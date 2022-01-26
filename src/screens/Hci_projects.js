@@ -5,7 +5,7 @@ import SecondImage from "../assets/images/second-section.png"
 import SecondBackground from "../assets/images/second-background.png";
 import Slider from "react-slick";
 
-function IdoProjects(props){
+function HciProjects(props){
 
     
     var ido_slider = {
@@ -48,7 +48,7 @@ function IdoProjects(props){
                 <Container>
                     <Row className="align-items-center">
                         <Col lg={6} sm={12} md={6}>
-                            <h1 className="logo-text m-0">IDO Projects</h1>
+                            <h1 className="logo-text m-0">HCI Projects</h1>
                        
                             <div className="btn-group-custom">
                             <button class="btn-custom secondary-btn">Live Sales</button>
@@ -152,9 +152,10 @@ function IdoProjects(props){
             </Container>
           
         </div>
-        {props.footer}
 
+        {props.footer}
+        
         </>
     );
 }
-export default IdoProjects;
+export default HciProjects;

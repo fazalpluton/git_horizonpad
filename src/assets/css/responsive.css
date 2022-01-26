@@ -6,8 +6,13 @@
     .feature-ul li a{
         width: 100%;
     }
-    .btn-group-custom .btn-custom {
+    .btn-group-custom .btn-custom:nth-child(1) {
         margin-right: 3rem;
+    }
+    .ido-box{
+
+        margin-bottom: 30px;
+    
     }
 }
 @media (max-width: 761px){
@@ -18,6 +23,13 @@
     .banner-section{
         margin-bottom: 5rem;
     }
+
+    .banner-img{
+
+        margin-top: 20px;
+        
+    }
+
     .apply-btn-section {
         display: flex;
         flex-direction: column;
@@ -39,5 +51,11 @@
         padding: 0rem !important;
         font-size: 18px;
     }
+
+.ido-box{
+
+    margin-bottom: 30px;
+
+}
   
 }
