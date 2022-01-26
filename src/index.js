@@ -5,9 +5,11 @@ import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import "./assets/fontawesome/css/all.css";
+
 import reportWebVitals from './reportWebVitals';
 import { Web3ReactProvider } from '@web3-react/core';
 import { getLibrary } from './utils/web3Library';
+
 
 ReactDOM.render(
   <React.StrictMode>

@@ -3,8 +3,12 @@ import './assets/css/style.css'
 import './assets/css/responsive.css';
 import Header from './components/Header';
 import Home from './screens/Home'
+import IdoProjects from './screens/Ido_projects'
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { useEagerConnect, useInactiveListener } from './hooks/useEagerConnect';
 import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
+
 
 function App() {
 
@@ -12,6 +16,7 @@ function App() {
     <Router>
         <Routes>
         <Route path="/" element={<Home header={<Header/>}/>}  />
+        <Route path="/Ido-Projects" element={<IdoProjects header={<Header/>}/>}  />
         </Routes>
     </Router>
   );
