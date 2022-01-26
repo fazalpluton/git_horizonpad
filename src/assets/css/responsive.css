@@ -6,13 +6,38 @@
     .feature-ul li a{
         width: 100%;
     }
+    .btn-group-custom .btn-custom {
+        margin-right: 3rem;
+    }
 }
 @media (max-width: 761px){
 
     .logo-text{
-        margin-top: 7rem !important;
+        margin-top: 22rem !important;
     }
     .banner-section{
         margin-bottom: 5rem;
     }
+    .apply-btn-section {
+        display: flex;
+        flex-direction: column;
+    }
+    .apply-btn-section .btn-custom{
+        margin-top: 2rem;
+    }
+    .footer-right-text{
+        justify-content: left;
+        margin-top: 2rem;
+    }
+    .sroll-top{
+        margin-bottom: 1rem;
+    }
+    .feature{
+        margin-top: 22rem;
+    }
+    .tier-table-section th{
+        padding: 0rem !important;
+        font-size: 18px;
+    }
+  
 }
