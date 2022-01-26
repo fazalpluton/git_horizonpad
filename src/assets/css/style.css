@@ -62,8 +62,11 @@ padding: 10px 30px;
 .logo{
     width: 70px;
 }
+.logo-text{
+    font-size: 50px;
+}
 .banner-p{
-    font-size: 20px;
+    font-size: 30px;
     margin-top: 2.5rem;
 }
 .btn-group-custom{
@@ -220,11 +223,8 @@ margin-top: 2rem;
     margin-top: 1rem;
 }
 .tier-table-section{
-    /* background: var(--secondary); */
-    /* border: 2px solid var(--white);
-    /* width: 1198px;
-    height: 438px; */
-    border-radius: 30px;
+    margin-top: 5rem;
+    margin-bottom: 7rem;
 }
 .tier-table-section th{
     color: var(--white);
@@ -359,4 +359,103 @@ margin-top: 2rem;
 
     padding: 15rem;
 
+}
+.apply-btn-section{
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 14rem;
+}
+.apply-btn-section .btn-custom{
+    font-size: 30px;
+    padding: 0.5rem 3rem !important;
+}
+.third-background{
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+    height: 600px;
+}
+.footer{
+    margin-top: 15rem;
+    background-color: var(--primary);
+}
+.footer-heading{
+    font-size: 40px;
+}
+.footer-social-icon{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    padding-right: 2rem;
+}
+.footer-social-icon a{
+    color: var(--white);
+}
+.footer-social-icon a:hover{
+    color: var(--gray);
+}
+.footer-social-icon i{
+    font-size: 35px;
+}
+.footer-ul{
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    list-style: none;
+}
+.footer-ul li{
+}
+.footer-ul li a{
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 39px;
+    color: var(--white);
+}
+.footer-ul li a:hover{
+    color: var(--gray);
+}
+.sroll-top{
+    background-color: var(--white);
+    color: var(--secondary);
+    padding: 1rem 1.2rem;
+    border-radius: 50px;
+    font-size: 30px;
+    font-weight: bold !important;
+    cursor: pointer;
+}
+.text-right{
+    text-align: right;
+}
+.footer-right-text{
+    display: flex;
+    justify-content: right;
+}
+.h2{
+    line-height: 91px;
+    font-size: 50px !important;
+}
+.navbar-collapse.collapse.show .navbar-nav-scroll{
+    /* max-height: 200px !important; */
+}
+.navbar-toggler .navbar-toggler-icon{
+    background-color: var(--white);
+}
+.navbar-toggler{
+    background-color: var(--white) !important;
+}
+.navbar-light .navbar-toggler {
+    color: rgba(0,0,0,.55);
+    border-color: var(--white) !important;
+}
+.navbar-toggler:focus {
+    text-decoration: none;
+    outline: 0;
+    box-shadow: none !important;
+}
+.ul-box p{
+    font-size: 25px;
+}
+.ul-between-flex h5,.ul-between-footer h5{
+font-size: 30px;
 }

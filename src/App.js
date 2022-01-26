@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './assets/css/style.css'
 import './assets/css/responsive.css';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import Home from './screens/Home'
 import IdoProjects from './screens/Ido_projects'
 import "slick-carousel/slick/slick.css";
@@ -15,7 +16,7 @@ function App() {
   return (
     <Router>
         <Routes>
-        <Route path="/" element={<Home header={<Header/>}/>}  />
+        <Route path="/" element={<Home header={<Header/>} footer={<Footer/>}/>}  />
         <Route path="/Ido-Projects" element={<IdoProjects header={<Header/>}/>}  />
         </Routes>
     </Router>

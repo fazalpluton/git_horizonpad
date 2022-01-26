@@ -5,6 +5,7 @@ import FirstImage from "../assets/images/first-section.png"
 import SecondImage from "../assets/images/second-section.png"
 import NotoIcon from "../assets/images/noto_coin.png";
 import SecondBackground from "../assets/images/second-background.png";
+import ThirdBackground from "../assets/images/background-3.png";
 
 function Home(props){
     return (
@@ -31,7 +32,7 @@ function Home(props){
                 </Container>
             </div>
         </div>
-        <div>
+        <div className="feature">
             <h2 className="text-center h2">Token Features.</h2>
             <Container>
             <Row className="feature-section">
@@ -141,20 +142,20 @@ function Home(props){
                         <div className="box-ul-flex">
                             <div className="ul-box">
                                 <div className="flex">
-                                <p className="text-center">30%</p>
-                                <h4>Public Sales</h4>
+                                <p className="text-center">12%</p>
+                                <h4>Staking</h4>
+                                </div>
+                            </div>
+                            <div className="ul-box">
+                                <div className="flex">
+                                <p className="text-center">5%</p>
+                                <h4>Treasury</h4>
                                 </div>
                             </div>
                             <div className="ul-box">
                                 <div className="flex">
                                 <p className="text-center">10%</p>
-                                <h4>Private Sales</h4>
-                                </div>
-                            </div>
-                            <div className="ul-box">
-                                <div className="flex">
-                                <p className="text-center">10%</p>
-                                <h4>Team</h4>
+                                <h4>Liquidity</h4>
                                 </div>
                             </div>
                         </div>
@@ -238,6 +239,16 @@ function Home(props){
                </Container>
             </div>
         </div>
+        <div className="position-relative">
+        <img src={ThirdBackground} className="third-background"/>
+        <Container>
+            <div className="apply-btn-section">
+            <button type="button" class="btn-custom secondary-btn">Apply For IDO</button>
+            <button type="button" class="btn-custom secondary-btn">Apply For HCI</button>
+            </div>
+        </Container>
+        </div>
+        {props.footer}
         </>
     )
 }
