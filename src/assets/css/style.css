@@ -74,7 +74,7 @@ padding: 10px 30px;
     align-items: center;
     margin-top: 3rem;
 }
-.btn-group-custom .btn-custom{
+.btn-group-custom .btn-custom:nth-child(1){
     margin-right: 5rem;
 }
 .banner-img{
