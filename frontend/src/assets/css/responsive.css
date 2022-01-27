@@ -1,0 +1,155 @@
+@media (max-width: 944px){
+
+    .feature-img{
+        width: 100%;
+    }
+    .feature-ul li a{
+        width: 100%;
+    }
+    .btn-group-custom .btn-custom:nth-child(1) {
+        margin-right: 3rem;
+    }
+    .ido-box{
+
+        margin-bottom: 30px;
+    
+    }
+}
+@media (max-width: 761px){
+
+    .logo-text{
+        margin-top: 1rem !important;
+    }
+    .banner-section{
+        margin-bottom: 5rem;
+    }
+
+    .banner-img{
+
+        margin-top: 20px;
+        
+    }
+
+    .apply-btn-section {
+        display: flex;
+        flex-direction: column;
+    }
+    .apply-btn-section .btn-custom{
+        margin-top: 2rem;
+    }
+    .footer-right-text{
+        justify-content: left;
+        margin-top: 2rem;
+    }
+    .sroll-top{
+        margin-bottom: 1rem;
+    }
+    .feature{
+        margin-top: 22rem;
+    }
+    .tier-table-section th{
+        padding: 0rem !important;
+        font-size: 18px;
+    }
+
+.ido-box{
+
+    margin-bottom: 30px;
+
+}
+.video-section{
+    width: 100% !important;
+}
+.video-main-section{
+    width: 100%;
+}
+.banner-section{
+    height: 1000px;
+    align-items: flex-start !important;
+}
+.banner-background{
+    height: 100%;
+}
+.custom-order-4{
+    order: 4;
+}
+.box-ul-column {
+    flex-direction: inherit;
+    flex-wrap: wrap;
+}
+.box-ul-column .ul-box {
+    width: 166px;
+}
+.box-ul-flex {
+    flex-wrap: wrap;
+}
+.box-ul-flex .ul-box {
+    width: 166px !important;
+    margin: 1rem auto; 
+
+}
+  
+}
+
+@media (max-width: 420px){
+
+    .btn-group-custom{
+
+        justify-content: center;
+
+    }
+
+    .btn-group-custom .btn-custom:nth-child(1) {
+        margin-right: 1rem;
+    }
+
+    .btn-custom{
+
+        padding: 10px 20px;
+
+    }
+
+    .ido-cap{
+        flex-direction: column;
+        text-align: center !important;
+
+    }
+
+    .ido-cap span{
+
+        margin:10px 0;
+        text-align: center !important;
+        
+
+    }
+
+    .ido img{
+
+        width: 45px;
+
+    }
+    .logo-text-img{
+        width: 270px !important;
+    }
+    
+
+}
+@media (max-width:978px) and (min-width:752px) {
+    .btn-group-custom .btn-custom{
+        padding: 10px 21px;
+
+    }
+    .video-section{
+        width: 100% !important;
+    }
+    .video-main-section{
+        width: 100%;
+    }
+    .custom-order-4{
+        order: 4;
+    }
+    .box-ul-column {
+        flex-direction: inherit;
+        flex-wrap: wrap;
+    }
+}

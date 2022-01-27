@@ -1,0 +1,11 @@
+[
+  "event OwnershipTransferred(address indexed,address indexed)",
+  "function getUserAppliedProjects(address) view returns (address[])",
+  "function lockTickets(address,address)",
+  "function owner() view returns (address)",
+  "function renounceOwnership()",
+  "function setFactory(address)",
+  "function setStaking(address)",
+  "function transferOwnership(address)",
+  "function unlockTickets(address,address)"
+]

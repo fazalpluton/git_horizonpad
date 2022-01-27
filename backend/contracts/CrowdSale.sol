@@ -1,0 +1,275 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "./interfaces/ITicketConsumer.sol";
+
+
+
+
+contract CrowdSale is Context, ReentrancyGuard {
+    using SafeMath for uint256;
+    using SafeERC20 for IERC20;
+
+    ITicketConsumer ticketConsumer;
+    //owner
+    address public token_Owner;
+
+    modifier onlyTokenOwner() {
+        require(token_Owner == _msgSender(), "Ownable: caller is not the Token owner");
+        _;
+    }
+    
+    // The token being sold
+    IERC20 private token;
+    IERC20 private BUSD;
+
+    // Address where funds are collected
+    address payable private wallet;
+    address payable public _manager;
+
+    //Time
+    //default
+    uint256 DEFAULT_SALE_ENDTIME = 4 weeks;
+    uint256 DEFAULT_TOKEN_DESTRIBUTIONTIME = 4 weeks;
+    //custom
+    uint256 public CUSTOM_SALE_STARTTIME;
+    uint256 public CUSTOM_SALE_ENDTIME;
+    uint256 public CUSTOM_TOKEN_DESTRIBUTIONTIME;
+    //price
+    uint256 public token_Price;
+    uint256 public tokenAllocation;
+    uint256 public total_amount;
+    //whiteList users
+    uint256 public TOTAL_WHITELIST;
+    mapping(address => bool) private isWhitelisted;
+
+    // How many token units a buyer gets per wei.
+    // The rate is the conversion between wei and the smallest and indivisible token unit.
+    // So, if you are using a rate of 1 with a ERC20Detailed token with 3 decimals called TOK
+    // 1 wei will give you 1 unit, or 0.001 TOK.
+    uint256 private _rate;
+    uint256 public min;
+    uint256 public minBuy = 215 ether;
+    uint256 public maxBuy = 430 ether;
+    uint256 public price_0 = 0.035 ether; 
+    uint256 public price_1 = 0.040 ether;
+    uint256 public price_2 = 0.045 ether;
+    uint256 public sale_price ;
+    
+
+    // Amount of wei raised
+    uint256 public _weiRaised;
+    uint256 public _tokenPurchased;
+    bool public success;
+    bool public finalized;
+    bool public _buyable;
+
+    
+    event TokensPurchased(address indexed purchaser, address indexed beneficiary, uint256 value, uint256 amount);
+
+    
+    
+    mapping (address => uint256) purchase;
+    mapping (address => uint256) msgValue; 
+
+    uint256 current = block.timestamp * 1 seconds;
+    uint256 public buyTime = block.timestamp + 500 seconds;//+ 15 days
+    
+
+    constructor(uint256 _startTime,uint256 _salePrice,
+                address _token,address payable _wallet,
+                address _tokenOwner,address _ticketConsumer,uint256 _totalAmount){
+        token_Price = _salePrice;
+        CUSTOM_SALE_STARTTIME = block.timestamp + _startTime;
+        token = IERC20(_token);
+        wallet = _wallet;
+        token_Owner = _tokenOwner;
+        total_amount = _totalAmount;
+        ticketConsumer = ITicketConsumer(_ticketConsumer);
+        BUSD = IERC20(0x833655CAA72938494309905edcec453Cf852556c);
+    }
+
+
+    function getSaleEndTime() public view returns(uint256){
+        if(CUSTOM_SALE_ENDTIME != 0){
+            return CUSTOM_SALE_ENDTIME;
+        }else{
+            return DEFAULT_SALE_ENDTIME;
+        }
+    }
+
+    function getdistributionTime() public view returns(uint256){
+        if(CUSTOM_TOKEN_DESTRIBUTIONTIME != 0){
+            return CUSTOM_TOKEN_DESTRIBUTIONTIME;
+        }else{
+            return DEFAULT_TOKEN_DESTRIBUTIONTIME;
+        }
+    }
+            // 1 hours --do
+    function setEnd_Destribution_Time(uint256 _end , uint256 _distribution) public onlyTokenOwner{
+        require(block.timestamp + 1 seconds < CUSTOM_SALE_STARTTIME,"Time limit reached");
+        require(_end <=_distribution,"destribution time must be greater than end time");
+        CUSTOM_SALE_ENDTIME = block.timestamp + _end;
+        CUSTOM_TOKEN_DESTRIBUTIONTIME = block.timestamp + _distribution;
+    }
+            // 1 hours --do
+    function getWhitlisted() public {
+        require(isWhitelisted[_msgSender()] == false,"already applied for whitelisted");
+        require(block.timestamp + 1 seconds < CUSTOM_SALE_STARTTIME,"Time limit reached");
+        isWhitelisted[_msgSender()] = true;
+        TOTAL_WHITELIST++;
+        require(total_amount / TOTAL_WHITELIST>0,"whiteListing finished");
+        tokenAllocation = total_amount / TOTAL_WHITELIST;
+        ticketConsumer.lockTickets(_msgSender(), address(this));
+    }
+    
+
+    /**
+     * @dev fallback function ***DO NOT OVERRIDE***
+     * Note that other contracts will transfer funds with a base gas stipend
+     * of 2300, which is not enough to call buyTokens. Consider calling
+     * buyTokens directly when purchasing tokens from a contract.
+     */
+    // fallback () external payable {
+    //     buyTokens();
+    // }
+
+    // receive () external payable {
+    //     buyTokens();
+    // }
+
+    /**
+     * @return the token being sold.
+     */
+
+    
+
+    /**
+     * @return the address where funds are collected.
+     */
+    function wallet_address() public view returns (address payable) {
+        return wallet;
+    }
+
+    /**
+     * @return the number of token units a buyer gets per wei.
+     */
+    function rate() public view returns (uint256) {
+        return _rate;
+    }
+    function getPrice() public view returns(uint256){
+        return token_Price;
+    }
+
+    /**
+     * @return the amount of wei raised.
+     */
+    function weiRaised() public view returns (uint256) {
+        return _weiRaised;
+    }
+
+    function buyable()public returns(bool) { 
+        if(buyTime > block.timestamp){
+            _buyable = true;
+        }
+        return _buyable;
+    }
+    
+    function selectPrice(uint8 no) public view returns(uint256){
+        if(no==0){
+            return price_0;
+        }else if(no==1){
+            return price_1;
+        }else if(no==2){
+            return price_2;
+        }else{
+            require(false);
+        }
+    }
+    
+   function buyTokens() public nonReentrant payable {
+        require ( getSaleEndTime() > block.timestamp, "Buy Time expired");
+
+        uint256 weiAmount = BUSD.allowance(_msgSender(), address(this));
+        require(msgValue[_msgSender()] + weiAmount <=tokenAllocation,"please approve Busd according to limit");
+        
+        //new calulate amount
+        uint256 one = 1 ether;
+        uint256 tokens =  (one * weiAmount)/token_Price;
+       
+        require(token.balanceOf(address(this)) >= tokens,"buy amount exceeds not enough Tokens remaining");
+        BUSD.safeTransferFrom(_msgSender(),address(this), weiAmount);
+        _tokenPurchased = _tokenPurchased + tokens;
+
+        // update state
+        _weiRaised = _weiRaised.add(weiAmount);
+        
+        msgValue[_msgSender()] = msgValue[_msgSender()] + weiAmount;
+        purchase[_msgSender()]=purchase[_msgSender()]+tokens;
+       
+    }
+    
+    function claim() public payable {
+        require (block.timestamp > getdistributionTime());
+ 
+        uint256 t = purchase[_msgSender()]; 
+        require (t>0,"0 tokens to claim");
+         ticketConsumer.unlockTickets(_msgSender(), address(this));
+        _processPurchase(_msgSender(), t);
+         delete purchase[_msgSender()];
+     
+    }
+    
+    function balance() public view returns(uint){
+        return token.balanceOf(address(this));
+    }
+
+    function Finalize() public  returns(bool) {
+        require( getdistributionTime() < block.timestamp, "the crowdSale is in progress");
+        require(!finalized,"already finalized");
+        require(_msgSender() == wallet,"you are not the owner");
+        if(_weiRaised >= min ){
+            success = true;
+        }
+        else{
+             success = false;   
+        }
+         uint256 remainingTokensInTheContract = token.balanceOf(address(this)) - _tokenPurchased;
+        token.safeTransfer(address(_manager),remainingTokensInTheContract);
+        _forwardFunds(_weiRaised);
+        finalized = true;
+        return success;
+    }
+
+
+    function _deliverTokens(address beneficiary, uint256 tokenAmount) internal {
+        token.safeTransfer(beneficiary, tokenAmount);
+    }
+
+   
+    function _processPurchase(address beneficiary, uint256 tokenAmount) internal {
+        _deliverTokens(beneficiary, tokenAmount);
+    }
+
+    function _updatePurchasingState(address beneficiary, uint256 weiAmount) internal {
+        // solhint-disable-previous-line no-empty-blocks
+    }
+
+  
+    function _getTokenAmount(uint256 weiAmount) internal view returns (uint256) {
+        return weiAmount.mul(_rate);
+    }
+
+   
+    function _forwardFunds(uint256 amount) internal {
+      //  _wallet.transfer(amount);
+      BUSD.safeTransfer(wallet, amount);
+    }
+
+      
+}
