@@ -15,7 +15,7 @@
     
     }
 }
-@media (max-width: 761px){
+@media (max-width: 767px){
 
     .logo-text{
         margin-top: 1rem !important;
@@ -88,7 +88,79 @@
     margin: 1rem auto; 
 
 }
+
+.staking-dropdown{
+    
+    text-align: center;
+    margin: 3rem 0;
+
+}
+
+.ido-box .btn-group-custom{
+
+    flex-wrap: wrap;
+    justify-content: center !important;
+
+}
+
+.ido-box .btn-group-custom a{
+
+margin-bottom: 10px !important;
+
+}
+
+.flex-xs-wrap{
+
+    flex-wrap: wrap;
+
+}
+
+.conditions{
+
+    margin-right: 0 !important;
+    margin-bottom: 30px;
+
+}
+
+.roadmap {
+    flex-direction: column;
+    margin: 50px 14em 50px 0;
+
+  }
+
+  .roadmap-circle {
+    width: 50px;
+    height: 50px;
+  }
+
+  .roadmap-hr {
+    width: 1px;
+    height: 150px !important;
+    display: inline-block;
   
+    opacity: 1 !important;
+  }
+
+  .roadmap-item p {
+    left: 120%;
+    font-size: 0.9em;
+    width: 225px;
+    top: auto;
+    text-align: left;
+  }
+
+  .custom-checkbox{
+
+    font-size: 12px;
+
+  }
+
+  .custom-checkbox input {
+    width: 10px;
+    height: 10px;
+    margin-right: 5px !important;
+}
+
 }
 
 @media (max-width: 420px){
@@ -134,7 +206,12 @@
     
 
 }
-@media (max-width:978px) and (min-width:752px) {
+@media (max-width:991px) and (min-width:768px) {
+
+    .feature-img {
+        width: 100%;
+    }
+
     .btn-group-custom .btn-custom{
         padding: 10px 21px;
 
@@ -151,5 +228,115 @@
     .box-ul-column {
         flex-direction: inherit;
         flex-wrap: wrap;
+    }
+
+    .ido-box{
+
+        margin-bottom: 30px;
+
+    }
+
+    .ido-box .btn-group-custom{
+
+        flex-wrap: wrap;
+        justify-content: center !important;
+    
+    }
+    
+    .ido-box .btn-group-custom a{
+    
+    margin-bottom: 10px !important;
+    
+    }
+
+    .staking-dropdown{
+    
+        text-align: center;
+        margin: 3rem 0;
+    
+    }
+
+    .flex-xs-wrap{
+
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+
+    }
+
+    .roadmap-item p{
+
+        width: auto;
+
+    }
+
+    .conditions{
+
+        flex-basis: 48%;
+        margin: 0 0 20px 0!important;
+
+    }
+
+  
+}
+
+@media (max-width:1024px) and (min-width:992px) {
+
+
+
+    .roadmap-item p{
+
+        width: auto;
+
+    }
+
+    .ido-box .btn-group-custom {
+        flex-wrap: wrap;
+        justify-content: center !important;
+    }
+
+    .ido-box .btn-group-custom a {
+        margin-bottom: 10px !important;
+    }
+}
+
+@media (max-width:1200px) and (min-width:1024px) {
+
+
+
+    .roadmap-item p{
+
+        width: auto;
+
+    }
+
+    .ido-box .btn-group-custom {
+        flex-wrap: wrap;
+        justify-content: center !important;
+    }
+
+    .ido-box .btn-group-custom a {
+        margin-bottom: 10px !important;
+    }
+}
+
+
+@media (max-width:1440px) and (min-width:1200px) {
+
+
+
+    .roadmap-item p{
+
+        width: auto;
+
+    }
+
+    .ido-box .btn-group-custom {
+        flex-wrap: wrap;
+        justify-content: center !important;
+    }
+
+    .ido-box .btn-group-custom a {
+        margin-bottom: 10px !important;
     }
 }
