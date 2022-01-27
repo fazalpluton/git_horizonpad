@@ -54,17 +54,17 @@ align-items: center;
     height: calc(100vh - 87px);
 }
 .btn-custom{
-border: 2.17888px solid #FFFFFF;
-box-sizing: border-box;
-border-radius: 32.6831px;
-padding: 10px 30px;
+border: 2.17888px solid #FFFFFF !important;
+
+border-radius: 32.6831px !important;
+padding: 10px 30px !important;
 text-decoration: none;
 }
 .btn-custom:hover{
     color: var(--white);
 }
 .secondary-btn{
-    background: var(--secondary);
+    background: var(--secondary) !important;
     color: var(--white);
 }
 .primary-btn{
@@ -565,7 +565,7 @@ margin-left: 1rem !important;
     width: 100px;
 }
 
-.staked:not(:last-child){
+.staked{
 
     border-bottom: 2px dashed #ffffff60;
    
@@ -803,3 +803,27 @@ margin-left: 1rem !important;
   }
 
   
+.max-staked{
+
+    position: relative;
+
+}
+
+.max-staked button{
+
+    background-color: transparent !important;
+    border: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+}
+
+.max-staked button:focus{
+
+        box-shadow:none !important;
+        border:none !important;
+
+}
+
+
