@@ -2,12 +2,20 @@
     --primary: #38065E;
     --secondary: #4F0574;
     --white:#fff;
+    --black:#000000;
     --gray: gray;
     --overlay:#80808038;
+    --soon:#FFA200;
 }
 body{
     background: var(--primary) !important;
     color: var(--white) !important;
+}
+
+.f-bold{
+
+    font-weight: 600;
+
 }
 .custom-header{
     background: var(--primary);
@@ -257,6 +265,12 @@ margin-top: 2rem;
 
 }
 
+.ido-small{
+
+    padding: 10px;
+
+}
+
 .ido-box p{
 
     margin-bottom: 0 !important;
@@ -281,13 +295,13 @@ margin-top: 2rem;
 
 .soon{
 
-    color: #FFA200;
+    color: var(--soon);
 }
 
 
 .soon i{
 
-    color: #FFA200;
+    color: var(--soon);
     font-size: 10px;
     margin-right: 5px;
 
@@ -549,4 +563,194 @@ margin-left: 1rem !important;
 }
 .upload-img{
     width: 100px;
+}
+
+.staked:not(:last-child){
+
+    border-bottom: 2px dashed #ffffff60;
+   
+
+}
+
+.staked{
+
+    padding: 20px 0;
+
+}
+
+.staking-dropdown button{
+
+    background-color: transparent !important;
+    border:2px solid var(--white);
+    border-radius: 32.6831px;
+    padding: 10px 30px;
+
+}
+
+.staking-dropdown button:focus,.show>.btn-primary.dropdown-toggle{
+
+    box-shadow: none !important;
+    border-color: var(--secondary) !important;
+
+}
+
+.staking-dropdown button:hover{
+
+    border-color: var(--secondary);
+
+}
+
+
+.roadmap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 70px 0 170px 0;
+  }
+  
+  .roadmap-item {
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .roadmap-item p {
+    margin-bottom: 0;
+    position: absolute;
+    top: 120%;
+    width: 200px;
+    font-weight: 600;
+  }
+  
+  .roadmap-circle {
+    border: 1px solid var(--black);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    color: var(--secondary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--gray);
+  }
+
+  .roadmap-circle img{
+
+    width: 30px;
+
+  }
+  
+  .roadmap-hr {
+    border:2px dashed var(--white);
+    background-color: transparent !important;
+    width: 100px;
+    height: 2px !important;
+    margin: 0 20px;
+    opacity: 1 !important;
+  }
+  
+  .circle-active .roadmap-circle {
+    background-color: var(--soon);
+    color: var(--primary);
+  }
+
+  .circle-active p{
+
+    color: var(--soon);
+
+  }
+
+
+.conditions{
+
+    background-color: var(--secondary);
+    padding: 30px;
+    border-radius: 30px;
+    justify-content:space-between;
+
+
+}
+
+
+.conditions:not(:last-child){
+
+    margin-right: 20px;
+
+}
+
+.conditions h4{
+
+    font-weight: 400;
+    font-size: 18px;
+    margin-bottom: 1rem;
+
+}
+
+.custom-checkbox{
+
+    text-align: center;
+    font-size: 25px;
+
+}
+
+.custom-checkbox input{
+
+    width:18px;
+    height:18px;
+    margin-right: 10px;
+
+}
+
+.conditions-met{
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+
+}
+
+.tick-enable{
+
+    border-radius: 50%;
+    border: 2px solid var(--soon);
+    width:30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.tick-enable i{
+    
+    font-size: 15px;
+
+}
+
+.tick-disble i{
+    
+    display: none;
+
+}
+
+.unstaking-warn{
+
+    display: flex;
+    align-items: center;
+    margin: 3rem 1rem;
+
+}
+
+.unstaking-warn p{
+
+   
+    font-size: 20px;
+    line-height: 32px;
+    line-height: 50px;
+    margin-left: 20px;
+
 }

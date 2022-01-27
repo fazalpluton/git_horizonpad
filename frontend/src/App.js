@@ -15,6 +15,9 @@ import Burgeon from './screens/Burgeon';
 import NFTMarket from './screens/NFTMarket';
 import P2P from './screens/P2P';
 import B2B from './screens/B2B';
+import Stacking from './screens/Staking';
+import UnStacking from './screens/Unstaking';
+import Withdraw from './screens/Withdraw';
 import Login from './screens/admin/Login';
 import Projects from './screens/admin/Project';
 import AddProject from './screens/admin/AddProject';
@@ -33,6 +36,10 @@ function App() {
         <Route path="/nft-marketplace" element={<NFTMarket header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/p2p-swap" element={<P2P header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/b2b-market" element={<B2B header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/staking" element={<Stacking header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/unstaking" element={<UnStacking header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/withdraw" element={<Withdraw header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+
         {/* admin routes  */}
         <Route path="/admin/login" element={<Login header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/admin/projects" element={<Projects header={<DashboardHeader/>} footer={<Footer/>}/>}  />

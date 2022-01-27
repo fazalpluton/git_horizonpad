@@ -1,10 +1,9 @@
 import { Container, Row,Col, Table } from "react-bootstrap";
 import IdoBox from "../components/ido-box"
 import BannerImage from "../assets/images/ido-banner-main.png"
-import SecondImage from "../assets/images/second-section.png"
 import SecondBackground from "../assets/images/second-background.png";
 import Slider from "react-slick";
-import { Link } from "react-router-dom";
+
 
 function HciProjects(props){
 
