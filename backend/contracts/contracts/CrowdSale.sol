@@ -5,13 +5,14 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./interfaces/ITicketConsumer.sol";
 
 
 
 
-contract CrowdSale is Context, ReentrancyGuard {
+contract CrowdSale is Context,Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
@@ -31,12 +32,23 @@ contract CrowdSale is Context, ReentrancyGuard {
     // Address where funds are collected
     address payable private wallet;
     address payable public _manager;
-
+    //status
+    //whitelist soon 0
+    //whitelist open 1
+    //sale wait 2
+    //sale start 3
+    //sale end 4
+    //destribution 5
+    //uint8 public status;
     //Time
     //default
     uint256 DEFAULT_SALE_ENDTIME = 4 weeks;
     uint256 DEFAULT_TOKEN_DESTRIBUTIONTIME = 4 weeks;
+    uint256 DEFAULT_WHITELIST_STARTTIME;
+    uint256 DEFAULT_WHITELIST_ENDTIME;
     //custom
+    uint256 public CUSTOM_WHITELIST_STARTTIME;
+    uint256 public CUSTOM_WHITELIST_ENDTIME;
     uint256 public CUSTOM_SALE_STARTTIME;
     uint256 public CUSTOM_SALE_ENDTIME;
     uint256 public CUSTOM_TOKEN_DESTRIBUTIONTIME;
@@ -44,6 +56,7 @@ contract CrowdSale is Context, ReentrancyGuard {
     uint256 public token_Price;
     uint256 public tokenAllocation;
     uint256 public total_amount;
+
     //whiteList users
     uint256 public TOTAL_WHITELIST;
     mapping(address => bool) private isWhitelisted;
@@ -56,10 +69,7 @@ contract CrowdSale is Context, ReentrancyGuard {
     uint256 public min;
     uint256 public minBuy = 215 ether;
     uint256 public maxBuy = 430 ether;
-    uint256 public price_0 = 0.035 ether; 
-    uint256 public price_1 = 0.040 ether;
-    uint256 public price_2 = 0.045 ether;
-    uint256 public sale_price ;
+    uint256 public sale_price;
     
 
     // Amount of wei raised
@@ -81,19 +91,55 @@ contract CrowdSale is Context, ReentrancyGuard {
     uint256 public buyTime = block.timestamp + 500 seconds;//+ 15 days
     
 
-    constructor(uint256 _startTime,uint256 _salePrice,
+    constructor(uint256 _salePrice,
                 address _token,address payable _wallet,
-                address _tokenOwner,address _ticketConsumer,uint256 _totalAmount){
+                address _tokenOwner,uint256 _totalAmount ,address _ticketConsumer){
         token_Price = _salePrice;
-        CUSTOM_SALE_STARTTIME = block.timestamp + _startTime;
         token = IERC20(_token);
         wallet = _wallet;
         token_Owner = _tokenOwner;
         total_amount = _totalAmount;
-        ticketConsumer = ITicketConsumer(_ticketConsumer);
         BUSD = IERC20(0x833655CAA72938494309905edcec453Cf852556c);
+        setTicketConsumer(_ticketConsumer);
     }
 
+    function setTime(uint256 _wstartTimes,uint256 _wstartTimee,uint256 _sstartTimes,uint256 _sstartTimee,
+                uint256 _dstartTime) public onlyOwner{
+        uint256 one_day = (1 days * 1 seconds)-(1 seconds);    
+        CUSTOM_WHITELIST_STARTTIME = block.timestamp + _wstartTimes;
+        CUSTOM_WHITELIST_ENDTIME = CUSTOM_WHITELIST_STARTTIME + _wstartTimee;
+        require(CUSTOM_WHITELIST_ENDTIME - CUSTOM_WHITELIST_STARTTIME >= one_day , "please set whitelist time ending period greater than 1 day");
+        CUSTOM_SALE_STARTTIME = CUSTOM_WHITELIST_ENDTIME + _sstartTimes;
+        CUSTOM_SALE_ENDTIME = CUSTOM_SALE_STARTTIME + _sstartTimee;
+        require(CUSTOM_SALE_ENDTIME - CUSTOM_SALE_STARTTIME >= one_day ,"please set sale time ending period greater than 1 day");
+        CUSTOM_TOKEN_DESTRIBUTIONTIME = CUSTOM_SALE_ENDTIME + _dstartTime;
+    }
+
+    
+
+    function setTicketConsumer(address _ticketConsumer) public onlyOwner{
+        ticketConsumer = ITicketConsumer(_ticketConsumer);
+    }
+
+    function getStatus() public view returns(uint8){
+        if(block.timestamp < CUSTOM_WHITELIST_STARTTIME){
+            return 0;
+        }else if(block.timestamp>CUSTOM_WHITELIST_STARTTIME && block.timestamp <= CUSTOM_WHITELIST_ENDTIME){
+            return 1;
+        }else if(block.timestamp>CUSTOM_WHITELIST_ENDTIME  && block.timestamp<= CUSTOM_SALE_STARTTIME){
+            return 2;
+        }else if(block.timestamp>CUSTOM_SALE_STARTTIME  && block.timestamp<= CUSTOM_SALE_ENDTIME){
+            return 3;
+        }else if(CUSTOM_SALE_ENDTIME != CUSTOM_TOKEN_DESTRIBUTIONTIME){
+            if(block.timestamp>CUSTOM_SALE_ENDTIME  && block.timestamp<= CUSTOM_TOKEN_DESTRIBUTIONTIME){
+                return 4;
+            }else{
+                return 5;
+            }       
+        }else{
+            return 5;
+        }
+    }
 
     function getSaleEndTime() public view returns(uint256){
         if(CUSTOM_SALE_ENDTIME != 0){
@@ -120,45 +166,19 @@ contract CrowdSale is Context, ReentrancyGuard {
             // 1 hours --do
     function getWhitlisted() public {
         require(isWhitelisted[_msgSender()] == false,"already applied for whitelisted");
-        require(block.timestamp + 1 seconds < CUSTOM_SALE_STARTTIME,"Time limit reached");
+        require(getStatus() == 1,"Time limit reached");
         isWhitelisted[_msgSender()] = true;
         TOTAL_WHITELIST++;
         require(total_amount / TOTAL_WHITELIST>0,"whiteListing finished");
         tokenAllocation = total_amount / TOTAL_WHITELIST;
         ticketConsumer.lockTickets(_msgSender(), address(this));
     }
-    
 
-    /**
-     * @dev fallback function ***DO NOT OVERRIDE***
-     * Note that other contracts will transfer funds with a base gas stipend
-     * of 2300, which is not enough to call buyTokens. Consider calling
-     * buyTokens directly when purchasing tokens from a contract.
-     */
-    // fallback () external payable {
-    //     buyTokens();
-    // }
-
-    // receive () external payable {
-    //     buyTokens();
-    // }
-
-    /**
-     * @return the token being sold.
-     */
-
-    
-
-    /**
-     * @return the address where funds are collected.
-     */
     function wallet_address() public view returns (address payable) {
         return wallet;
     }
 
-    /**
-     * @return the number of token units a buyer gets per wei.
-     */
+    
     function rate() public view returns (uint256) {
         return _rate;
     }
@@ -166,9 +186,7 @@ contract CrowdSale is Context, ReentrancyGuard {
         return token_Price;
     }
 
-    /**
-     * @return the amount of wei raised.
-     */
+   
     function weiRaised() public view returns (uint256) {
         return _weiRaised;
     }
@@ -180,20 +198,9 @@ contract CrowdSale is Context, ReentrancyGuard {
         return _buyable;
     }
     
-    function selectPrice(uint8 no) public view returns(uint256){
-        if(no==0){
-            return price_0;
-        }else if(no==1){
-            return price_1;
-        }else if(no==2){
-            return price_2;
-        }else{
-            require(false);
-        }
-    }
     
    function buyTokens() public nonReentrant payable {
-        require ( getSaleEndTime() > block.timestamp, "Buy Time expired");
+        require ( getStatus() == 3, "Buy Time expired");
 
         uint256 weiAmount = BUSD.allowance(_msgSender(), address(this));
         require(msgValue[_msgSender()] + weiAmount <=tokenAllocation,"please approve Busd according to limit");
@@ -215,7 +222,7 @@ contract CrowdSale is Context, ReentrancyGuard {
     }
     
     function claim() public payable {
-        require (block.timestamp > getdistributionTime());
+        require (getStatus() == 5);
  
         uint256 t = purchase[_msgSender()]; 
         require (t>0,"0 tokens to claim");
@@ -230,7 +237,7 @@ contract CrowdSale is Context, ReentrancyGuard {
     }
 
     function Finalize() public  returns(bool) {
-        require( getdistributionTime() < block.timestamp, "the crowdSale is in progress");
+        require( getStatus() >= 4 , "the crowdSale is in progress");
         require(!finalized,"already finalized");
         require(_msgSender() == wallet,"you are not the owner");
         if(_weiRaised >= min ){
@@ -269,6 +276,9 @@ contract CrowdSale is Context, ReentrancyGuard {
     function _forwardFunds(uint256 amount) internal {
       //  _wallet.transfer(amount);
       BUSD.safeTransfer(wallet, amount);
+    }
+    function time()public view returns(uint256){
+        return block.timestamp;
     }
 
       

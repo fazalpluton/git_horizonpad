@@ -19,19 +19,24 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
     RewardToken public rewardsToken;
     IERC20 public stakingToken;
 
-
+    //sig
+    bytes32 public DOMAIN_SEPARATOR;
+    // keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)");
+    bytes32 public constant PERMIT_TYPEHASH = 0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
+    mapping(address => uint) public nonces;
+    //
     struct stakingDetail{
 
-        uint256 depositValue;
-        uint256 depositBlock;
-        uint256 withdrawBlock;
-        uint256 pendingRewards;
+        uint256 depositValue; 
+        uint256 depositBlock; 
+        uint256 withdrawBlock; 
+        uint256 pendingRewards; 
         uint256 withDrawValue; 
         uint256 noHasStaked; 
-        uint32 userWeight;
-        uint256 rewardReleased;
-        uint256 stakeTime;
-        uint256 tickets;
+        uint32 userWeight; 
+        uint256 rewardReleased; 
+        uint256 stakeTime; 
+        uint256 tickets; 
 
     }
 
@@ -71,9 +76,11 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
     
 
     constructor(address _token ,address _rewardToken,uint256 _baseRatePerBlock){
+        
         stakingToken = IERC20(_token);
         rewardsToken = RewardToken(_rewardToken);
         baseRatePerBlock = _baseRatePerBlock;
+        
     }
 
     modifier onlyConsumer() {
@@ -108,7 +115,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         return detail.pendingRewards;
     }
 
-    function setPendingRewards(uint256 amount)public {
+    function setPendingRewards(uint256 amount)private {
         stakingDetail memory detail = userStakingDetail[_msgSender()];
         detail.pendingRewards = amount;
         userStakingDetail[_msgSender()] = detail;

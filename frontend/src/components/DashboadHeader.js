@@ -2,9 +2,24 @@ import { Container, Form, FormControl, Nav, Navbar,Button, NavDropdown } from "r
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Web3Modal from "web3modal";
+import { connectWallet } from "../utils/connectWallet";
+import { useWeb3React } from "@web3-react/core";
 
 import VectorLogo from "../assets/images/vector-logo.png"
 function DashboardHeader(){
+
+  const {
+    connector,
+    library,
+    account,
+    chainId,
+    activate,
+    deactivate,
+    active,
+    errorWeb3Modal,
+  } = useWeb3React();
+
   const [token,setToken] = useState(sessionStorage.getItem("token"));
   let url = process.env.REACT_APP_API;
   useEffect(async ()=>{
@@ -38,7 +53,13 @@ function DashboardHeader(){
         <Link to={'/hci-projects'} className="nav-link">HCI Projects</Link>
       </Nav>
       <Form className="d-flex">
-       <button type="button" className="btn-custom secondary-btn">Connect Wallet</button>
+       {/* <button type="button" className="btn-custom secondary-btn">CONNECTED</button> */}
+       {active
+        ? (<div><button type="button" className="btn-custom secondary-btn">CONNECTED</button></div>)
+         : (<div><button onClick={() => {
+          connectWallet(activate);
+        }} type="button" className="btn-custom secondary-btn">Connect Wallet</button></div>)
+         }
       </Form>
     </Navbar.Collapse>
   </Container>

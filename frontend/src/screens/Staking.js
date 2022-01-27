@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, InputGroup,DropdownButton,Dropdown,FormControl,Form } from "react-bootstrap";
 import IdoBox from "../components/ido-box"
 import BannerImage from "../assets/images/ido-banner-main.png"
@@ -7,12 +8,154 @@ import confirmation from "../assets/images/confirmation.png";
 import preauth from "../assets/images/pre-auth.png";
 import amountstack from "../assets/images/amountstack.png";
 import { Link } from "react-router-dom";
+// import detectEthereumProvider from '@metamask/detect-provider'
+import { ethers } from 'ethers'
+import StakingAbi from "../contract/Staking.json"
+import ZPadAbi from "../contract/ZPad.json"
+import {staking_addr, zpad_addr, rewardToken_addr} from "../contract/addresses"
+import Web3Modal from 'web3modal'
+import { useWeb3React } from "@web3-react/core";
+
 
 
 
 
 
 function Stacking(props){
+
+    const {
+        connector,
+        library,
+        account,
+        chainId,
+        activate,
+        deactivate,
+        active,
+        errorWeb3Modal
+    } = useWeb3React();
+
+    const [stakevalue,setStakevalue] = useState(0);
+    const [unStakeValue, setUnStakeValue] = useState(0)
+    const [staketype,setStaketype] = useState('stake');
+    const [totalToken, setTotalToken] = useState(0)
+    const [totalbalance, setTotalBalance] = useState(0)
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    const [error, setError] = useState()
+    const [msgHandling, setMsgHandling] = useState()
+    
+    const [bronze, setBronze] = useState(0)
+    const [silver, setSilver] = useState(0)
+    const [gold, setGold] = useState(0)
+    const [tokenError, setTokenError]= useState()
+
+    const loadProvider = async () => {
+        try {
+            const web3Modal = new Web3Modal();
+            const connection = await web3Modal.connect();
+            const provider = new ethers.providers.Web3Provider(connection);
+            return provider.getSigner();
+          } catch (e) {
+            console.log("loadProvider default: ", e);
+          }
+      };
+
+      const loadSigner = async () => {
+        try {
+            var provider = new ethers.providers.getDefaultProvider('rinkeby');
+            //   console.log(provider)
+          return provider
+        } catch (e) {
+          console.log("loadProvider: ", e);
+        }
+      };
+    
+      const loadTotalStake = async () => {
+        try{
+            let signer = await loadProvider()
+            let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+            let totalStakedValue = await stakingContract.totalStakedValue()
+            let token = ethers.utils.formatEther(totalStakedValue.toString())
+            console.log(token)
+            setTotalToken(token)
+        }catch(e){
+            console.log(e)
+        }
+        }
+
+        const Stake = async () => {
+            try{
+                
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                let getBronze = await stakingContract.bronze()
+                let ZPadContract = new ethers.Contract(zpad_addr, ZPadAbi, signer)
+                let allowanceCheck = await ZPadContract.allowance(account, staking_addr)
+                allowanceCheck = parseInt(allowanceCheck.toString())
+                let _value = await ethers.utils.parseEther(stakevalue)
+                
+                if(allowanceCheck < getBronze){
+                    handleShow()
+                setMsgHandling("Approving")
+                    // console.log("allounceCheck>>", allowanceCheck)
+                    let approve = await ZPadContract.approve(staking_addr, _value)
+                    let approveTx = await approve.wait()
+                    // console.log("approveTx>", approveTx)
+                    if(approveTx && approveTx.blockNumber){
+                        setMsgHandling("Staking")
+                        let stake = await stakingContract.stake(ethers.utils.parseEther(stakevalue))
+                        let tx = await stake.wait()
+                        // totalBalance()
+                        setStakevalue(0)
+                        loadTotalStake()
+                        setMsgHandling("Staking Done")
+                    }
+                    else{
+                        console.log("error")
+                    }
+                }
+                else{
+                    console.log("errorr")
+    
+                }
+                
+            }
+            catch(e){
+                setMsgHandling(e)
+                handleShow()
+                setError(1)
+                console.log("error: ",e)
+            }
+        }
+
+        useEffect(() => {
+            (async () => {
+                
+                    try {    
+                        loadTotalStake()
+                    } catch (error) {
+                        console.log(error)
+                    }
+                
+            })()
+        }, []);
+
+        // useEffect(() => {
+        //     (async () => {
+        //         if (account) {
+        //             try {
+        //                 StakeEvent()
+        //                 // totalBalance()
+                        
+    
+        //             } catch (error) {
+        //                 console.log(error)
+        //             }
+        //         }
+        //     })()
+        // }, [account]);
 
     return (
 
@@ -55,7 +198,7 @@ function Stacking(props){
                         <div className="ido-box ido-small" style={{background: "#39065E"}}>
 
                             <p className="f-bold text-center">Total Zpad Stacked</p>
-                            <h4 className="soon text-center mt-2">123456</h4>
+                            <h4 className="soon text-center mt-2">{Math.floor(totalbalance)}</h4>
 
                         </div>
 
