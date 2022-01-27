@@ -30,8 +30,8 @@ function Stacking(props){
 
                        
                             <DropdownButton  title="Staking" className="staking-dropdown">
-                                <Dropdown.Item href="#">Unstaking</Dropdown.Item>
-                                <Dropdown.Item href="#">Withdraw</Dropdown.Item>
+                                <Dropdown.Item href="/unstaking">Unstaking</Dropdown.Item>
+                                <Dropdown.Item href="/withdraw">Withdraw</Dropdown.Item>
                                 
                             </DropdownButton>
                            
@@ -90,7 +90,7 @@ function Stacking(props){
                             </div>
 
                             <div className="staked">
-                                <h4>Staked</h4>
+                                <h4>Unstaked</h4>
                                 <h2>0.0000</h2>
                             </div>
 
@@ -99,9 +99,8 @@ function Stacking(props){
                                 <h2>0.0000</h2>
                             </div>
                         
-                            <div className="btn-group-custom justify-content-between">
-                                <a href="#live" class="btn-custom secondary-btn m-0">Live Sales</a>
-                                <a href="#upcomming" class="btn-custom primary-btn">Upcoming Sales</a>
+                            <div className="text-center mt-5">
+                                <Link to={'/'} className="btn-custom secondary-btn">Stack</Link>
                             </div>
 
                         </div>

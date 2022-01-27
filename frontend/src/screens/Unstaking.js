@@ -1,4 +1,4 @@
-import { Container, Row, Col, InputGroup,DropdownButton,Dropdown,FormControl,Form } from "react-bootstrap";
+import { Container, Row, Col,DropdownButton,Dropdown } from "react-bootstrap";
 import BannerImage from "../assets/images/ido-banner-main.png"
 import warning from "../assets/images/warning.png";
 import checklist from "../assets/images/checklist.png";
@@ -30,8 +30,8 @@ function UnStacking(props){
 
                        
                             <DropdownButton  title="Unstake" className="staking-dropdown">
-                                <Dropdown.Item href="#">Staking</Dropdown.Item>
-                                <Dropdown.Item href="#">Withdraw</Dropdown.Item>
+                                <Dropdown.Item href="/staking">Staking</Dropdown.Item>
+                                <Dropdown.Item href="/withdraw">Withdraw</Dropdown.Item>
                                 
                             </DropdownButton>
                            
@@ -90,7 +90,7 @@ function UnStacking(props){
                             </div>
 
                             <div className="staked">
-                                <h4>Staked</h4>
+                                <h4>Unstaked</h4>
                                 <h2>0.0000</h2>
                             </div>
 
@@ -99,9 +99,8 @@ function UnStacking(props){
                                 <h2>0.0000</h2>
                             </div>
                         
-                            <div className="btn-group-custom justify-content-between">
-                                <a href="#live" class="btn-custom secondary-btn m-0">Live Sales</a>
-                                <a href="#upcomming" class="btn-custom primary-btn">Upcoming Sales</a>
+                            <div className="text-center mt-5">
+                                <Link to={'/'} className="btn-custom secondary-btn">Unstack</Link>
                             </div>
 
                         </div>

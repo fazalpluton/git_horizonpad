@@ -334,7 +334,7 @@ margin-top: 2rem;
 
 }
 
-.ido-details ul{
+.ido-ul{
 
     list-style: none;
     padding: 0;
@@ -342,7 +342,7 @@ margin-top: 2rem;
 
 }
 
-.ido-details ul li{
+.ido-ul li{
 
     margin-right: 10px;
     font-size: 12px;
@@ -358,7 +358,7 @@ margin-top: 2rem;
    
    }
 
-.ido-details ul a{
+.ido-ul a{
 
  color: var(--white);
 
@@ -754,3 +754,35 @@ margin-left: 1rem !important;
     margin-left: 20px;
 
 }
+
+
+
+.table-dashed {
+    border-collapse: separate;
+    border-spacing: 0;
+    border:2px dashed var(--white);
+   
+  }
+  .table-dashed tr th,
+  .table-dashed tr td {
+   
+    padding: 5px;
+    color: var(--white);
+  }
+  
+  .table-dashed tr th:first-child
+ {
+  border-radius: 50px 50px 0 0;
+}
+
+.table-dashed tr:last-child
+{
+   border-radius: 0 0 50px 50px;
+}
+  .table-dashed tr th {
+    
+    
+    text-align: left;
+  }
+
+  

@@ -41,7 +41,7 @@ function IdoBox(props){
 
                         <h4>DotOracles(DTO)</h4>
 
-                        <ul>
+                        <ul className="ido-ul">
 
                             <li><a href="#"><i class="fa-brands fa-medium"></i></a></li>
                             <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
