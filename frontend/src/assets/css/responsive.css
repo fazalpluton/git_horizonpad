@@ -14,6 +14,12 @@
         margin-bottom: 30px;
     
     }
+
+    .custom-table{
+
+        margin-bottom: 40px;
+
+    }
 }
 @media (max-width: 767px){
 
@@ -23,6 +29,8 @@
     .banner-section{
         margin-bottom: 5rem;
     }
+
+    
 
     .banner-img{
 
@@ -67,6 +75,14 @@
     height: 1000px;
     align-items: flex-start !important;
 }
+
+.banner-section-m{
+
+height: auto !important;
+
+}
+
+
 .banner-background{
     height: 100%;
 }
@@ -277,6 +293,12 @@ margin-bottom: 10px !important;
 
     }
 
+    .custom-table{
+
+        margin-bottom: 40px;
+
+    }
+
   
 }
 
@@ -298,6 +320,10 @@ margin-bottom: 10px !important;
     .ido-box .btn-group-custom a {
         margin-bottom: 10px !important;
     }
+
+
+  
+
 }
 
 @media (max-width:1200px) and (min-width:1024px) {
