@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, InputGroup,DropdownButton,Dropdown,FormControl,Form } from "react-bootstrap";
+import { Container, Row, Col, InputGroup,DropdownButton,Dropdown,FormControl,Form ,Button } from "react-bootstrap";
 import IdoBox from "../components/ido-box"
 import BannerImage from "../assets/images/ido-banner-main.png"
 import checkpoint from "../assets/images/checkpoint.png";
@@ -175,7 +175,6 @@ function Stacking(props){
                             <DropdownButton  title="Staking" className="staking-dropdown">
                                 <Dropdown.Item href="/unstaking">Unstaking</Dropdown.Item>
                                 <Dropdown.Item href="/withdraw">Withdraw</Dropdown.Item>
-                                
                             </DropdownButton>
                            
                        
@@ -242,9 +241,20 @@ function Stacking(props){
                                 <h2>0.0000</h2>
                             </div>
                         
-                            <div className="text-center mt-5">
-                                <Link to={'/'} className="btn-custom secondary-btn">Stack</Link>
-                            </div>
+                            
+
+                            <Form className="text-center mt-3">
+                                
+                                <Form.Group className="mb-3 max-staked" controlId="formBasicCheckbox">
+                                <Form.Control type="text" placeholder="Stake Amount" />
+                                <Button className="">
+                                    Max
+                                </Button>
+                                </Form.Group>
+                                <Button  type="submit" className="btn-custom secondary-btn">
+                                    Stake
+                                </Button>
+                            </Form>
 
                         </div>
 

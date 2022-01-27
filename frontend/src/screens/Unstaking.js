@@ -1,4 +1,4 @@
-import { Container, Row, Col,DropdownButton,Dropdown } from "react-bootstrap";
+import { Container, Row, Col,DropdownButton,Dropdown,Form, Button } from "react-bootstrap";
 import BannerImage from "../assets/images/ido-banner-main.png"
 import warning from "../assets/images/warning.png";
 import checklist from "../assets/images/checklist.png";
@@ -99,9 +99,18 @@ function UnStacking(props){
                                 <h2>0.0000</h2>
                             </div>
                         
-                            <div className="text-center mt-5">
-                                <Link to={'/'} className="btn-custom secondary-btn">Unstack</Link>
-                            </div>
+                            <Form className="text-center mt-3">
+                                
+                                <Form.Group className="mb-3 max-staked" controlId="formBasicCheckbox">
+                                <Form.Control type="text" placeholder="Unstake Amount" />
+                                <Button className="">
+                                    Max
+                                </Button>
+                                </Form.Group>
+                                <Button  type="submit" className="btn-custom secondary-btn">
+                                    Unstake
+                                </Button>
+                            </Form>
 
                         </div>
 
