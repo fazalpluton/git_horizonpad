@@ -1,0 +1,15 @@
+[
+  "constructor(address)",
+  "event OwnershipTransferred(address indexed,address indexed)",
+  "function create_TokenSale(address,address,uint256,uint256,address) returns (address)",
+  "function getIdoExist(address) view returns (bool)",
+  "function getToken() view returns (address)",
+  "function ico_addr() view returns (address)",
+  "function idos(uint256) view returns (address)",
+  "function owner() view returns (address)",
+  "function renounceOwnership()",
+  "function setToken(address)",
+  "function total_idos() view returns (uint256)",
+  "function total_tokens() view returns (uint256)",
+  "function transferOwnership(address)"
+]
