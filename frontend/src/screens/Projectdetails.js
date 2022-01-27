@@ -14,10 +14,10 @@ function ProjectDetails(props){
         {props.header}
         <div className="position-relative">
             <img src={require('../assets/images/banner-background.png').default} className="banner-background"/>
-            <div className="banner-section">
+            <div className="banner-section banner-section-m">
                 <Container>
                     <Row className="align-items-center">
-                        <Col lg={6} sm={12} md={6}>
+                        <Col lg={6} sm={12} md={6} className="py-5">
 
                             <div className="ido"> 
 
@@ -85,54 +85,107 @@ function ProjectDetails(props){
                 
             <Col lg={6} sm={12}>
 
-                <Table responsive className="table-dashed">
+                <div className="custom-table">
+                    <Table responsive className="table-dashed">
 
-                    <thead>
-                        <tr>
-                            <th colSpan={2}>Pool Information</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
+                        <thead>
+                            <tr>
+                                <th colSpan={2}>Pool Information</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                        <tr>
-                            <td>Opens</td>
-                            <td>2022-01-11 08:00:00 UTC</td>
-                            
-                        </tr>
+                            <tr>
+                                <td>Opens</td>
+                                <td>2022-01-11 08:00:00 UTC</td>
+                                
+                            </tr>
 
-                        <tr>
-                            <td>Opens</td>
-                            <td>2022-01-11 08:00:00 UTC</td>
-                            
-                        </tr>
+                            <tr>
+                                <td>FSC Opens</td>
+                                <td>2022-01-11 08:00:00 UTC</td>
+                                
+                            </tr>
 
-                        <tr>
-                            <td>Opens</td>
-                            <td>2022-01-11 08:00:00 UTC</td>
-                            
-                        </tr>
+                            <tr>
+                                <td>Closes</td>
+                                <td>2022-01-11 08:00:00 UTC</td>
+                                
+                            </tr>
 
-                        <tr>
-                            <td>Opens</td>
-                            <td>2022-01-11 08:00:00 UTC</td>
-                            
-                        </tr>
+                            <tr>
+                                <td>Swap rate</td>
+                                <td>1BUSD = 20YYY</td>
+                                
+                            </tr>
 
-                        <tr>
-                            <td>Opens</td>
-                            <td>2022-01-11 08:00:00 UTC</td>
-                            
-                        </tr>
-                       
-                    </tbody>
+                            <tr>
+                                <td>Cap</td>
+                                <td>3000 BUSD</td>
+                                
+                            </tr>
 
-                </Table>
+                            <tr>
+                                <td>Total User Participated</td>
+                                <td>12345</td>
+                                
+                            </tr>
+
+                            <tr>
+                                <td>Total Fund Swapped</td>
+                                <td>3000000 BUSD</td>
+                                
+                            </tr>
+
+                            <tr>
+                                <td>Access Type</td>
+                                <td>Private</td>
+                                
+                            </tr>
+                        
+                        </tbody>
+
+                    </Table>
+                </div>
 
             </Col>
 
             <Col lg={6} sm={12}>
-                <IdoBox status={"Live"} />
+            <div className="custom-table">
+                    <Table responsive className="table-dashed">
+
+                        <thead>
+                            <tr>
+                                <th colSpan={2}>Token Information</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>Name</td>
+                                <td>WeWay</td>
+                                
+                            </tr>
+
+                            <tr>
+                                <td>Token Symbol</td>
+                                <td>WWW</td>
+                                
+                            </tr>
+
+                            <tr>
+                                <td>Token Supply</td>
+                                <td>100000000</td>
+                                
+                            </tr>
+
+                        
+                        </tbody>
+
+                    </Table>
+                </div>
             </Col>
 
          
@@ -145,48 +198,6 @@ function ProjectDetails(props){
     
 
       
-
-        <div className="position-relative" id="upcomming">
-
-            <img src={SecondBackground} className="second-background"/>
-
-            <Container className="ido-slider-section">
-            
-            <h2 className="text-center h2">Upcoming Projects.</h2>
-            
-          
-
-            </Container>
-
-            <Container className="feature-section">
-            
-            <h2 className="text-center h2">Closed Projects.</h2>
-            
-            <Row className="feature-section g-lg-5">
-                
-                <Col lg={6} sm={12}>
-                    <IdoBox status={"Closed"} />
-                </Col>
-    
-                <Col lg={6}  sm={12}>
-                    <IdoBox status={"Closed"} />
-                </Col>
-    
-                <Col lg={6}  sm={12}>
-                    <IdoBox status={"Closed"} />
-                </Col>
-    
-                <Col lg={6} sm={12}>
-                    <IdoBox status={"Closed"} />
-                </Col>
-                
-                
-    
-                </Row>
-
-            </Container>
-          
-        </div>
 
         {props.footer}
         
