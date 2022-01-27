@@ -18,6 +18,7 @@ import B2B from './screens/B2B';
 import Stacking from './screens/Staking';
 import UnStacking from './screens/Unstaking';
 import Withdraw from './screens/Withdraw';
+import ProjectDetails from './screens/Projectdetails';
 import Login from './screens/admin/Login';
 import Projects from './screens/admin/Project';
 import AddProject from './screens/admin/AddProject';
@@ -39,6 +40,7 @@ function App() {
         <Route path="/staking" element={<Stacking header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/unstaking" element={<UnStacking header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/withdraw" element={<Withdraw header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/project-details" element={<ProjectDetails header={<DashboardHeader/>} footer={<Footer/>}/>}  />
 
         {/* admin routes  */}
         <Route path="/admin/login" element={<Login header={<DashboardHeader/>} footer={<Footer/>}/>}  />
