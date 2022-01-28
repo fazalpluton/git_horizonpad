@@ -359,15 +359,12 @@ function Stacking(props){
                         Event()
                         totalBalance()
                         getUnstakedValue()
-                        // calcPendingReward()
 
                         const interval = setInterval(() => {
                             calcPendingReward();
                           }, 15000);
                           return () => clearInterval(interval);
 
-                        // Stakers()
-                        // APY()
     
                     } catch (error) {
                         console.log(error)
