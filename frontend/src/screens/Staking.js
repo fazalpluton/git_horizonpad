@@ -7,6 +7,9 @@ import confirm from "../assets/images/confirm.png";
 import confirmation from "../assets/images/confirmation.png";
 import preauth from "../assets/images/pre-auth.png";
 import amountstack from "../assets/images/amountstack.png";
+import warning from "../assets/images/warning.png";
+import checklist from "../assets/images/checklist.png";
+import warningyellow from "../assets/images/warning-yellow.png"
 import { Link } from "react-router-dom";
 // import detectEthereumProvider from '@metamask/detect-provider'
 import { ethers, BigNumber } from 'ethers'
@@ -41,6 +44,8 @@ function Stacking(props){
     const [totalbalance, setTotalBalance] = useState(0)
     const [stakersNo, setStakersNo] = useState(0)
     const [userApy, setUserApy] = useState(0)
+    const [userReward, setUserReward] = useState(0)
+    const [userUnstakedValue, setUserUnstakedValue] = useState(0)
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -52,6 +57,9 @@ function Stacking(props){
     const [silver, setSilver] = useState(0)
     const [gold, setGold] = useState(0)
     const [tokenError, setTokenError]= useState()
+
+    // fazal 
+    const [isType,setIsType]= useState('withdraw')
 
     const loadProvider = async () => {
         try {
@@ -140,6 +148,8 @@ function Stacking(props){
             event.preventDefault()
         }
 
+        
+
         // This Function is used to lock Maximum Token
 
         const MaxStake = async () => {
@@ -159,6 +169,94 @@ function Stacking(props){
           }
 
         // This Function is used for unStake Token from SmartToken
+
+        const unStake = async () => {
+            try{
+                
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                let token = ethers.utils.parseEther((unStakeValue).toString())
+                // console.log(token)
+                let unStake = await stakingContract.unStake(token)
+                console.log("unStake>>>>>>>>>>", unStake)
+                let tx = await unStake.wait()
+                // console.log("tx>>", tx)
+                setUnStakeValue(0)
+            }
+            catch(e){
+                console.log(e)
+            }
+        }
+        
+        console.log("unStakeValue", unStakeValue)
+
+        const MaxUnStake = async () => {
+            try{
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                let getUserStakedValue = await stakingContract.getUserStakedValue(account)
+                let token = ethers.utils.formatEther(getUserStakedValue.toString())
+                console.log("token>>", token)
+                setUnStakeValue(Math.floor(token))
+            }
+            catch(e){
+                console.log(e)
+            }
+        }
+
+        const unStaking = (event) => {
+            unStake()
+            event.preventDefault()
+        }
+
+        // This function is used to get unStaked Value
+
+        const getUnstakedValue = async () => {
+            try{
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                let getUserStakedValue = await stakingContract.getUnstakedValue(account)
+                let token = ethers.utils.formatEther(getUserStakedValue.toString())
+                setUserUnstakedValue(token)
+                console.log(getUserStakedValue.toString())
+            }
+            catch(e){
+                console.log(e)
+            }
+        }
+
+        console.log("userUnstakedValue",userUnstakedValue)
+
+        // This is functrion is used for pull Rewards
+        const Reward = async () => {
+            try{
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                if(totalbalance !== 0){
+                    let withdrawRewards = await stakingContract.withdrawRewards()
+                    let tx = await withdrawRewards.wait()
+                console.log("tx", tx)
+                }
+                else{
+                   return null
+    
+                }
+                
+            }
+            catch(e) {
+                console.log(e)
+            }
+        }
+
+        // This function is used for Claculate Panding Reward
+        const calcPendingReward = async () => {
+            let signer = await loadProvider()
+            let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+            let calcPendingRewards = await stakingContract.calcPendingRewards(account)
+            setUserReward(calcPendingRewards.toString())
+            console.log("userReward", calcPendingRewards.toString())
+        } 
+
 
 
         // This function is used to get all token to the user
@@ -193,6 +291,8 @@ function Stacking(props){
                   
                     loadTotalStake()
                     totalBalance()
+                    getUnstakedValue()
+                    
                     // console.log("amount>>", amount.toString())
                 }
                 ) 
@@ -208,8 +308,20 @@ function Stacking(props){
             let signer = await loadProvider()
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let staker = await stakingContract.noOfStakers()
-            setStakersNo(staker.toString())
-            console.log("staker", staker.toString())
+
+            if(staker <=0 ){
+                setStakersNo("NA")
+            }
+            else{
+
+                setStakersNo(staker.toString())
+            }
+            console.log("getAPY", staker.toString())
+            // setStakersNo(staker.toString())
+            // if(stakersNo == null || 0) {
+            //     setStakersNo("hjhj")
+            // }
+            // console.log("staker", staker.toString())
         }
 
         const APY = async () => {
@@ -246,7 +358,15 @@ function Stacking(props){
                        // loadTotalStake()
                         Event()
                         totalBalance()
-                        Stakers()
+                        getUnstakedValue()
+                        // calcPendingReward()
+
+                        const interval = setInterval(() => {
+                            calcPendingReward();
+                          }, 15000);
+                          return () => clearInterval(interval);
+
+                        // Stakers()
                         // APY()
     
                     } catch (error) {
@@ -298,9 +418,19 @@ function Stacking(props){
                         <Col lg={3}>
 
                        
-                            <DropdownButton  title="Staking" className="staking-dropdown">
-                                <Dropdown.Item href="/unstaking">Unstaking</Dropdown.Item>
-                                <Dropdown.Item href="/withdraw">Withdraw</Dropdown.Item>
+                            <DropdownButton  title={isType == "stake" ? "Staking":isType == "unstaking" ? "Unstaking":isType == "withdraw" ? "Withdraw":"Staking"} className="staking-dropdown">
+                            {
+                            isType == "stake" ? "":
+                                <Dropdown.Item href="#" onClick={(e)=>setIsType("stake")}>Staking</Dropdown.Item>
+                            }
+                            {
+                            isType == "unstaking" ? "":
+                                <Dropdown.Item href="#" onClick={(e)=>setIsType("unstaking")}>Unstaking</Dropdown.Item>
+                            }
+                            {
+                            isType == "withdraw" ? "":
+                                <Dropdown.Item href="#" onClick={(e)=>setIsType("withdraw")}>Withdraw</Dropdown.Item>
+                            }
                             </DropdownButton>
                            
                        
@@ -351,25 +481,26 @@ function Stacking(props){
                         <Col lg={4} sm={12} md={6}>
                            
                         <div className="ido-box" style={{background: "#39065E"}}>
+                            
 
                             <div className="staked">
                                 <h4>Staked</h4>
                                 <h2>{Math.floor(totalbalance)}</h2>
+                                {console.log("totalbalance", totalbalance)}
                             </div>
 
                             <div className="staked">
                                 <h4>Unstaked</h4>
-                                <h2>0.0000</h2>
+                                <h2>{Math.floor(userUnstakedValue)}</h2>
                             </div>
 
                             <div className="staked">
                                 <h4>Reward</h4>
-                                <h2>0.0000</h2>
+                                <h2>{Math.floor(userReward)}</h2>
                             </div>
                         
                             
-
-                            <Form className="text-center mt-3">
+                            {isType == "stake" ? (<Form className="text-center mt-3">
                                 
                                 <Form.Group className="mb-3 max-staked" controlId="formBasicCheckbox">
                                 <Form.Control type="text" value={stakevalue} placeholder="Stake Amount" onChange={(e)=>setStakevalue(e.target.value)} />
@@ -380,7 +511,43 @@ function Stacking(props){
                                 <Button onClick={Staking} type="submit" className="btn-custom secondary-btn">
                                     Stake
                                 </Button>
-                            </Form>
+                            </Form>) : null}
+
+                            {isType == "unstaking" ? (<Form className="text-center mt-3">
+                                
+                                <Form.Group className="mb-3 max-staked" controlId="formBasicCheckbox">
+                                <Form.Control type="text"  placeholder="Stake Amount" onChange={(e)=>setUnStakeValue(e.target.value)} />
+                                <Button onClick={MaxUnStake} className="">
+                                    Max
+                                </Button>
+                                </Form.Group>
+                                <Button onClick={unStaking} type="submit"  className="btn-custom secondary-btn">
+                                    UnStake
+                                </Button>
+                            </Form>) : null}
+
+                            {/* withdraw */}
+
+                            {isType == "withdraw" ? (
+                                <div  className="text-center mt-3">
+                                <Button onClick={Reward} type="submit"  className="btn-custom secondary-btn">
+                                    Withdraw
+                                </Button>
+                                </div>
+                            ) : null}
+
+                            {/* <Form className="text-center mt-3">
+                                
+                                <Form.Group className="mb-3 max-staked" controlId="formBasicCheckbox">
+                                <Form.Control type="text" value={stakevalue} placeholder="Stake Amount" onChange={(e)=>setStakevalue(e.target.value)} />
+                                <Button onClick={MaxStake} className="">
+                                    Max
+                                </Button>
+                                </Form.Group>
+                                <Button onClick={Staking} type="submit" className="btn-custom secondary-btn">
+                                    Stake
+                                </Button>
+                            </Form> */}
 
                         </div>
 
@@ -394,157 +561,398 @@ function Stacking(props){
         </div>
 
         
-            <h2 className="text-center h2">Stake your Zpad</h2>
+         {
+             isType == "stake" &&
+             <div>
+         <h2 className="text-center h2">Stake your Zpad</h2>
 
-            <Container>
+                <Container>
 
-            <div class="roadmap">
+                <div class="roadmap">
 
-                <div class="roadmap-item circle-active">
+                    <div class="roadmap-item circle-active">
 
-                    <div class="roadmap-circle">
-                        <img src={checkpoint}/>
+                        <div class="roadmap-circle">
+                            <img src={checkpoint}/>
+                        </div>
+
+                        <p>Checkpoint</p>
+
                     </div>
 
-                    <p>Checkpoint</p>
-
-                </div>
-
-                <hr class="roadmap-hr"/>
-
-                <div class="roadmap-item">
-
-                    <div class="roadmap-circle">
-                    <img src={amountstack}/>
-                    </div>
-
-                    <p>Amount to Stake</p>
-
-                </div>
-
-                <hr class="roadmap-hr"/>
-
-                <div class="roadmap-item">
-
-                    <div class="roadmap-circle">
-                    <img src={preauth}/>
-                    </div>
-
-                    <p>Pre-authorization</p>
-
-                </div>
-
-                <hr class="roadmap-hr"/>
-
-                <div class="roadmap-item">
-
-                    <div class="roadmap-circle">
-                    <img src={confirm}/>
-                    </div>
-
-                    <p>Confirm</p>
-
-                </div>
-
-                <hr class="roadmap-hr"/>
+                    <hr class="roadmap-hr"/>
 
                     <div class="roadmap-item">
 
                         <div class="roadmap-circle">
-                        <img src={confirmation}/>
+                        <img src={amountstack}/>
                         </div>
 
-                        <p>Confirmation</p>
+                        <p>Amount to Stake</p>
 
                     </div>
 
-                
+                    <hr class="roadmap-hr"/>
 
-            </div>
+                    <div class="roadmap-item">
 
-            <h4 className="mb-4">The following conditions must be met before proceeding</h4>
+                        <div class="roadmap-circle">
+                        <img src={preauth}/>
+                        </div>
 
-            <div className="ido-box" style={{background: "transparent"}}>
-
-                <div className="d-flex mb-5 flex-xs-wrap">
-
-                    <div className="conditions">
-
-                        <span className="conditions-met">
-                            <h4>Connected with MetaMask</h4>
-                            <span className="tick-enable"><i class="fa-solid fa-check"></i></span>
-                        </span>
-
-                        <p>If not connected, click
-                            the "Connect Wallet" 
-                            button in the top right
-                            corner
-                        </p>
+                        <p>Pre-authorization</p>
 
                     </div>
 
-                    <div className="conditions">
+                    <hr class="roadmap-hr"/>
 
-                         <span className="conditions-met">
-                            <h4>Connected with MetaMask</h4>
-                            <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
-                        </span>
+                    <div class="roadmap-item">
 
-                        <p>If not connected, click
-                            the "Connect Wallet" 
-                            button in the top right
-                            corner
-                        </p>
+                        <div class="roadmap-circle">
+                        <img src={confirm}/>
+                        </div>
+
+                        <p>Confirm</p>
 
                     </div>
 
-                    <div className="conditions">
+                    <hr class="roadmap-hr"/>
 
-                         <span className="conditions-met">
-                            <h4>Connected with MetaMask</h4>
-                            <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
-                        </span>
+                        <div class="roadmap-item">
 
-                        <p>If not connected, click
-                            the "Connect Wallet" 
-                            button in the top right
-                            corner
-                        </p>
+                            <div class="roadmap-circle">
+                            <img src={confirmation}/>
+                            </div>
 
-                    </div>
+                            <p>Confirmation</p>
 
-                    <div className="conditions">
+                        </div>
 
-                         <span className="conditions-met">
-                            <h4>Connected with MetaMask</h4>
-                            <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
-                        </span>
-
-                        <p>If not connected, click
-                            the "Connect Wallet" 
-                            button in the top right
-                            corner
-                        </p>
-
-                    </div>
+                    
 
                 </div>
 
-                <Form>
-                    <div class="custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="defaultUnchecked" />
-                        <label class="custom-control-label" for="defaultUnchecked">I have read the Terms and Conditions</label>
+                <h4 className="mb-4">The following conditions must be met before proceeding</h4>
+
+                <div className="ido-box" style={{background: "transparent"}}>
+
+                    <div className="d-flex mb-5 flex-xs-wrap">
+
+                        <div className="conditions">
+
+                            <span className="conditions-met">
+                                <h4>Connected with MetaMask</h4>
+                                <span className="tick-enable"><i class="fa-solid fa-check"></i></span>
+                            </span>
+
+                            <p>If not connected, click
+                                the "Connect Wallet" 
+                                button in the top right
+                                corner
+                            </p>
+
+                        </div>
+
+                        <div className="conditions">
+
+                            <span className="conditions-met">
+                                <h4>Connected with MetaMask</h4>
+                                <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
+                            </span>
+
+                            <p>If not connected, click
+                                the "Connect Wallet" 
+                                button in the top right
+                                corner
+                            </p>
+
+                        </div>
+
+                        <div className="conditions">
+
+                            <span className="conditions-met">
+                                <h4>Connected with MetaMask</h4>
+                                <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
+                            </span>
+
+                            <p>If not connected, click
+                                the "Connect Wallet" 
+                                button in the top right
+                                corner
+                            </p>
+
+                        </div>
+
+                        <div className="conditions">
+
+                            <span className="conditions-met">
+                                <h4>Connected with MetaMask</h4>
+                                <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
+                            </span>
+
+                            <p>If not connected, click
+                                the "Connect Wallet" 
+                                button in the top right
+                                corner
+                            </p>
+
+                        </div>
+
                     </div>
-                </Form>
 
-            </div>
+                    <Form>
+                        <div class="custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked" />
+                            <label class="custom-control-label" for="defaultUnchecked">I have read the Terms and Conditions</label>
+                        </div>
+                    </Form>
 
-            <div className="text-center my-5">
-                <Link to={'/'} className="btn-custom secondary-btn">Next</Link>
-            </div>
+                </div>
 
-            </Container>
+                <div className="text-center my-5">
+                    <Link to={'/'} className="btn-custom secondary-btn">Next</Link>
+                </div>
+
+                </Container>
+         </div>
        
+         }
+         {
+             isType == "unstaking" &&
+             <div>
+               <h2 className="text-center h2">Unstake your Zpad</h2>
+
+                    <Container>
+
+                    <div class="roadmap">
+
+                        <div class="roadmap-item circle-active">
+
+                            <div class="roadmap-circle">
+                                <img src={warning}/>
+                            </div>
+
+                            <p>Warning</p>
+
+                        </div>
+
+                        <hr class="roadmap-hr"/>
+
+                        <div class="roadmap-item">
+
+                            <div class="roadmap-circle">
+                            <img src={checklist}/>
+                            </div>
+
+                            <p>Checklist</p>
+
+                        </div>
+
+                        <hr class="roadmap-hr"/>
+
+                        <div class="roadmap-item">
+
+                            <div class="roadmap-circle">
+                            <img src={amountstack}/>
+                            </div>
+
+                            <p>Amount to Stake</p>
+
+                        </div>
+
+                        <hr class="roadmap-hr"/>
+
+                        <div class="roadmap-item">
+
+                            <div class="roadmap-circle">
+                            <img src={confirm}/>
+                            </div>
+
+                            <p>Initialize Unstake</p>
+
+                        </div>
+
+                        <hr class="roadmap-hr"/>
+
+                            <div class="roadmap-item">
+
+                                <div class="roadmap-circle">
+                                <img src={confirmation}/>
+                                </div>
+
+                                <p>Confirmation</p>
+
+                            </div>
+
+                        
+
+                    </div>
+
+
+                    <div className="ido-box" style={{background: "transparent"}}>
+
+                    <div className="unstaking-warn">
+
+                            <img src={warningyellow}/>
+                            <p>After Unstaking, you must wait 7 days before you can withdraw your BSCPAD and rewards.
+
+                            The amount of tokens you Unstake will not count towards your tier level for upcoming Projects.</p>
+
+                    </div>
+
+                    </div>
+
+                    <div className="text-center my-5">
+                        <Link to={'/'} className="btn-custom secondary-btn">Next</Link>
+                    </div>
+
+                    </Container>
+             </div>
+         }
+         {
+             isType == "withdraw" &&
+             <div>
+                 <h2 className="text-center h2">Withdraw your Zpad</h2>
+
+                        <Container>
+
+                        <div class="roadmap">
+
+                            <div class="roadmap-item circle-active">
+
+                                <div class="roadmap-circle">
+                                    <img src={checkpoint}/>
+                                </div>
+
+                                <p>Checkpoint</p>
+
+                            </div>
+
+                            <hr class="roadmap-hr"/>
+
+                            <div class="roadmap-item">
+
+                                <div class="roadmap-circle">
+                                <img src={amountstack}/>
+                                </div>
+
+                                <p>Amount to Stake</p>
+
+                            </div>
+
+
+                            <hr class="roadmap-hr"/>
+
+                            <div class="roadmap-item">
+
+                                <div class="roadmap-circle">
+                                <img src={confirm}/>
+                                </div>
+
+                                <p>Initialize Withdraw</p>
+
+                            </div>
+
+                            <hr class="roadmap-hr"/>
+
+                                <div class="roadmap-item">
+
+                                    <div class="roadmap-circle">
+                                    <img src={confirmation}/>
+                                    </div>
+
+                                    <p>Confirmation</p>
+
+                                </div>
+
+                            
+
+                        </div>
+
+                        <h4 className="mb-4">The following conditions must be met before proceeding</h4>
+
+                        <div className="ido-box" style={{background: "transparent"}}>
+
+                            <div className="d-flex mb-5 flex-xs-wrap">
+
+                                <div className="conditions">
+
+                                    <span className="conditions-met">
+                                        <h4>Connected with MetaMask</h4>
+                                        <span className="tick-enable"><i class="fa-solid fa-check"></i></span>
+                                    </span>
+
+                                    <p>If not connected, click
+                                        the "Connect Wallet" 
+                                        button in the top right
+                                        corner
+                                    </p>
+
+                                </div>
+
+                                <div className="conditions">
+
+                                    <span className="conditions-met">
+                                        <h4>Connected with MetaMask</h4>
+                                        <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
+                                    </span>
+
+                                    <p>If not connected, click
+                                        the "Connect Wallet" 
+                                        button in the top right
+                                        corner
+                                    </p>
+
+                                </div>
+
+                                <div className="conditions">
+
+                                    <span className="conditions-met">
+                                        <h4>Connected with MetaMask</h4>
+                                        <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
+                                    </span>
+
+                                    <p>If not connected, click
+                                        the "Connect Wallet" 
+                                        button in the top right
+                                        corner
+                                    </p>
+
+                                </div>
+
+                                <div className="conditions">
+
+                                    <span className="conditions-met">
+                                        <h4>Connected with MetaMask</h4>
+                                        <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
+                                    </span>
+
+                                    <p>If not connected, click
+                                        the "Connect Wallet" 
+                                        button in the top right
+                                        corner
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <Form>
+                                <div class="custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="defaultUnchecked" />
+                                    <label class="custom-control-label" for="defaultUnchecked">I have read the Terms and Conditions</label>
+                                </div>
+                            </Form>
+
+                        </div>
+
+                        <div className="text-center my-5">
+                            <Link to={'/'} className="btn-custom secondary-btn">Next</Link>
+                        </div>
+
+                        </Container>
+             </div>
+         }
     
 
       

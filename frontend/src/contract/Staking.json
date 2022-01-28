@@ -17,6 +17,7 @@
   "function fee() view returns (uint256)",
   "function getAPY() view returns (uint256)",
   "function getPendingRewards() view returns (uint256)",
+  "function getUnstakedValue(address) view returns (uint256)",
   "function getUserStakedValue(address) view returns (uint256)",
   "function getUserWeight(address) view returns (uint32)",
   "function getUsertickets(address) view returns (uint256)",
