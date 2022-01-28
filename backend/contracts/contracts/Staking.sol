@@ -47,6 +47,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
     uint public constant blocksPerYear = 2102400;
     uint public multiplierPerBlock;
     uint public baseRatePerBlock;
+    uint256 public noOfStakers;
 
     
 
@@ -91,6 +92,19 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
     function setTicketConsumer(address _consumer) public onlyOwner {
         ticketConsumer = _consumer;
     }
+
+     function getAPY() public view returns(uint256) {
+        if(totalStakedValue != 0){
+            uint256 a= blocksPerYear * baseRatePerBlock;
+            a= a/totalStakedValue;
+            a= a*100;
+            return a;
+        }else{
+            return 0;
+        }
+       
+        
+        } 
 
     function calcPendingRewards(address account)public view returns(uint256) {
         stakingDetail memory detail = userStakingDetail[account];
@@ -284,6 +298,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
 
         userStakingDetail[_msgSender()] = detail;
         totalStakedValue += amount;
+        noOfStakers++;
         emit eve_staked(amount);
     }
     
@@ -317,6 +332,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         detail.userWeight = getPoolWeight(newBalance);
         userStakingDetail[_msgSender()] = detail;
         totalStakedValue -= amount;
+        noOfStakers--;
         emit eve_Unstaked(amount);
     }
 
