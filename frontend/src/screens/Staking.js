@@ -9,7 +9,7 @@ import preauth from "../assets/images/pre-auth.png";
 import amountstack from "../assets/images/amountstack.png";
 import { Link } from "react-router-dom";
 // import detectEthereumProvider from '@metamask/detect-provider'
-import { ethers } from 'ethers'
+import { ethers, BigNumber } from 'ethers'
 import StakingAbi from "../contract/Staking.json"
 import ZPadAbi from "../contract/ZPad.json"
 import {staking_addr, zpad_addr, rewardToken_addr} from "../contract/addresses"
@@ -39,6 +39,8 @@ function Stacking(props){
     const [staketype,setStaketype] = useState('stake');
     const [totalToken, setTotalToken] = useState(0)
     const [totalbalance, setTotalBalance] = useState(0)
+    const [stakersNo, setStakersNo] = useState(0)
+    const [userApy, setUserApy] = useState(0)
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -85,6 +87,7 @@ function Stacking(props){
         }
         }
 
+        // function to insert token to the smart contract
         const Stake = async () => {
             try{
                 
@@ -109,6 +112,7 @@ function Stacking(props){
                         let tx = await stake.wait()
                         // totalBalance()
                         setStakevalue(0)
+                        Stakers()
                         loadTotalStake()
                         setMsgHandling("Staking Done")
                     }
@@ -129,6 +133,128 @@ function Stacking(props){
                 console.log("error: ",e)
             }
         }
+
+        // This function is used to call Stake function
+        const Staking = (event) => {
+            Stake()
+            event.preventDefault()
+        }
+
+        // This Function is used to lock Maximum Token
+
+        const MaxStake = async () => {
+            try{
+              let signer = await loadProvider()
+              let ZPadContract = new ethers.Contract(zpad_addr, ZPadAbi, signer)
+              let balanceOf = await ZPadContract.balanceOf(account)
+              let token = await ethers.utils.formatEther(balanceOf.toString())
+              console.log("token", token)
+              setStakevalue(parseInt(token).toString())
+              // console.log("balance>>",  token)
+            }
+            catch(error){
+                console.log(error)
+            }
+             
+          }
+
+        // This Function is used for unStake Token from SmartToken
+
+
+        // This function is used to get all token to the user
+        const totalBalance = async () => {
+            try{
+                // console.log("token>>")
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                let getUserStakedValue = await stakingContract.getUserStakedValue(account)
+                let token = ethers.utils.formatEther(getUserStakedValue.toString())
+                setTotalBalance(token)
+                // console.log("getUserStakedValue", token)
+            } 
+            catch(e){
+                console.log(e)
+            }
+        }
+
+        // This Function is used to get staking and unstaking Events from smart contract
+
+        const Event = async () => {
+            try{
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                  stakingContract.on("eve_staked", (amount) => {
+                    
+                    loadTotalStake()
+                    totalBalance()
+                }
+                ) 
+                stakingContract.on("eve_Unstaked", (amount) => {
+                  
+                    loadTotalStake()
+                    totalBalance()
+                    // console.log("amount>>", amount.toString())
+                }
+                ) 
+            }
+            catch(e){
+                console.log(e)
+            }
+        }
+
+        // This Function is Used For No Of Stakers
+
+        const Stakers = async () => {
+            let signer = await loadProvider()
+            let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+            let staker = await stakingContract.noOfStakers()
+            setStakersNo(staker.toString())
+            console.log("staker", staker.toString())
+        }
+
+        const APY = async () => {
+            let signer = await loadProvider()
+            let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+            // let blockPerYear = 2102400
+            // let baseRatePerBlock = await stakingContract.baseRatePerBlock()
+            // let abc = ethers.utils.parseEther(baseRatePerBlock.toString())
+            // console.log("abc", abc.toString())
+            // let a = baseRatePerBlock.mul(blockPerYear)
+            // let b = ethers.utils.parseEther(totalToken)
+            // let c = a/b
+            // let d = c*100
+            // console.log("b", c.toString())
+            // console.log("c", c.toFixed(3))
+            // console.log("d",d)
+            let getAPY = await stakingContract.getAPY()
+            if(getAPY <=0 ){
+                setUserApy("NA")
+            }
+            else{
+
+                setUserApy(getAPY.toString())
+            }
+            console.log("getAPY", getAPY.toString())
+        }
+        // Stakers()
+        
+
+        useEffect(() => {
+            (async () => {
+                if (account) {
+                    try {
+                       // loadTotalStake()
+                        Event()
+                        totalBalance()
+                        Stakers()
+                        // APY()
+    
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            })()
+        }, [account]);
 
         useEffect(() => {
             (async () => {
@@ -186,7 +312,7 @@ function Stacking(props){
                             <div className="ido-box ido-small" style={{background: "#39065E"}}>
 
                                 <p className="f-bold text-center">Number Of Stackers</p>
-                                <h4 className="soon text-center mt-2">123456</h4>
+                                <h4 className="soon text-center mt-2">{stakersNo}</h4>
 
                             </div>
 
@@ -197,7 +323,7 @@ function Stacking(props){
                         <div className="ido-box ido-small" style={{background: "#39065E"}}>
 
                             <p className="f-bold text-center">Total Zpad Stacked</p>
-                            <h4 className="soon text-center mt-2">{Math.floor(totalbalance)}</h4>
+                            <h4 className="soon text-center mt-2">{Math.floor(totalToken)}</h4>
 
                         </div>
 
@@ -208,7 +334,7 @@ function Stacking(props){
                         <div className="ido-box ido-small" style={{background: "#39065E"}}>
 
                             <p className="f-bold text-center">APY</p>
-                            <h4 className="soon text-center mt-2">123456</h4>
+                            <h4 className="soon text-center mt-2">{userApy}</h4>
 
                         </div>
 
@@ -228,7 +354,7 @@ function Stacking(props){
 
                             <div className="staked">
                                 <h4>Staked</h4>
-                                <h2>0.0000</h2>
+                                <h2>{Math.floor(totalbalance)}</h2>
                             </div>
 
                             <div className="staked">
@@ -246,12 +372,12 @@ function Stacking(props){
                             <Form className="text-center mt-3">
                                 
                                 <Form.Group className="mb-3 max-staked" controlId="formBasicCheckbox">
-                                <Form.Control type="text" placeholder="Stake Amount" />
-                                <Button className="">
+                                <Form.Control type="text" value={stakevalue} placeholder="Stake Amount" onChange={(e)=>setStakevalue(e.target.value)} />
+                                <Button onClick={MaxStake} className="">
                                     Max
                                 </Button>
                                 </Form.Group>
-                                <Button  type="submit" className="btn-custom secondary-btn">
+                                <Button onClick={Staking} type="submit" className="btn-custom secondary-btn">
                                     Stake
                                 </Button>
                             </Form>

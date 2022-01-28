@@ -49,7 +49,7 @@ async function main() {
   await factory.deployed();
 
   Staking = await ethers.getContractFactory("Staking");
-  staking = await Staking.deploy(zpad.address,rewardToken.address,10000);
+  staking = await Staking.deploy(zpad.address,rewardToken.address,10000000);
   await staking.deployed();
 
   CrowdSale = await ethers.getContractFactory("CrowdSale");

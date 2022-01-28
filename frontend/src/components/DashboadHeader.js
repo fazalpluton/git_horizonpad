@@ -5,6 +5,7 @@ import axios from "axios";
 import Web3Modal from "web3modal";
 import { connectWallet } from "../utils/connectWallet";
 import { useWeb3React } from "@web3-react/core";
+import {injectedConnector} from "../../src/utils/connectors"
 
 import VectorLogo from "../assets/images/vector-logo.png"
 function DashboardHeader(){
@@ -18,7 +19,27 @@ function DashboardHeader(){
     deactivate,
     active,
     errorWeb3Modal,
+    active: networkActive, error: networkError, activate: activateNetwork
   } = useWeb3React();
+
+  // console.log("library", library)
+
+  const [loaded, setLoaded] = useState(false)
+
+
+  useEffect(() => {
+    injectedConnector
+      .isAuthorized()
+      .then((isAuthorized) => {
+        setLoaded(true)
+        if (isAuthorized && !networkActive && !networkError) {
+          activateNetwork(injectedConnector)
+        }
+      })
+      .catch(() => {
+        setLoaded(true)
+      })
+  }, [activateNetwork, networkActive, networkError])
 
   const [token,setToken] = useState(sessionStorage.getItem("token"));
   let url = process.env.REACT_APP_API;
