@@ -13,10 +13,16 @@ function Home(props){
         <>
         {props.header}
         <div className="position-relative">
-            <img src={require('../assets/images/banner-background.png').default} className="banner-background"/>
-            <div className="banner-section">
+            <img src={require('../assets/images/banner-background.png').default} className="banner-video-background"/>
+            <div className="banner-video-section">
                 <Container>
                     <Row className="align-items-center">
+                        <Col lg={12}>
+                        <div className="banner-video">
+                        <video  src={require('../assets/images/video.mp4').default} controls>
+                        </video>
+                        </div>
+                        </Col>
                         <Col lg={6} sm={12} md={6}>
                             <h1 className="logo-text">
                                 <img src={HORIZONPAD} className="logo-text-img"/>
@@ -25,7 +31,7 @@ function Home(props){
                             <p className="banner-p">The First of it’s kind Fundraising platform <br/> For Crypto and Non-Crpto Project, built<br/> and partnered with Binance Smart Chain</p>
                             <div className="btn-group-custom">
                             <button class="btn-custom secondary-btn">Learn More</button>
-                            <Link to={'/ido-projects'} className="btn-custom secondary-btn">Launch App</Link>
+                            <Link to={'/ido-projects'} target="_blank" className="btn-custom secondary-btn">Launch App</Link>
                             </div>
                         </Col>
                         <Col lg={6} sm={12} md={6}>
@@ -45,10 +51,10 @@ function Home(props){
             </Col>
             <Col lg={6} md={6} sm={12}>
                 <ul className="feature-ul">
-                   <li><Link to={'/nft-marketplace'}><img src={NotoIcon}/><span>NFT Market Place</span></Link></li> 
-                   <li><Link to={'/p2p-swap'}><img src={NotoIcon}/><span>P2P Swap</span></Link></li> 
-                   <li><Link to={'/burgeon-projects'}><img src={NotoIcon}/><span>Burgeon Project</span></Link></li> 
-                   <li><Link to={'/b2b-market'}><img src={NotoIcon}/><span>B2B Market</span></Link></li> 
+                   <li><Link to={'/nft-marketplace'} target="_blank"><img src={NotoIcon}/><span>NFT Market Place</span></Link></li> 
+                   <li><Link to={'/p2p-swap'} target="_blank"><img src={NotoIcon}/><span>P2P Swap</span></Link></li> 
+                   <li><Link to={'/burgeon-projects'} target="_blank"><img src={NotoIcon}/><span>Burgeon Project</span></Link></li> 
+                   <li><Link to={'/b2b-market'} target="_blank"><img src={NotoIcon}/><span>B2B Market</span></Link></li> 
 
                 </ul>
             </Col>
@@ -204,37 +210,37 @@ function Home(props){
                        <Table responsive="sm">
                         <thead>
                         <tr>
-                            <th>Tiers</th>
-                            <th>ZPAD Stacked</th>
-                            <th>Time before the IDO</th>
-                            <th>Guaranteed Allocation</th>
-                            <th>Poll Weight</th>
+                            <th className="left-none top-none">Tiers</th>
+                            <th className="top-none">ZPAD Stacked</th>
+                            <th className="top-none">Time before the IDO</th>
+                            <th className="top-none">Guaranteed Allocation</th>
+                            <th className="top-none right-none">Poll Weight</th>
                     
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Bronze</td>
+                            <td className="left-none">Bronze</td>
                             <td>30,000</td>
                             <td>4 Hrs</td>
                             <td>Yes</td>
-                            <td>10</td>
+                            <td className="right-none">10</td>
                         
                         </tr>
                         <tr>
-                            <td>Silver</td>
+                            <td className="left-none">Silver</td>
                             <td>75,000</td>
                             <td>4 Hrs</td>
                             <td>Yes</td>
-                            <td>32</td>
+                            <td className="right-none">32</td>
                         
                         </tr>
                         <tr>
-                            <td>Gold</td>
-                            <td>170,000</td>
-                            <td>4 Hrs</td>
-                            <td>Yes</td>
-                            <td>80</td>
+                            <td className="left-none bottom-none">Gold</td>
+                            <td className="bottom-none">170,000</td>
+                            <td className="bottom-none">4 Hrs</td>
+                            <td className="bottom-none">Yes</td>
+                            <td className="bottom-none right-none">80</td>
                         </tr>
                         </tbody>
                     </Table>

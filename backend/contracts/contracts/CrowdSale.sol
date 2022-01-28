@@ -105,14 +105,14 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
 
     function setTime(uint256 _wstartTimes,uint256 _wstartTimee,uint256 _sstartTimes,uint256 _sstartTimee,
                 uint256 _dstartTime) public onlyOwner{
-        uint256 one_day = (1 days * 1 seconds)-(1 seconds);    
+        uint256 one_day = (1 seconds); //(1 days * 1 seconds)-(1 seconds)   
         CUSTOM_WHITELIST_STARTTIME = block.timestamp + _wstartTimes;
-        CUSTOM_WHITELIST_ENDTIME = CUSTOM_WHITELIST_STARTTIME + _wstartTimee;
+        CUSTOM_WHITELIST_ENDTIME = block.timestamp + _wstartTimes + _wstartTimee;
         require(CUSTOM_WHITELIST_ENDTIME - CUSTOM_WHITELIST_STARTTIME >= one_day , "please set whitelist time ending period greater than 1 day");
-        CUSTOM_SALE_STARTTIME = CUSTOM_WHITELIST_ENDTIME + _sstartTimes;
-        CUSTOM_SALE_ENDTIME = CUSTOM_SALE_STARTTIME + _sstartTimee;
+        CUSTOM_SALE_STARTTIME = block.timestamp + _wstartTimes + _wstartTimee + _sstartTimes;
+        CUSTOM_SALE_ENDTIME = block.timestamp + _wstartTimes + _wstartTimee + _sstartTimes + _sstartTimee;
         require(CUSTOM_SALE_ENDTIME - CUSTOM_SALE_STARTTIME >= one_day ,"please set sale time ending period greater than 1 day");
-        CUSTOM_TOKEN_DESTRIBUTIONTIME = CUSTOM_SALE_ENDTIME + _dstartTime;
+        CUSTOM_TOKEN_DESTRIBUTIONTIME = block.timestamp + _wstartTimes + _wstartTimee + _sstartTimes + _sstartTimee + _dstartTime;
     }
 
     

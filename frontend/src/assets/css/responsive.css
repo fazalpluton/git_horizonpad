@@ -22,7 +22,10 @@
     }
 }
 @media (max-width: 767px){
-
+    .banner-video-section video{
+        width: 100%;
+    }
+    
     .logo-text{
         margin-top: 1rem !important;
     }
@@ -219,6 +222,10 @@ margin-bottom: 10px !important;
     .logo-text-img{
         width: 270px !important;
     }
+    .banner-video-section video{
+        width: 100%;
+
+    }
     
 
 }
@@ -298,7 +305,11 @@ margin-bottom: 10px !important;
         margin-bottom: 40px;
 
     }
+   
+    .banner-video-section {
+        height: 988px;
 
+    }
   
 }
 
@@ -320,7 +331,17 @@ margin-bottom: 10px !important;
     .ido-box .btn-group-custom a {
         margin-bottom: 10px !important;
     }
+    .footer-social-icon i {
+        font-size: 25px;
+    }
+    .custom-header .navbar-light .navbar-nav .nav-link {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 
+    .banner-video video{
+        margin-bottom: 2rem !important;
+    }
 
   
 

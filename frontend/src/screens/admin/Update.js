@@ -22,7 +22,7 @@ function UpdateProject(props){
         const [hdescription,setHdescription] = useState('')
         const [hid,setHid] = useState('')
         const [datatable, setDatatable] = useState();
-        const [token,setToken] = useState(sessionStorage.getItem("token"));
+        const [token,setToken] = useState(localStorage.getItem("token"));
         let url = process.env.REACT_APP_API;
         const formData = new FormData();
         const [status, setStatus] = useState('')
@@ -117,8 +117,8 @@ function UpdateProject(props){
         highlight.map((item, index) => {
           item.action = (
             <>
-            <button  className='btn btn-skyblue' onClick={(e) => edithighlight(item.id)}>Edit</button> 
-            <button  className='btn btn-danger' onClick={(e)=>confirmation(item.id)}>Delete</button>
+            <button  className='btn-custom primary-btn' onClick={(e) => edithighlight(item.id)}>Edit</button> 
+            <button  className='btn-custom btn-danger ml-1' onClick={(e)=>confirmation(item.id)}>Delete</button>
             </>
           );
         });
@@ -154,10 +154,13 @@ function UpdateProject(props){
         }
         return (
         <>
-                <h3 className="main-heading">EDIT PROJECT</h3>
+                {props.header}
+                <Container className="mt-3">
+
                 <Row>
+                <h2 className="h2 mb-3 text-center">Edit Project</h2>
                     <Col lg={12} sm={12} md={12}>
-                        <div className="box">
+                        <div className="ido-box">
                             <Row className="gy-5">
                                 <Col lg={6} sm={12} md={6}>
                                 <Form onSubmit={(e) => {
@@ -193,11 +196,11 @@ function UpdateProject(props){
                                 </Form.Select>
                                 </Form.Group> */}
                                 <p className="text-success">{message}</p>
-                                <button type="submit" className="btn-custom btn-white-border mt-3">Submit</button>
+                                <button type="submit" className="btn-custom primary-btn mt-3">Submit</button>
                                 </Form>
                                 </Col>
 
-                                <Col lg={12} sm={12} md={12}>
+                                {/* <Col lg={12} sm={12} md={12}>
                                 <h3 class="main-heading">HIGHLIGHT LIST</h3>
                                 <MDBDataTableV5
                                 hover
@@ -210,7 +213,7 @@ function UpdateProject(props){
                                 searchBottom={false}
                                 />
                                 </Col>
-                             <DetailUpdate id={id}/>
+                             <DetailUpdate id={id}/> */}
                             </Row>
                         </div>
                     </Col>
@@ -218,6 +221,8 @@ function UpdateProject(props){
                    
                    
                 </Row>
+                </Container>
+                {props.footer}
                 <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
                   <Modal.Title className="text-dark">Edit Highlight</Modal.Title>
@@ -230,12 +235,9 @@ function UpdateProject(props){
                     <Form.Label>Description</Form.Label>
                     <Form.Control type="text" as="textarea" rows={3} value={hdescription} onChange={(e)=>setHdescription(e.target.value)} required/>
                   </Form.Group>
-                  <button type="submit" className="btn-custom btn-white-border mt-3">Submit</button>
+                  <button type="submit" className="btn-custom primary-btn mt-3">Submit</button>
                   </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                  
-                </Modal.Footer>
               </Modal>
 
               <Modal show={dshow} onHide={dhandleClose} centered>
@@ -243,8 +245,8 @@ function UpdateProject(props){
                 <Modal.Title className="text-black">Confirmation</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="text-center">
-                    <h4 className="text-black">Are you sure to delete this item.</h4>
-                  <button type="button" onClick={(e)=>confirmdelete()} className="btn-custom btn-white-border mt-3">Confirm</button>
+                    <h4 className="text-white">Are you sure to delete this item.</h4>
+                  <button type="button" onClick={(e)=>confirmdelete()} className="btn-custom primary-btn mt-3">Confirm</button>
 
                 </Modal.Body>
               

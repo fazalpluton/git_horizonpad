@@ -18,7 +18,7 @@ function Projects(props){
         <>
                 {props.header}
                 <Container className="admin-projects">
-                <Row>
+                <Row className="gy-5">
                     
                     {
                         projects.map((project)=>{
@@ -54,12 +54,24 @@ function Projects(props){
 
                                             <h4>{project.title}</h4>
 
-                                            <ul>
+                                            <ul className="ido-ul">
 
-                                                <li><a href={project.medium}><i class="fa-brands fa-medium"></i></a></li>
-                                                <li><a href={project.twitter}><i class="fa-brands fa-twitter"></i></a></li>
-                                                <li><a href={project.telegram}><i class="fa-brands fa-telegram"></i></a></li>
-                                                <li><a href="#"><i class="fa-solid fa-globe"></i></a></li>
+                                            {
+                                project.medium == null?
+                                "":<li><a href={project.medium} target="_blank"><i class="fa-brands fa-medium"></i></a></li>
+                            }
+                            {
+                                project.twitter == null?
+                                "": <li><a href={project.twitter} target="_blank"><i class="fa-brands fa-twitter"></i></a></li>
+                            }
+                            {
+                                project.telegram == null?
+                                "":   <li><a href={project.telegram} target="_blank"><i class="fa-brands fa-telegram"></i></a></li>
+                            }
+                            {
+                                project.twitter == null?
+                                "":<li><a href="#" target="_blank"><i class="fa-solid fa-globe"></i></a></li>
+                            }
 
                                             </ul>
                                         </div>
@@ -84,7 +96,6 @@ function Projects(props){
                                     </div>
                                     <div className="ido-box-footer">
                                         <Link to={'/admin/edit-project/'+project.id} className="btn-custom secondary-btn">Edit</Link>
-                                        <Link to={'#'} className="btn-custom secondary-btn">Add Detail</Link>
                                     </div>
                                     </div>
                             </Col>
