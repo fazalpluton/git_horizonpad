@@ -57,6 +57,8 @@ function Stacking(props){
     const [silver, setSilver] = useState(0)
     const [gold, setGold] = useState(0)
     const [tokenError, setTokenError]= useState()
+    // fazal 
+    const [isType,setIsType]= useState('withdraw')
 
     // fazal 
     const [isType,setIsType]= useState('withdraw')
@@ -359,12 +361,8 @@ function Stacking(props){
                         Event()
                         totalBalance()
                         getUnstakedValue()
-
-                        const interval = setInterval(() => {
-                            calcPendingReward();
-                          }, 15000);
-                          return () => clearInterval(interval);
-
+                        // Stakers()
+                        // APY()
     
                     } catch (error) {
                         console.log(error)

@@ -23,8 +23,8 @@ function Login(props){
             })
             .then(function (response) {
                 if(response.data.access_token){
-                    sessionStorage.setItem("token", response.data.access_token);
-                    navigate('/admin/projects')
+                    localStorage.setItem("token", response.data.access_token);
+                    window.location = '/admin/projects'
                 }
                 else if(response.data.error){
                     setError(response.data.error)

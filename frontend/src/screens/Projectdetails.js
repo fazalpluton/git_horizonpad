@@ -1,13 +1,25 @@
 import { Container, Row,Col,DropdownButton,Dropdown,Table  } from "react-bootstrap";
+import React, { useState,useEffect } from "react";
 import IdoBox from "../components/ido-box"
 import BannerImage from "../assets/images/second-section.png"
 import SecondBackground from "../assets/images/second-background.png";
 import ido_logos from "../assets/images/ido-logos.png"
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import axios from 'axios';
 
 function ProjectDetails(props){
 
-   
+    let url = process.env.REACT_APP_API;
+    const [project,setProject] = useState([]);
+    const [detailType,setDetailType] = useState("detail");
+    const { id } = useParams();
+
+    useEffect(async ()=>{
+    await axios.get(url+'projects/'+id).then((res)=>{
+        setProject(res.data.projects)
+    })
+    },[]);
+    
 
     return (
         <>
@@ -21,11 +33,11 @@ function ProjectDetails(props){
 
                             <div className="ido"> 
 
-                                <img src={ido_logos} />
+                                <img src={url+project.img} />
 
                                 <div className="ido-details">
 
-                                    <h4>DotOracles(DTO)</h4>
+                                    <h4>{project.title}</h4>
 
                                 </div>
 
@@ -34,25 +46,68 @@ function ProjectDetails(props){
                             <div className="d-flex">
                                 
                                 <ul className="ido-ul w-50">
-
-                                    <li><a href="#"><i class="fa-brands fa-medium"></i></a></li>
-                                    <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa-brands fa-telegram"></i></a></li>
-                                    <li><a href="#"><i class="fa-solid fa-globe"></i></a></li>
+                            {
+                                project.medium == null?
+                                "":<li><a href={project.medium} target="_blank"><i class="fa-brands fa-medium"></i></a></li>
+                            }
+                            {
+                                project.twitter == null?
+                                "": <li><a href={project.twitter} target="_blank"><i class="fa-brands fa-twitter"></i></a></li>
+                            }
+                            {
+                                project.telegram == null?
+                                "":   <li><a href={project.telegram} target="_blank"><i class="fa-brands fa-telegram"></i></a></li>
+                            }
+                            {
+                                project.web == null?
+                                "":<li><a href={project.web} target="_blank"><i class="fa-solid fa-globe"></i></a></li>
+                            }
 
                                 </ul>
                             
-                                <p className="closed">
+                                {
+                                    project.time_status == "0" &&
+                                    <p className="soon">
                                     <i class="fa-solid fa-circle"></i>
-                                    Closed
-                                </p>
+                                    Soon</p>
+                                }
+                                {
+                                    project.time_status == "1" &&
+                                    <p className="live">
+                                    <i class="fa-solid fa-circle"></i>
+                                    Whitelist Open</p>
+                                }
+                                {
+                                    project.time_status == "2" &&
+                                    <p className="closed">
+                                    <i class="fa-solid fa-circle"></i>
+                                    Whitelist Closed</p>
+                                }
+                                   {
+                                        project.time_status == "3" &&
+                                        <p className="live">
+                                        <i class="fa-solid fa-circle"></i>
+                                        Live</p>
+                                    }
+
+                                    {
+                                        project.time_status == "4" &&
+                                        <p className="closed">
+                                        <i class="fa-solid fa-circle"></i>
+                                        Closed</p>
+                                    }
+                                    {
+                                        project.time_status == "5" &&
+                                        <p className="closed">
+                                        <i class="fa-solid fa-circle"></i>
+                                        Closed</p>
+                                    }
 
                             </div>
 
 
-                            <p className="f-bold my-3">Video game Bad Days gives you the chance to collect,
-                                own, breed, and battle as your favourite heroes and
-                                villains by Stan Lee!
+                            <p className="f-bold my-3">
+                            {project.short_intro}
                             </p>
 
                             <div className="my-5">
@@ -74,15 +129,27 @@ function ProjectDetails(props){
                     
             <Container>
 
-            <DropdownButton  title="Project Details" className="staking-dropdown">
+            <DropdownButton  title={detailType == "detail" ? "Project Details":detailType == "schedule" ? "Schedule":detailType == "allocation" ? "Allocation":"Project Details"} className="staking-dropdown">
 
-                <Dropdown.Item href="#">Dropdown 1</Dropdown.Item>
-                <Dropdown.Item href="#">Dropdown 1</Dropdown.Item>
+                {
+                    detailType == "schedule" ? "":
+                    <Dropdown.Item href="#" onClick={(e)=>setDetailType('schedule')}>Schedule</Dropdown.Item>
+                }
+                {
+                    detailType == "allocation" ? "":
+                    <Dropdown.Item href="#" onClick={(e)=>setDetailType('allocation')}>Allocation</Dropdown.Item>
+                }
+                {
+                    detailType == "detail" ? "":
+                    <Dropdown.Item href="#" onClick={(e)=>setDetailType('detail')}>Project Details</Dropdown.Item>
+                }
                         
             </DropdownButton>
 
-            <Row className="feature-section g-lg-5">
-                
+            {
+                detailType == "detail" &&
+                <Row className="feature-section g-lg-5">
+          
             <Col lg={6} sm={12}>
 
                 <div className="custom-table">
@@ -97,19 +164,29 @@ function ProjectDetails(props){
                         <tbody>
 
                             <tr>
-                                <td>Opens</td>
+                                <td>Whitelist Opens</td>
                                 <td>2022-01-11 08:00:00 UTC</td>
                                 
                             </tr>
 
                             <tr>
-                                <td>FSC Opens</td>
+                                <td>Whitelist Ends</td>
                                 <td>2022-01-11 08:00:00 UTC</td>
                                 
                             </tr>
 
                             <tr>
-                                <td>Closes</td>
+                                <td>Sale Opens</td>
+                                <td>2022-01-11 08:00:00 UTC</td>
+                                
+                            </tr>
+                            <tr>
+                                <td>Sale Ends</td>
+                                <td>2022-01-11 08:00:00 UTC</td>
+                                
+                            </tr>
+                            <tr>
+                                <td>Destribution Ends</td>
                                 <td>2022-01-11 08:00:00 UTC</td>
                                 
                             </tr>
@@ -133,16 +210,16 @@ function ProjectDetails(props){
                             </tr>
 
                             <tr>
-                                <td>Total Fund Swapped</td>
-                                <td>3000000 BUSD</td>
+                                <td className="bottom-none">Total Fund Swapped</td>
+                                <td className="bottom-none">{project.total_raised} BUSD</td>
                                 
                             </tr>
 
-                            <tr>
+                            {/* <tr>
                                 <td>Access Type</td>
                                 <td>Private</td>
                                 
-                            </tr>
+                            </tr> */}
                         
                         </tbody>
 
@@ -176,8 +253,8 @@ function ProjectDetails(props){
                             </tr>
 
                             <tr>
-                                <td>Token Supply</td>
-                                <td>100000000</td>
+                                <td className="bottom-none">Token Supply</td>
+                                <td className="bottom-none">100000000</td>
                                 
                             </tr>
 
@@ -193,6 +270,83 @@ function ProjectDetails(props){
             
 
             </Row>
+            }
+            {
+                detailType == "schedule" &&
+                <Row className="feature-section g-lg-5">
+
+            <Col lg={12} sm={12}>
+            <div className="custom-table">
+                    <Table responsive className="table-dashed">
+
+                        <thead>
+                            <tr>
+                                <th >Round</th>
+                                <th >Opens</th>
+                                <th >Closes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>Allocation</td>
+                                <td>2022-01-11 08:00:00 UTC</td>
+                                <td>2022-01-11 08:00:00 UTC</td>
+                            </tr>
+                            <tr>
+                                <td>FCFS Prepare</td>
+                                <td>2022-01-11 08:00:00 UTC</td>
+                                <td>2022-01-11 08:00:00 UTC</td>
+                            </tr>
+                            <tr>
+                                <td className="bottom-none">FCFS Start</td>
+                                <td className="bottom-none">2022-01-11 08:00:00 UTC</td>
+                                <td className="bottom-none">2022-01-11 08:00:00 UTC</td>
+                            </tr>
+
+                        </tbody>
+
+                    </Table>
+                </div>
+            </Col>
+
+         
+            
+            
+
+            </Row>
+            }
+              {
+                detailType == "allocation" &&
+                <Row className="feature-section g-lg-5">
+
+            <Col lg={12} sm={12}>
+            <div className="custom-table">
+                    <Table responsive className="no-border-bottom table-dashed">
+
+                        <thead>
+                            <tr>
+                                <th >No.</th>
+                                <th >Allocation</th>
+                                <th >Date</th>
+                                <th >Claimed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                        </tbody>
+
+                    </Table>
+                </div>
+            </Col>
+
+         
+            
+            
+
+            </Row>
+            }
             </Container>
         </div>
     

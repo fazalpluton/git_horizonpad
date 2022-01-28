@@ -22,7 +22,7 @@ function Header(){
         <a href="#apply" className="nav-link">Apply</a>
       </Nav>
       <Form className="d-flex">
-       <Link to={'/ido-projects'} className="btn-custom secondary-btn">Launch App</Link>
+       <Link to={'/ido-projects'} target="_blank" className="btn-custom secondary-btn">Launch App</Link>
       </Form>
     </Navbar.Collapse>
   </Container>

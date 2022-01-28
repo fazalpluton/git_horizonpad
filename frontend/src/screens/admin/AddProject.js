@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { factory_addr } from "../../contract/addresses";
 import Factory from '../../contract/Factory.json';
 import ZPadAbi from '../../contract/ZPad.json'
@@ -9,12 +9,31 @@ import { useWeb3React } from "@web3-react/core";
 import Web3Modal from 'web3modal'
 import { ethers } from 'ethers'
 function AddProject(props){
-    const [tokenAddress, setTokenAddress] = useState('0xdbC43Ba45381e02825b14322cDdd15eC4B3164E6')
-    const [ownerAddress, setOwnerAddress] = useState('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266')
+    const navigate = useNavigate();
+    const [tokenAddress, setTokenAddress] = useState('')
+    const [ownerAddress, setOwnerAddress] = useState('')
     const [startTime, setStartTime] = useState('')
+    const [endTime, setEndTime] = useState('')
     const [salePrice, setSalePrice] = useState('')
-    const [walletAddress, setWalletAddress] = useState('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266')
+    const [walletAddress, setWalletAddress] = useState('')
+    const [whiteliststart, setWhiteliststart] = useState('')
+    const [whitelistend, setWhitelistend] = useState('')
+    const [destributionend, setDestributionend] = useState('')
+
+    const [selectedFile, setSelectedFile] = useState()
+    const [preview, setPreview] = useState('logo')
+    const [title, setTitle] = useState('')
+    const [shortintro, setShortintro] = useState('')
+    const [message, setMessage] = useState('')
+    const [type, setType] = useState('HCI')
+    const [twitter, setTwitter] = useState('')
+    const [telegram, setTelegram] = useState('')
+    const [medium, setMedium] = useState('')
+    const [web, setWeb] = useState('')
+    const [token,setToken] = useState(localStorage.getItem("token"));
+
     let url = process.env.REACT_APP_API;
+
 
 
 
@@ -43,6 +62,10 @@ function AddProject(props){
             shortintro
         );
         formData.append(
+            "price",
+            salePrice
+        );
+        formData.append(
             "twitter",
             twitter
         );
@@ -53,6 +76,10 @@ function AddProject(props){
         formData.append(
             "medium",
             medium
+        );
+        formData.append(
+            "web",
+            web
         );
         formData.append(
             "type",
@@ -89,35 +116,43 @@ function AddProject(props){
       const formSubmit = async (e) => {
         e.preventDefault();
         try{
-            let signer = await loadProvider()
+            if(token != null){
+                let signer = await loadProvider()
 
-            let eth_token_addr = ethers.utils.getAddress(tokenAddress)
-            let eth_owner_addr = ethers.utils.getAddress(ownerAddress)
-            let eth_wallet_addr = ethers.utils.getAddress(walletAddress)
-
-            let ZPadContract = new ethers.Contract(eth_token_addr, ZPadAbi, signer)
-            let allowanceCheck = await ZPadContract.allowance(eth_owner_addr, factory_addr)
-            allowanceCheck = allowanceCheck.toString()
-            let _value = await ethers.utils.parseEther('1000')
-        
-            if(allowanceCheck == 0){
-                // console.log("allounceCheck>>", allowanceCheck)
-                let approve = await ZPadContract.approve(factory_addr, _value)
-                let approveTx = await approve.wait()
-
-                if(approveTx.confirmations>=1){
-                    let factory = new ethers.Contract(factory_addr, Factory, signer)
-                    let price = ethers.utils.parseEther(salePrice)
-                    let tx = await factory.create_TokenSale(eth_token_addr,eth_owner_addr,startTime,price,eth_wallet_addr)
-                    let confirm = await tx.wait()
-                    if(confirm.confirmations >= 1){
-                     let ico_addr = await factory.ico_addr()
-                    api(ico_addr)
+                let eth_token_addr = ethers.utils.getAddress(tokenAddress)
+                let eth_owner_addr = ethers.utils.getAddress(ownerAddress)
+                let eth_wallet_addr = ethers.utils.getAddress(walletAddress)
+    
+                let ZPadContract = new ethers.Contract(eth_token_addr, ZPadAbi, signer)
+                let allowanceCheck = await ZPadContract.allowance(eth_owner_addr, factory_addr)
+                allowanceCheck = allowanceCheck.toString()
+                let _value = await ethers.utils.parseEther('1000')
+            
+                if(allowanceCheck == 0){
+                    // console.log("allounceCheck>>", allowanceCheck)
+                    let approve = await ZPadContract.approve(factory_addr, _value)
+                    let approveTx = await approve.wait()
+    
+                    if(approveTx.confirmations>=1){
+                        let factory = new ethers.Contract(factory_addr, Factory, signer)
+                        let price = ethers.utils.parseEther(salePrice)
+                        let tx = await factory.create_TokenSale(eth_token_addr,eth_owner_addr,whiteliststart,whitelistend,startTime,endTime,destributionend,price,eth_wallet_addr)
+                        let confirm = await tx.wait()
+                        if(confirm.confirmations >= 1){
+                         let ico_addr = await factory.ico_addr()
+                        api(ico_addr)
+                }
+                else{
+                    console.log("error")
+                }
+                    }
+                }
+                else{
+    
+                }
             }
             else{
-                console.log("error")
-            }
-                }
+                navigate('/admin/login')
             }
             
         }catch(e){
@@ -126,16 +161,7 @@ function AddProject(props){
     }
     // end block chani states
 
-    const [selectedFile, setSelectedFile] = useState()
-    const [preview, setPreview] = useState('logo')
-    const [title, setTitle] = useState('')
-    const [shortintro, setShortintro] = useState('')
-    const [message, setMessage] = useState('')
-    const [type, setType] = useState('HCI')
-    const [twitter, setTwitter] = useState('')
-    const [telegram, setTelegram] = useState('')
-    const [medium, setMedium] = useState('')
-    const [token,setToken] = useState(sessionStorage.getItem("token"));
+
 
     const formData = new FormData();
       
@@ -206,6 +232,10 @@ function AddProject(props){
                                 <Form.Label>Medium Link</Form.Label>
                                 <Form.Control type="text" value={medium} onChange={(e)=>setMedium(e.target.value)} required/>
                                 </Form.Group>
+                                <Form.Group className="mt-3" controlId="medium">
+                                <Form.Label>Web Link</Form.Label>
+                                <Form.Control type="text" value={web} onChange={(e)=>setWeb(e.target.value)} required/>
+                                </Form.Group>
                                 
                                 </Col>
                                 <Col lg={6}>
@@ -218,9 +248,25 @@ function AddProject(props){
                                 <Form.Label>Token Owner Address</Form.Label>
                                 <Form.Control type="text" value={ownerAddress} onChange={(e)=>setOwnerAddress(e.target.value)} required/>
                                 </Form.Group>
+                                <Form.Group className="mt-3" controlId="white_start">
+                                <Form.Label>Whitelist Start Time</Form.Label>
+                                <Form.Control type="text" placeholder="Please put value in seconds" value={whiteliststart} onChange={(e)=>setWhiteliststart(e.target.value)} required/>
+                                </Form.Group>
+                                <Form.Group className="mt-3" controlId="white_end">
+                                <Form.Label>Whitelist End Time</Form.Label>
+                                <Form.Control type="text" placeholder="Please put value in seconds" value={whitelistend} onChange={(e)=>setWhitelistend(e.target.value)} required/>
+                                </Form.Group>
                                 <Form.Group className="mt-3" controlId="start">
-                                <Form.Label>Start Time</Form.Label>
+                                <Form.Label>Sale Start Time</Form.Label>
                                 <Form.Control type="text" placeholder="Please put value in seconds" value={startTime} onChange={(e)=>setStartTime(e.target.value)} required/>
+                                </Form.Group>
+                                <Form.Group className="mt-3" controlId="sale_end">
+                                <Form.Label>Sale End Time</Form.Label>
+                                <Form.Control type="text" placeholder="Please put value in seconds" value={endTime} onChange={(e)=>setEndTime(e.target.value)} required/>
+                                </Form.Group>
+                                <Form.Group className="mt-3" controlId="des">
+                                <Form.Label>Destribution End Time</Form.Label>
+                                <Form.Control type="text" placeholder="Please put value in seconds" value={destributionend} onChange={(e)=>setDestributionend(e.target.value)} required/>
                                 </Form.Group>
                                 <Form.Group className="mt-3" controlId="price">
                                 <Form.Label>Sale Price</Form.Label>
