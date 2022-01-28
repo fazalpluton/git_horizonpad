@@ -96,8 +96,8 @@ function DetailUpdate(props){
     detail.map((item, index) => {
       item.action = (
         <>
-        <button  className='btn btn-skyblue' onClick={(e)=>editdescription(item.id)}>Edit</button> 
-        <button  className='btn btn-danger' onClick={(e)=>confirmation(item.id)}>Delete</button>
+        <button  className='btn-custom primary-btn' onClick={(e)=>editdescription(item.id)}>Edit</button> 
+        <button  className='btn-custom btn-danger ml-1' onClick={(e)=>confirmation(item.id)}>Delete</button>
         </>
       );
       item.image = (
@@ -197,20 +197,18 @@ function DetailUpdate(props){
                     <Form.Label>Description</Form.Label>
                     <Form.Control type="text" as="textarea" rows={3} value={description} onChange={(e)=>setDescription(e.target.value)}/>
                   </Form.Group>
-                  <button type="submit" className="btn-custom btn-white-border mt-3">Submit</button>
+                  <button type="submit" className="btn-custom primary-btn mt-3">Submit</button>
                   </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                  
-                </Modal.Footer>
+              
               </Modal>
               <Modal show={dshow} onHide={dhandleClose} centered>
                 <Modal.Header closeButton>
                 <Modal.Title className="text-black">Confirmation</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="text-center">
-                    <h4 className="text-black">Are you sure to delete this item.</h4>
-                  <button type="button" onClick={(e)=>confirmdelete()} className="btn-custom btn-white-border mt-3">Confirm</button>
+                    <h4 className="text-white">Are you sure to delete this item.</h4>
+                  <button type="button" onClick={(e)=>confirmdelete()} className="btn-custom primary-btn mt-3">Confirm</button>
 
                 </Modal.Body>
               

@@ -20,7 +20,7 @@ function DashboardHeader(){
     errorWeb3Modal,
   } = useWeb3React();
 
-  const [token,setToken] = useState(sessionStorage.getItem("token"));
+  const [token,setToken] = useState(localStorage.getItem("token"));
   let url = process.env.REACT_APP_API;
   useEffect(async ()=>{
   await axios.post(url+'me', {
@@ -28,7 +28,7 @@ function DashboardHeader(){
   })
   .then(function (response) {
     if(!response.data){
-      sessionStorage.setItem("token", null);
+      localStorage.setItem("token", null);
     }
   })
   .catch(function (error) {
@@ -51,6 +51,12 @@ function DashboardHeader(){
         <Link to={'/staking'} className="nav-link">Staking</Link>
         <Link to={'/ido-projects'} className="nav-link">IDO Projects</Link>
         <Link to={'/hci-projects'} className="nav-link">HCI Projects</Link>
+        {
+          token == null ? '':<NavDropdown title="Manager" id="basic-nav-dropdown" className="manager-dropdown">
+          <Link to={'/admin/add-project'} className="dropdown-item">Add Project</Link>
+          <Link to={'/admin/projects'} className="dropdown-item">List Projects</Link>
+        </NavDropdown>
+        }
       </Nav>
       <Form className="d-flex">
        {/* <button type="button" className="btn-custom secondary-btn">CONNECTED</button> */}
