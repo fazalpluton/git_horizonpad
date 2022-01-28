@@ -19,6 +19,7 @@ function Footer(){
                     <a href=""><i class="fa-brands fa-instagram"></i></a>
 
                     </div>
+                    <p className="mt-3">2020 Horizonpad All Rights Reserved</p>
                 </Col>
                 <Col lg={3} md={6} sm={12}>
                     <div className="">

@@ -200,7 +200,7 @@ function UpdateProject(props){
                                 </Form>
                                 </Col>
 
-                                <Col lg={12} sm={12} md={12}>
+                                {/* <Col lg={12} sm={12} md={12}>
                                 <h3 class="main-heading">HIGHLIGHT LIST</h3>
                                 <MDBDataTableV5
                                 hover
@@ -213,7 +213,7 @@ function UpdateProject(props){
                                 searchBottom={false}
                                 />
                                 </Col>
-                             <DetailUpdate id={id}/>
+                             <DetailUpdate id={id}/> */}
                             </Row>
                         </div>
                     </Col>

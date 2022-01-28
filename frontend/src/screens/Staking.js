@@ -213,8 +213,20 @@ function Stacking(props){
             let signer = await loadProvider()
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let staker = await stakingContract.noOfStakers()
-            setStakersNo(staker.toString())
-            console.log("staker", staker.toString())
+
+            if(staker <=0 ){
+                setStakersNo("NA")
+            }
+            else{
+
+                setStakersNo(staker.toString())
+            }
+            console.log("getAPY", staker.toString())
+            // setStakersNo(staker.toString())
+            // if(stakersNo == null || 0) {
+            //     setStakersNo("hjhj")
+            // }
+            // console.log("staker", staker.toString())
         }
 
         const APY = async () => {
@@ -251,7 +263,7 @@ function Stacking(props){
                        // loadTotalStake()
                         Event()
                         totalBalance()
-                        Stakers()
+                        // Stakers()
                         // APY()
     
                     } catch (error) {

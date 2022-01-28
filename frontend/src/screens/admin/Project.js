@@ -96,7 +96,6 @@ function Projects(props){
                                     </div>
                                     <div className="ido-box-footer">
                                         <Link to={'/admin/edit-project/'+project.id} className="btn-custom secondary-btn">Edit</Link>
-                                        <Link to={'/admin/add-project-detail/'+project.id} className="btn-custom secondary-btn">Add Detail</Link>
                                     </div>
                                     </div>
                             </Col>
