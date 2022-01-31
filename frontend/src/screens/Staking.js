@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, InputGroup,DropdownButton,Dropdown,FormControl,Form ,Button } from "react-bootstrap";
+import { Container, Row, Col, InputGroup,DropdownButton,Dropdown,FormControl,Form ,Button, Modal } from "react-bootstrap";
 import IdoBox from "../components/ido-box"
 import BannerImage from "../assets/images/ido-banner-main.png"
 import checkpoint from "../assets/images/checkpoint.png";
@@ -46,6 +46,10 @@ function Stacking(props){
     const [userApy, setUserApy] = useState(0)
     const [userReward, setUserReward] = useState(0)
     const [userUnstakedValue, setUserUnstakedValue] = useState(0)
+    const [authorization, setAuthorization] = useState("")
+    const [Confirmation, setConfirmation] = useState("")
+    const [confirmed, setConfirmed] = useState("")
+
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -61,7 +65,7 @@ function Stacking(props){
     const [isType,setIsType]= useState('withdraw')
 
     // fazal 
-    const [isType,setIsType]= useState('withdraw')
+    // const [isType,setIsType]= useState('withdraw')
 
     const loadProvider = async () => {
         try {
@@ -76,7 +80,7 @@ function Stacking(props){
 
       const loadSigner = async () => {
         try {
-            var provider = new ethers.providers.getDefaultProvider('rinkeby');
+            var provider = new ethers.providers.getDefaultProvider();
             //   console.log(provider)
           return provider
         } catch (e) {
@@ -100,19 +104,19 @@ function Stacking(props){
         // function to insert token to the smart contract
         const Stake = async () => {
             try{
-                
+                setAuthorization("Pre-authorization")
                 let signer = await loadProvider()
                 let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
                 let getBronze = await stakingContract.bronze()
                 let ZPadContract = new ethers.Contract(zpad_addr, ZPadAbi, signer)
                 let allowanceCheck = await ZPadContract.allowance(account, staking_addr)
-                allowanceCheck = parseInt(allowanceCheck.toString())
+                // allowanceCheck = parseInt(allowanceCheck.toString())
                 let _value = await ethers.utils.parseEther(stakevalue)
-                
+                console.log("allowanceCheck", allowanceCheck)
+                console.log("getBronze", getBronze.toString())
                 if(allowanceCheck < getBronze){
-                    handleShow()
-                setMsgHandling("Approving")
                     // console.log("allounceCheck>>", allowanceCheck)
+                    setConfirmation("Confirmation")
                     let approve = await ZPadContract.approve(staking_addr, _value)
                     let approveTx = await approve.wait()
                     // console.log("approveTx>", approveTx)
@@ -120,19 +124,30 @@ function Stacking(props){
                         setMsgHandling("Staking")
                         let stake = await stakingContract.stake(ethers.utils.parseEther(stakevalue))
                         let tx = await stake.wait()
+                        console.log("tx1", tx)
+                        setConfirmed("Confirmed")
                         // totalBalance()
                         setStakevalue(0)
                         Stakers()
                         loadTotalStake()
-                        setMsgHandling("Staking Done")
+
+                        // setMsgHandling("Staking Done")
                     }
                     else{
                         console.log("error")
                     }
-                }
-                else{
+                }else{
                     console.log("errorr")
-    
+                    setConfirmation("Confirmation")
+                    setMsgHandling("Staking")
+                        let stake = await stakingContract.stake(ethers.utils.parseEther(stakevalue))
+                        let tx = await stake.wait()
+                        console.log("tx2", tx)
+                        setConfirmed("Confirmed")
+                        setStakevalue(0)
+                        Stakers()
+                        loadTotalStake()
+
                 }
                 
             }
@@ -143,6 +158,8 @@ function Stacking(props){
                 console.log("error: ",e)
             }
         }
+
+        // console.log("bronze", msgHandling)
 
         // This function is used to call Stake function
         const Staking = (event) => {
@@ -199,6 +216,7 @@ function Stacking(props){
                 let getUserStakedValue = await stakingContract.getUserStakedValue(account)
                 let token = ethers.utils.formatEther(getUserStakedValue.toString())
                 console.log("token>>", token)
+                // setUnStakeValue(token)
                 setUnStakeValue(Math.floor(token))
             }
             catch(e){
@@ -234,13 +252,13 @@ function Stacking(props){
             try{
                 let signer = await loadProvider()
                 let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
-                if(totalbalance !== 0){
-                    let withdrawRewards = await stakingContract.withdrawRewards()
-                    let tx = await withdrawRewards.wait()
-                console.log("tx", tx)
+                if(totalbalance == 0){
+                    return
                 }
                 else{
-                   return null
+                    let withdrawRewards = await stakingContract.withdrawRewards()
+                    await withdrawRewards.wait()
+                // console.log("withdrawRewards", withdrawRewards)
     
                 }
                 
@@ -351,18 +369,25 @@ function Stacking(props){
             console.log("getAPY", getAPY.toString())
         }
         // Stakers()
+
+        const Tiers = async () => {
+            let signer = await loadProvider()
+            let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+            let bronze = await stakingContract.bronze()
+            setBronze(Math.floor(ethers.utils.formatEther(bronze.toString())))
+        }
         
 
         useEffect(() => {
             (async () => {
                 if (account) {
                     try {
-                       // loadTotalStake()
+                        loadTotalStake()
                         Event()
                         totalBalance()
                         getUnstakedValue()
-                        // Stakers()
-                        // APY()
+                        Stakers()
+                        Tiers()
     
                     } catch (error) {
                         console.log(error)
@@ -371,32 +396,35 @@ function Stacking(props){
             })()
         }, [account]);
 
-        useEffect(() => {
-            (async () => {
-                
-                    try {    
-                        loadTotalStake()
-                    } catch (error) {
-                        console.log(error)
-                    }
-                
-            })()
-        }, []);
-
         // useEffect(() => {
         //     (async () => {
-        //         if (account) {
-        //             try {
-        //                 StakeEvent()
-        //                 // totalBalance()
-                        
-    
+                
+        //             try {    
+        //                 loadTotalStake()
         //             } catch (error) {
         //                 console.log(error)
         //             }
-        //         }
+                
         //     })()
-        // }, [account]);
+        // }, []);
+        
+        useEffect(() => {
+            (async () => {
+                if (account) {
+                    try {
+                        const interval = setInterval(() => {
+                                calcPendingReward();
+                                console.log("hhh")
+                              }, 15000);
+                              return () => clearInterval(interval);
+                        
+    
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            })()
+        }, [account]);
 
     return (
 
@@ -474,6 +502,19 @@ function Stacking(props){
                         </Col>
 
                         <Col lg={4} sm={12} md={6}>
+
+                        {error == 1 ? (
+                                
+                                <Modal show={show} onHide={handleClose}  className='custom-modal' size="lg"
+                                aria-labelledby="contained-modal-title-vcenter"
+                                centered>
+                                    <Modal.Header > <div style={{textAlign:"center"}}>
+                                          <p style={{width:"800px", color:"red"}} >{msgHandling.message || msgHandling}</p>
+                                          </div></Modal.Header>
+                                
+                            </Modal>
+                            
+                        ): null}
                            
                         <div className="ido-box" style={{background: "#39065E"}}>
                             
@@ -511,7 +552,7 @@ function Stacking(props){
                             {isType == "unstaking" ? (<Form className="text-center mt-3">
                                 
                                 <Form.Group className="mb-3 max-staked" controlId="formBasicCheckbox">
-                                <Form.Control type="text"  placeholder="Stake Amount" onChange={(e)=>setUnStakeValue(e.target.value)} />
+                                <Form.Control type="text" value={unStakeValue} placeholder="Stake Amount" onChange={(e)=>setUnStakeValue(e.target.value)} />
                                 <Button onClick={MaxUnStake} className="">
                                     Max
                                 </Button>
@@ -577,19 +618,44 @@ function Stacking(props){
 
                     <hr class="roadmap-hr"/>
 
-                    <div class="roadmap-item">
+                    {stakevalue > bronze ? 
+                    (<div class="roadmap-item circle-active">
+
+
+                    <div class="roadmap-circle">
+                    <img src={amountstack}/>
+                    
+                    </div>
+
+                    <p>Amount to Stake</p>
+
+                </div>): (<div class="roadmap-item">
+
 
                         <div class="roadmap-circle">
                         <img src={amountstack}/>
+
                         </div>
 
                         <p>Amount to Stake</p>
 
-                    </div>
+                        </div>)}
+
+                    {/* <div class="roadmap-item circle-active">
+
+
+                        <div class="roadmap-circle">
+                        <img src={amountstack}/>
+                        
+                        </div>
+
+                        <p>Amount to Stake</p>
+
+                    </div> */}
 
                     <hr class="roadmap-hr"/>
 
-                    <div class="roadmap-item">
+                    {authorization == "Pre-authorization" ? (<div class="roadmap-item circle-active">
 
                         <div class="roadmap-circle">
                         <img src={preauth}/>
@@ -597,11 +663,40 @@ function Stacking(props){
 
                         <p>Pre-authorization</p>
 
-                    </div>
+                        </div>) : (<div class="roadmap-item">
+
+                        <div class="roadmap-circle">
+                        <img src={preauth}/>
+                        </div>
+
+                        <p>Pre-authorization</p>
+
+                        </div>)}
+
+
+
+                    {/* <div class="roadmap-item">
+
+                        <div class="roadmap-circle">
+                        <img src={preauth}/>
+                        </div>
+
+                        <p>Pre-authorization</p>
+
+                    </div> */}
 
                     <hr class="roadmap-hr"/>
 
-                    <div class="roadmap-item">
+                    {Confirmation == "Confirmation" ?
+                     ( <div class="roadmap-item circle-active">
+
+                     <div class="roadmap-circle">
+                     <img src={confirm}/>
+                     </div>
+
+                     <p>Confirm</p>
+
+                 </div>) : ( <div class="roadmap-item">
 
                         <div class="roadmap-circle">
                         <img src={confirm}/>
@@ -609,11 +704,30 @@ function Stacking(props){
 
                         <p>Confirm</p>
 
-                    </div>
+                        </div>)}
+
+                    {/* <div class="roadmap-item">
+
+                        <div class="roadmap-circle">
+                        <img src={confirm}/>
+                        </div>
+
+                        <p>Confirm</p>
+
+                    </div> */}
 
                     <hr class="roadmap-hr"/>
 
-                        <div class="roadmap-item">
+                    {confirmed == "Confirmed" ? 
+                    (<div class="roadmap-item circle-active">
+
+                    <div class="roadmap-circle">
+                    <img src={confirmation}/>
+                    </div>
+
+                    <p>Confirmation</p>
+
+                </div>) : (<div class="roadmap-item">
 
                             <div class="roadmap-circle">
                             <img src={confirmation}/>
@@ -621,7 +735,17 @@ function Stacking(props){
 
                             <p>Confirmation</p>
 
-                        </div>
+                        </div>)}
+
+                        {/* <div class="roadmap-item">
+
+                            <div class="roadmap-circle">
+                            <img src={confirmation}/>
+                            </div>
+
+                            <p>Confirmation</p>
+
+                        </div> */}
 
                     
 
@@ -746,6 +870,18 @@ function Stacking(props){
                         <hr class="roadmap-hr"/>
 
                         <div class="roadmap-item">
+
+                            {/* {stakevalue > bronze ?
+                             (<div><div class="roadmap-circle" style={{border:"1px solid red"}}>
+                            <img src={amountstack}/>
+                            </div>
+
+                            <p>Amount to Stake</p></div>)
+                             : <div><div class="roadmap-circle" >
+                             <img src={amountstack}/>
+                             </div>
+ 
+                             <p>Amount to Stake</p></div>} */}
 
                             <div class="roadmap-circle">
                             <img src={amountstack}/>
