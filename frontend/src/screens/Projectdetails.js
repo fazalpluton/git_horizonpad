@@ -10,7 +10,8 @@ import { useWeb3React } from "@web3-react/core";
 import Web3Modal from 'web3modal'
 import { ethers } from 'ethers'
 import ContractCrowdSale from '../contract/CrowdSale.json';
-import { factory_addr } from "../contract/addresses";
+import TicketConsumer from '../contract/TicketConsumer.json';
+import { busd_addr, ticketConsumer_addr } from "../contract/addresses";
 import ZPadAbi from '../contract/ZPad.json'
 
 function ProjectDetails(props){
@@ -38,8 +39,15 @@ function ProjectDetails(props){
     const [sale_start,setSale_start] = useState('');
     const [sale_end,setSale_end] = useState('');
     const [des_end,setDes_end] = useState('');
+    const [ticketlist,setTicketlist] = useState([])
+    const [claimstatus,setClaimstatus] = useState()
+    const [busdvalue,setBusdvalue] = useState(0)
+    const [allowancestatus,setAllowancestatus] = useState(false)
+    const [pervalue,setPervalue] = useState(0)
 
     const { id } = useParams();
+
+
 
     useEffect(async ()=>{
     await axios.get(url+'projects/'+id).then((res)=>{
@@ -54,6 +62,7 @@ function ProjectDetails(props){
          setSale_start(old_sale_start.toString())
          setSale_end(old_sale_end.toString())
          setDes_end(old_des_end.toString())
+         setPervalue(1 / res.data.projects.price)
 
     })
     },[]);
@@ -81,25 +90,73 @@ function ProjectDetails(props){
         }
         }
 
-        const Swap_Token = async (e) => {
+        const Allocations = async (e) => {
             try{
-                // let signer = await loadProvider()
-                // let BUSD = new ethers.Contract(eth_token_addr, ZPadAbi, signer)
-                // let allowanceCheck = await BUSD.allowance(eth_owner_addr, factory_addr)
-                // allowanceCheck = allowanceCheck.toString()
-                // let crowdsale_contract = new ethers.Contract(project.contract, ContractCrowdSale, signer)
-                // let buy_token = await crowdsale_contract.buyTokens();
-                // await buy_token.wait();
+                let signer = await loadProvider()
+                let ticketcontract = new ethers.Contract(ticketConsumer_addr, TicketConsumer, signer)
+                setTicketlist(await ticketcontract.getUserAppliedProjects(account))
+                let crowdsale_contract = new ethers.Contract(project.contract, ContractCrowdSale, signer)
+                setClaimstatus(await crowdsale_contract.getClaimed(account));
                 
             }catch(e){
                 console.log(e)
             }
         }
+
+        const Swap_Token = async (e) => {
+            try{
+                let signer = await loadProvider()
+                let BUSD = new ethers.Contract(busd_addr, ZPadAbi, signer)
+                let allowanceCheck = await BUSD.allowance(account, project.contract)
+                console.log(allowanceCheck.toString())
+                if(allowanceCheck ==0){
+                    let _value = await ethers.utils.parseEther(busdvalue)
+                    let approve = await BUSD.approve(project.contract, _value)
+                    let approveTx = await approve.wait()
+                    allowanceCheck = await BUSD.allowance(account, project.contract)
+                    if(approveTx.confirmations>=1){
+                        setAllowancestatus(true)
+                    }
+                }
+                else{
+                    let crowdsale_contract = new ethers.Contract(project.contract, ContractCrowdSale, signer)
+                    let buy_token = await crowdsale_contract.buyTokens();
+                    await buy_token.wait();
+                }
+       
+                
+            }catch(e){
+                console.log(e)
+            }
+        }
+
+
+        const checkAllowence = async (e) => {
+            try{
+                let signer = await loadProvider()
+                let BUSD = new ethers.Contract(busd_addr, ZPadAbi, signer)
+                let allowanceCheck = await BUSD.allowance(account, project.contract)
+                setBusdvalue(allowanceCheck.toString())
+                if(allowanceCheck ==0){
+                    setAllowancestatus(false)
+                }
+                else{
+                    setAllowancestatus(true)
+                }
+                
+            }catch(e){
+                console.log(e)
+            }
+        }
+        
+
+
    useEffect(() => {
         (async () => {
             if (account) {
                 try {
-               
+                    Allocations()
+                    checkAllowence()
 
                 } catch (error) {
                     console.log(error)
@@ -443,7 +500,13 @@ function ProjectDetails(props){
                             </tr>
                         </thead>
                         <tbody>
-
+                            <tr>
+                                <td className="bottom-none">1</td>
+                                <td className="bottom-none">{ticketlist.includes(project.contract) == true ?"Yes" : "No"}</td>
+                                <td className="bottom-none">{whitelist_end}</td>
+                                <td className="bottom-none text-start">{claimstatus == true ? "Yes" : "No"}</td>
+                            </tr>
+                            
 
                         </tbody>
 
@@ -470,25 +533,29 @@ function ProjectDetails(props){
             <Form.Group className="mb-3" controlId="busd">
                 <div className="position-relative">
                 <Form.Label>From</Form.Label>
-                <Form.Control type="text"  />
+                {allowancestatus == false ? 
+                <Form.Control type="number" value={busdvalue} onChange={(e)=>setBusdvalue(e.target.value)} min={0}/>
+                : 
+                <Form.Control type="number" value={busdvalue}  min={0} readOnly/>
+                }
                 <span className="text-ab">BUSD</span>
                 </div>
             </Form.Group>
             <Form.Group className="mb-3" controlId="token_symbol">
              <div className="position-relative">
              <Form.Label>To</Form.Label>
-                <Form.Control type="text" readOnly />
+                <Form.Control type="text" readOnly value={( pervalue * busdvalue)}/>
                 <span className="text-ab">{project.token_symbol}</span>
 
              </div>
             </Form.Group>
             <div className="d-flex justify-content-between">
             <p>Price</p>
-            <p>{(1 / project.price).toFixed(18) +" "+  project.token_symbol} per BUSD</p>
+            <p>{parseFloat(pervalue.toFixed(8)) +" "+  project.token_symbol} per BUSD</p>
 
             </div>
-            <div className="text-center mt-3">
-            <button class="btn-custom primary-btn w-100" >Confirm Swap</button>
+            <div className="text-center mt-3 mb-2">
+            <button class="btn-custom primary-btn w-100" onClick={Swap_Token}>{allowancestatus == false ? 'Approve' :'Confirm Swap'}</button>
             </div>
             </Modal.Body>
         </Modal>

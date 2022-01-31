@@ -19,6 +19,7 @@
   "function buyable() returns (bool)",
   "function claim() payable",
   "function finalized() view returns (bool)",
+  "function getClaimed(address) view returns (bool)",
   "function getPrice() view returns (uint256)",
   "function getSaleEndTime() view returns (uint256)",
   "function getStatus() view returns (uint8)",

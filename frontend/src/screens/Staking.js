@@ -60,8 +60,6 @@ function Stacking(props){
     // fazal 
     const [isType,setIsType]= useState('withdraw')
 
-    // fazal 
-    const [isType,setIsType]= useState('withdraw')
 
     const loadProvider = async () => {
         try {
