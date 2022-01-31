@@ -8,7 +8,7 @@ import { useWeb3React } from "@web3-react/core";
 import {injectedConnector} from "../../src/utils/connectors"
 
 import VectorLogo from "../assets/images/vector-logo.png"
-function DashboardHeader(props){
+function DashboardHeader(){
 
   const {
     connector,
@@ -84,7 +84,7 @@ function DashboardHeader(props){
        {active
         ? (<div><button type="button" className="btn-custom secondary-btn">CONNECTED</button></div>)
          : (<div><button onClick={() => {
-          connectWallet(activate, props.setErrorMessage);
+          connectWallet(activate);
         }} type="button" className="btn-custom secondary-btn">Connect Wallet</button></div>)
          }
       </Form>

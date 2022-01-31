@@ -24,39 +24,31 @@ import Projects from './screens/admin/Project';
 import AddProject from './screens/admin/AddProject';
 import UpdateProject from './screens/admin/Update';
 import AddProjectDetail from './screens/admin/AddDetail';
-// import { useEagerConnect, useInactiveListener } from './hooks/useEagerConnect';
-
 
 
 function App() {
-
-  const [errorMessage, setErrorMessage] = useState();
-  useEagerConnect(setErrorMessage);
-  useInactiveListener();
-
-  console.log("errorMessage", errorMessage)
 
   return (
     <Router>
         <Routes>
         <Route path="/" element={<Home header={<Header/>} footer={<Footer/>}/>}  />
-        <Route path="/ido-projects" element={<IdoProjects header={<DashboardHeader  setErrorMessage={setErrorMessage}/>} footer={<Footer/>} />}  />
-        <Route path="/hci-projects" element={<HciProjects header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
-        <Route path="/burgeon-projects" element={<Burgeon header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
-        <Route path="/nft-marketplace" element={<NFTMarket header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
-        <Route path="/p2p-swap" element={<P2P header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
-        <Route path="/b2b-market" element={<B2B header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
-        <Route path="/staking" element={<Stacking header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
-        <Route path="/unstaking" element={<UnStacking header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
-        <Route path="/withdraw" element={<Withdraw header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
+        <Route path="/ido-projects" element={<IdoProjects header={<DashboardHeader/>} footer={<Footer/>} />}  />
+        <Route path="/hci-projects" element={<HciProjects header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/burgeon-projects" element={<Burgeon header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/nft-marketplace" element={<NFTMarket header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/p2p-swap" element={<P2P header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/b2b-market" element={<B2B header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/staking" element={<Stacking header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/unstaking" element={<UnStacking header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/withdraw" element={<Withdraw header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/project-detail/:id" element={<ProjectDetails header={<DashboardHeader/>} footer={<Footer/>}/>}  />
 
         {/* admin routes  */}
-        <Route path="/admin/login" element={<Login header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
-        <Route path="/admin/projects" element={<Projects header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
-        <Route path="/admin/add-project" element={<AddProject header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
-        <Route path="/admin/edit-project/:id"  element={ <UpdateProject header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>}  />
-        <Route path="/admin/add-project-detail/:id"  element={ <AddProjectDetail header={<DashboardHeader setErrorMessage={setErrorMessage}/>} footer={<Footer/>}/>} />
+        <Route path="/admin/login" element={<Login header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/admin/projects" element={<Projects header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/admin/add-project" element={<AddProject header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/admin/edit-project/:id"  element={ <UpdateProject header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/admin/add-project-detail/:id"  element={ <AddProjectDetail header={<DashboardHeader/>} footer={<Footer/>}/>} />
         </Routes>
     </Router>
   );
