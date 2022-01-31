@@ -24,6 +24,7 @@ import Projects from './screens/admin/Project';
 import AddProject from './screens/admin/AddProject';
 import UpdateProject from './screens/admin/Update';
 import AddProjectDetail from './screens/admin/AddDetail';
+import Approval from './screens/Approval';
 
 
 function App() {
@@ -42,13 +43,15 @@ function App() {
         <Route path="/unstaking" element={<UnStacking header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/withdraw" element={<Withdraw header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/project-detail/:id" element={<ProjectDetails header={<DashboardHeader/>} footer={<Footer/>}/>}  />
-
+        <Route path="/project/approval"  element={ <Approval header={<DashboardHeader/>} footer={<Footer/>}/>} />
         {/* admin routes  */}
         <Route path="/admin/login" element={<Login header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/admin/projects" element={<Projects header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/admin/add-project" element={<AddProject header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/admin/edit-project/:id"  element={ <UpdateProject header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/admin/add-project-detail/:id"  element={ <AddProjectDetail header={<DashboardHeader/>} footer={<Footer/>}/>} />
+
+
         </Routes>
     </Router>
   );

@@ -100,7 +100,7 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
         wallet = _wallet;
         token_Owner = _tokenOwner;
         total_amount = _totalAmount;
-        BUSD = IERC20(0x833655CAA72938494309905edcec453Cf852556c);
+        BUSD = IERC20(0xE2aD269bD111FF893BE307A4c6DAA01662aCb352);
         setTicketConsumer(_ticketConsumer);
     }
 
@@ -253,7 +253,7 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
              success = false;   
         }
          uint256 remainingTokensInTheContract = token.balanceOf(address(this)) - _tokenPurchased;
-        token.safeTransfer(address(_manager),remainingTokensInTheContract);
+        token.safeTransfer(address(token_Owner),remainingTokensInTheContract);
         _forwardFunds(_weiRaised);
         finalized = true;
         return success;

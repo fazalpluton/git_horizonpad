@@ -49,7 +49,7 @@ function AddProject(props){
         errorWeb3Modal
     } = useWeb3React();
 
-    const api = async (e,token_name,token_symbol,total_supply,c_whitelist_start,c_whitelist_end,c_sale_start,c_sale_end,c_destribution_end,cap) =>{
+    const api = async (e,token_name,token_symbol,total_supply,c_whitelist_start,c_whitelist_end,c_sale_start,c_sale_end,c_destribution_end,cap,token_owener) =>{
        
         formData.append(
             "image",
@@ -91,6 +91,11 @@ function AddProject(props){
             "contract",
             e
         )
+        formData.append(
+            "token_owener",
+            token_owener
+        )
+        
         formData.append(
             "token_name",
             token_name
@@ -164,55 +169,50 @@ function AddProject(props){
     
                 let ZPadContract = new ethers.Contract(eth_token_addr, ZPadAbi, signer)
                 let allowanceCheck = await ZPadContract.allowance(eth_owner_addr, factory_addr)
-                allowanceCheck = allowanceCheck.toString()
-                let _value = await ethers.utils.parseEther('1000')
+                
             
                 if(allowanceCheck == 0){
                     // console.log("allounceCheck>>", allowanceCheck)
-                    let approve = await ZPadContract.approve(factory_addr, _value)
-                    let approveTx = await approve.wait()
-                    allowanceCheck = await ZPadContract.allowance(eth_owner_addr, factory_addr)
+                    // let approve = await ZPadContract.approve(factory_addr, _value)
+                    // let approveTx = await approve.wait()
+                    // allowanceCheck = await ZPadContract.allowance(eth_owner_addr, factory_addr)
 
-    
-                    if(approveTx.confirmations>=1){
-                        let factory = new ethers.Contract(factory_addr, Factory, signer)
-                        let price = ethers.utils.parseEther(salePrice)
-                        let tx = await factory.create_TokenSale(eth_token_addr,eth_owner_addr,whiteliststart,whitelistend,startTime,endTime,destributionend,price,eth_wallet_addr)
-                        let confirm = await tx.wait()
-                        if(confirm.confirmations >= 1){
-                         let ico_addr = await factory.ico_addr()
-                         let crowdsaleContract = new ethers.Contract(ico_addr, Crowdsale, signer)
-                         let c_whitelist_start = await crowdsaleContract.CUSTOM_WHITELIST_STARTTIME();
-                         let c_whitelist_end = await crowdsaleContract.CUSTOM_WHITELIST_ENDTIME();
-                         let c_sale_start = await crowdsaleContract.CUSTOM_SALE_STARTTIME();
-                         let c_sale_end = await crowdsaleContract.CUSTOM_SALE_ENDTIME();
-                         let c_destribution_end = await crowdsaleContract.CUSTOM_WHITELIST_ENDTIME();
-
-
-                         let token_name = await ZPadContract.name()
-                         let token_symbol = await ZPadContract.symbol()
-                         let token_supply = await ZPadContract.totalSupply()
-                         let token_supp = await ethers.utils.formatEther(token_supply)
-                         let cap = await ethers.utils.formatEther(allowanceCheck)
-
-                        api(ico_addr,token_name,token_symbol,token_supp,c_whitelist_start,c_whitelist_end,c_sale_start,c_sale_end,c_destribution_end,cap)
                 }
                 else{
-                    console.log("error")
+                    let factory = new ethers.Contract(factory_addr, Factory, signer)
+                    let price = ethers.utils.parseEther(salePrice)
+                    let tx = await factory.create_TokenSale(eth_token_addr,eth_owner_addr,whiteliststart,whitelistend,startTime,endTime,destributionend,price,eth_wallet_addr)
+                    let confirm = await tx.wait()
+                    if(confirm.confirmations >= 1){
+                     let ico_addr = await factory.ico_addr()
+                     let crowdsaleContract = new ethers.Contract(ico_addr, Crowdsale, signer)
+                     let c_whitelist_start = await crowdsaleContract.CUSTOM_WHITELIST_STARTTIME();
+                     let c_whitelist_end = await crowdsaleContract.CUSTOM_WHITELIST_ENDTIME();
+                     let c_sale_start = await crowdsaleContract.CUSTOM_SALE_STARTTIME();
+                     let c_sale_end = await crowdsaleContract.CUSTOM_SALE_ENDTIME();
+                     let c_destribution_end = await crowdsaleContract.CUSTOM_WHITELIST_ENDTIME();
+
+
+                     let token_name = await ZPadContract.name()
+                     let token_symbol = await ZPadContract.symbol()
+                     let token_supply = await ZPadContract.totalSupply()
+                     let token_supp = await ethers.utils.formatEther(token_supply)
+                     let cap = await ethers.utils.formatEther(allowanceCheck)
+                     let token_owener = eth_owner_addr;
+
+                    api(ico_addr,token_name,token_symbol,token_supp,c_whitelist_start,c_whitelist_end,c_sale_start,c_sale_end,c_destribution_end,cap,token_owener)
                 }
-                    }
-                }
-                else{
-    
-                }
+            }
             }
             else{
                 navigate('/admin/login')
             }
             
-        }catch(e){
+        }
+        catch(e){
             console.log(e)
         }
+        
     }
     // end block chani states
 

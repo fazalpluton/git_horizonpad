@@ -1018,3 +1018,6 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+.btn-custom:hover,.btn-custom:active,.btn-custom:focus{
+    box-shadow: 1px 1px 13px 4px #8080805e;
+}
