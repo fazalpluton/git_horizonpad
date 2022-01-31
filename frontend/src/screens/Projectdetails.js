@@ -89,6 +89,9 @@ function ProjectDetails(props){
             
         }catch(e){
             console.log(e)
+            setError("whiteList")
+            setErrorMsg(e)
+            handleShow()
         }
         }
 
@@ -101,6 +104,9 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
+                setError("claim")
+                setErrorMsg(e)
+                handleShow()
             }
             }
          
@@ -113,6 +119,9 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
+                setError("finalize")
+                setErrorMsg(e)
+                handleShow()
             }
             }   
 
@@ -128,6 +137,9 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
+                setError("allocations")
+                setErrorMsg(e)
+                handleShow()
             }
         }
 
@@ -155,6 +167,9 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
+                setError("swap_token")
+                setErrorMsg(e)
+                handleShow()
             }
         }
 
@@ -174,6 +189,9 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
+                setError("checkallowence")
+                setErrorMsg(e)
+                handleShow()
             }
         }
         
@@ -276,6 +294,19 @@ function ProjectDetails(props){
                                     }
 
                             </div>
+
+                            {error == "whiteList" || error == "claim" || error == "finalize" || error == "allocations" || error == "swap_token" || error == "checkallowence" ? (
+                                
+                                <Modal show={show} onHide={handleClose}  className='custom-modal' size="lg"
+                                aria-labelledby="contained-modal-title-vcenter"
+                                centered>
+                                    <Modal.Header > <div style={{textAlign:"center"}}>
+                                          <p style={{width:"800px", color:"red"}} >{errorMsg.message || errorMsg}</p>
+                                          </div></Modal.Header>
+                                
+                            </Modal>
+                            
+                        ): null}
 
 
                             <p className="f-bold my-3">
