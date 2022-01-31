@@ -24,6 +24,7 @@ import Projects from './screens/admin/Project';
 import AddProject from './screens/admin/AddProject';
 import UpdateProject from './screens/admin/Update';
 import AddProjectDetail from './screens/admin/AddDetail';
+import Approval from './screens/Approval';
 
 
 function App() {
