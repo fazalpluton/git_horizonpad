@@ -76,18 +76,18 @@ function Stacking(props){
       };
 
 
-      const loadSigner = async () => {
-        try {
-          const provider = new ethers.providers.Web3Provider(window.ethereum)
-          return provider
-        } catch (e) {
-          console.log("loadProvider: ", e);
-        }
-      };
+    //   const loadSigner = async () => {
+    //     try {
+    //       const provider = new ethers.providers.Web3Provider(window.ethereum)
+    //       return provider
+    //     } catch (e) {
+    //       console.log("loadProvider: ", e);
+    //     }
+    //   };
     
       const loadTotalStake = async () => {
         try{
-            let signer = await loadSigner()
+            let signer = await loadProvider()
             console.log("signer", signer)
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let totalStakedValue = await stakingContract.totalStakedValue()
@@ -273,11 +273,16 @@ function Stacking(props){
 
         // This function is used for Claculate Panding Reward
         const calcPendingReward = async () => {
-            let signer = await loadProvider()
+            try{
+                let signer = await loadProvider()
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let calcPendingRewards = await stakingContract.calcPendingRewards(account)
             setUserReward(calcPendingRewards.toString())
             console.log("userReward", calcPendingRewards.toString())
+            }
+            catch(e){
+                console.log(e)
+            }
         } 
 
 
@@ -328,18 +333,24 @@ function Stacking(props){
         // This Function is Used For No Of Stakers
 
         const Stakers = async () => {
-            let signer = await loadSigner()
-            let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
-            let staker = await stakingContract.noOfStakers()
-
-            if(staker <=0 ){
-                setStakersNo("NA")
+            try{
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                let staker = await stakingContract.noOfStakers()
+    
+                if(staker <=0 ){
+                    setStakersNo("NA")
+                }
+                else{
+    
+                    setStakersNo(staker.toString())
+                }
+                console.log("getAPY", staker.toString())
             }
-            else{
-
-                setStakersNo(staker.toString())
+            catch(e){
+                console.log(e)
             }
-            console.log("getAPY", staker.toString())
+           
             // setStakersNo(staker.toString())
             // if(stakersNo == null || 0) {
             //     setStakersNo("hjhj")
@@ -350,17 +361,6 @@ function Stacking(props){
         const APY = async () => {
             let signer = await loadProvider()
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
-            // let blockPerYear = 2102400
-            // let baseRatePerBlock = await stakingContract.baseRatePerBlock()
-            // let abc = ethers.utils.parseEther(baseRatePerBlock.toString())
-            // console.log("abc", abc.toString())
-            // let a = baseRatePerBlock.mul(blockPerYear)
-            // let b = ethers.utils.parseEther(totalToken)
-            // let c = a/b
-            // let d = c*100
-            // console.log("b", c.toString())
-            // console.log("c", c.toFixed(3))
-            // console.log("d",d)
             let getAPY = await stakingContract.getAPY()
             if(getAPY <=0 ){
                 setUserApy("NA")
@@ -374,10 +374,15 @@ function Stacking(props){
         // Stakers()
 
         const Tiers = async () => {
-            let signer = await loadSigner()
+           try{
+            let signer = await loadProvider()
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let bronze = await stakingContract.bronze()
             setBronze(Math.floor(ethers.utils.formatEther(bronze.toString())))
+           }
+           catch(e){
+               console.log(e)
+           }
         }
         
 
@@ -389,6 +394,9 @@ function Stacking(props){
                         Event()
                         totalBalance()
                         getUnstakedValue()
+                        loadTotalStake()
+                        Stakers()
+                        Tiers()
                         // Stakers()
     
                     } catch (error) {
@@ -398,19 +406,19 @@ function Stacking(props){
             })()
         }, [account]);
 
-        useEffect(() => {
-            (async () => {
+        // useEffect(() => {
+        //     (async () => {
                 
-                    try {
-                        loadTotalStake()
-                        Stakers()
-                        Tiers()
-                    } catch (error) {
-                        console.log(error)
-                    }
+        //             try {
+        //                 loadTotalStake()
+        //                 Stakers()
+        //                 Tiers()
+        //             } catch (error) {
+        //                 console.log(error)
+        //             }
                 
-            })()
-        }, []);
+        //     })()
+        // }, []);
         
         useEffect(() => {
             (async () => {
@@ -1103,3 +1111,9 @@ function Stacking(props){
 }
 
 export default Stacking;
+
+// function Stacking(props){
+//     return(<div>jfhjfhj</div>)
+// }
+
+// export default Stacking;

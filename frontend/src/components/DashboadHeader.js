@@ -23,7 +23,6 @@ function DashboardHeader(props){
   } = useWeb3React();
 
   const [token,setToken] = useState(localStorage.getItem("token"));
-  // console.log("library", library)
 
   const [loaded, setLoaded] = useState(false)
 

@@ -29,8 +29,13 @@ import Approval from './screens/Approval';
 
 function App() {
 
+  const [errorMessage, setErrorMessage] = useState();
+  useEagerConnect(setErrorMessage);
+  useInactiveListener();
+
   return (
-    <Router>
+   <div>
+      <Router>
         <Routes>
         <Route path="/" element={<Home header={<Header/>} footer={<Footer/>}/>}  />
         <Route path="/ido-projects" element={<IdoProjects header={<DashboardHeader/>} footer={<Footer/>} />}  />
@@ -54,6 +59,13 @@ function App() {
 
         </Routes>
     </Router>
+
+    {
+        errorMessage? <div style={{color:"red"}}>{errorMessage}</div>: null
+      }
+   </div>
+
+
   );
 }
 
