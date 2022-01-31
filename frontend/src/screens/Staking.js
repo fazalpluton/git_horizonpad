@@ -75,10 +75,11 @@ function Stacking(props){
           }
       };
 
+
       const loadSigner = async () => {
         try {
-            var provider = new ethers.providers.getDefaultProvider();
-            //   console.log(provider)
+          const provider = new ethers.providers.Web3Provider(window.ethereum)
+          // console.log(provider)
           return provider
         } catch (e) {
           console.log("loadProvider: ", e);
@@ -87,7 +88,8 @@ function Stacking(props){
     
       const loadTotalStake = async () => {
         try{
-            let signer = await loadProvider()
+            let signer = await loadSigner()
+            console.log("signer", signer)
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let totalStakedValue = await stakingContract.totalStakedValue()
             let token = ethers.utils.formatEther(totalStakedValue.toString())
@@ -322,7 +324,7 @@ function Stacking(props){
         // This Function is Used For No Of Stakers
 
         const Stakers = async () => {
-            let signer = await loadProvider()
+            let signer = await loadSigner()
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let staker = await stakingContract.noOfStakers()
 
@@ -368,7 +370,7 @@ function Stacking(props){
         // Stakers()
 
         const Tiers = async () => {
-            let signer = await loadProvider()
+            let signer = await loadSigner()
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let bronze = await stakingContract.bronze()
             setBronze(Math.floor(ethers.utils.formatEther(bronze.toString())))
@@ -379,12 +381,11 @@ function Stacking(props){
             (async () => {
                 if (account) {
                     try {
-                        loadTotalStake()
+                        // loadTotalStake()
                         Event()
                         totalBalance()
                         getUnstakedValue()
-                        Stakers()
-                        Tiers()
+                        // Stakers()
     
                     } catch (error) {
                         console.log(error)
@@ -393,17 +394,19 @@ function Stacking(props){
             })()
         }, [account]);
 
-        // useEffect(() => {
-        //     (async () => {
+        useEffect(() => {
+            (async () => {
                 
-        //             try {    
-        //                 loadTotalStake()
-        //             } catch (error) {
-        //                 console.log(error)
-        //             }
+                    try {
+                        loadTotalStake()
+                        Stakers()
+                        Tiers()
+                    } catch (error) {
+                        console.log(error)
+                    }
                 
-        //     })()
-        // }, []);
+            })()
+        }, []);
         
         useEffect(() => {
             (async () => {
