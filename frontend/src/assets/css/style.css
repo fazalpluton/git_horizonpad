@@ -882,6 +882,8 @@ td{
 }
 .modal-content{
     background-color: var(--secondary) !important;
+    border: 2px dashed var(--white) !important;
+    border-radius: 30px !important;
 }
 .modal-title.h4{
     color: var(--white) !important;
@@ -1006,3 +1008,13 @@ background-color: var(--secondary) !important;
   .controlsTime {
     color: white;
   }
+  .text-ab{
+    position: absolute;
+    right: 10px;
+    top: 39px;
+  }
+  input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

@@ -339,6 +339,8 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         return detail.withDrawValue;
     }
 
+
+
     function collectFee(address account , uint256 amount)public onlyOwner{
         require(amount <= fee , "Not enough amount to collect");
         stakingToken.safeTransfer(account,amount);

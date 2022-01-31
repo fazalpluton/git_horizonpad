@@ -18,7 +18,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 const ALCHEMY_API_KEY = `GKcZh-E7o6PB3gEz0M9fUHPwG4_xHbbj`
-const privateKey = `669a00a5dcee6b12e70ec23b4a793b14bcb38a0f657ce29ada80b578e14743a7`
+const privateKey = `7ad2941b69a0d0429d576eaac92d18e6f4c17c2dc2673c221585b2b96e5cbdb3`
 
 module.exports = {
   solidity: "0.8.0",

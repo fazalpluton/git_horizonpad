@@ -40,6 +40,10 @@ async function main() {
   tokenForSale = await TokenForSale.deploy();
   await tokenForSale.deployed();
 
+  TokenBUSD = await ethers.getContractFactory("ZPad");
+  busd = await TokenBUSD.deploy();
+  await busd.deployed();
+
   TicketConsumer = await ethers.getContractFactory("TicketConsumer");
   ticketConsumer = await TicketConsumer.deploy();
   await ticketConsumer.deployed();
@@ -78,11 +82,11 @@ async function main() {
   
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(zpad, staking,rewardToken ,tokenForSale,ticketConsumer,factory);
+  saveFrontendFiles(zpad, staking,rewardToken ,tokenForSale,ticketConsumer,factory,busd);
 }
 //,nftPreSale,nftPubSale,nft
 
-function saveFrontendFiles(zpad, staking ,rewardToken ,tokenForSale,ticketConsumer,factory) {
+function saveFrontendFiles(zpad, staking ,rewardToken ,tokenForSale,ticketConsumer,factory,busd) {
   const fs = require("fs");
   const contractsDir = "../frontend/src/contract";
 
@@ -96,6 +100,7 @@ function saveFrontendFiles(zpad, staking ,rewardToken ,tokenForSale,ticketConsum
  export const tokenForSale_addr = "${tokenForSale.address}"
  export const ticketConsumer_addr = "${ticketConsumer.address}"
  export const factory_addr = "${factory.address}"
+ export const busd_addr = "${busd.address}"
 `
 
   let data = JSON.stringify(config)

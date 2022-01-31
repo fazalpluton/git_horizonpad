@@ -86,6 +86,7 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
     
     mapping (address => uint256) purchase;
     mapping (address => uint256) msgValue; 
+    mapping (address => bool) claimed;
 
     uint256 current = block.timestamp * 1 seconds;
     uint256 public buyTime = block.timestamp + 500 seconds;//+ 15 days
@@ -186,6 +187,10 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
         return token_Price;
     }
 
+    function getClaimed(address account) public view returns(bool){
+        return claimed[account];
+    }
+
    
     function weiRaised() public view returns (uint256) {
         return _weiRaised;
@@ -228,6 +233,7 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
         require (t>0,"0 tokens to claim");
          ticketConsumer.unlockTickets(_msgSender(), address(this));
         _processPurchase(_msgSender(), t);
+        claimed[_msgSender()] =true;
          delete purchase[_msgSender()];
      
     }
