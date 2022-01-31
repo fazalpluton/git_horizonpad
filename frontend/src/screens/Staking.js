@@ -79,7 +79,6 @@ function Stacking(props){
       const loadSigner = async () => {
         try {
           const provider = new ethers.providers.Web3Provider(window.ethereum)
-          // console.log(provider)
           return provider
         } catch (e) {
           console.log("loadProvider: ", e);
@@ -130,7 +129,6 @@ function Stacking(props){
                         Stakers()
                         loadTotalStake()
 
-                        // setMsgHandling("Staking Done")
                     }
                     else{
                         console.log("error")
@@ -157,6 +155,12 @@ function Stacking(props){
                 console.log("error: ",e)
             }
         }
+
+        console.log("msgHandling", msgHandling)
+
+        
+        // let short = msgHandling.slice(0, 20)+"..." + msgHandling.slice(len-5, len-1)
+        // console.log("short", short)
 
         // console.log("bronze", msgHandling)
 
@@ -287,7 +291,7 @@ function Stacking(props){
                 let getUserStakedValue = await stakingContract.getUserStakedValue(account)
                 let token = ethers.utils.formatEther(getUserStakedValue.toString())
                 setTotalBalance(token)
-                // console.log("getUserStakedValue", token)
+                console.log("getUserStakedValue", token)
             } 
             catch(e){
                 console.log(e)
@@ -502,7 +506,7 @@ function Stacking(props){
                         </Col>
 
                         <Col lg={4} sm={12} md={6}>
-
+                            
                         {error == 1 ? (
                                 
                                 <Modal show={show} onHide={handleClose}  className='custom-modal' size="lg"

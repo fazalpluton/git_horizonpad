@@ -19,7 +19,7 @@ function DashboardHeader(props){
     deactivate,
     active,
     errorWeb3Modal,
-    active: networkActive, error: networkError, activate: activateNetwork
+    // active: networkActive, error: networkError, activate: activateNetwork
   } = useWeb3React();
 
   const [token,setToken] = useState(localStorage.getItem("token"));
@@ -48,13 +48,11 @@ function DashboardHeader(props){
     token:token
   })
   .then(function (response) {
-    // console.log(">>>>>>Data<",response.data)
     if(!response.data){
       localStorage.setItem("token", null);
     }
   })
   .catch(function (error) {
-    localStorage.setItem("token", null);
     // console.log(error);
   });
   },[]);
@@ -75,7 +73,7 @@ function DashboardHeader(props){
         <Link to={'/ido-projects'} className="nav-link">IDO Projects</Link>
         <Link to={'/hci-projects'} className="nav-link">HCI Projects</Link>
         {
-          token == 'null' ? '':<NavDropdown title="Manager" id="basic-nav-dropdown" className="manager-dropdown">
+          token == null ? '':<NavDropdown title="Manager" id="basic-nav-dropdown" className="manager-dropdown">
           <Link to={'/admin/add-project'} className="dropdown-item">Add Project</Link>
           <Link to={'/admin/projects'} className="dropdown-item">List Projects</Link>
         </NavDropdown>
