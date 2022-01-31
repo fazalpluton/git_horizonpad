@@ -1,7 +1,7 @@
 
- export const zpad_addr = "0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E"
- export const staking_addr = "0x1613beB3B2C4f22Ee086B2b38C1476A3cE7f78E8"
- export const rewardToken_addr = "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690"
- export const tokenForSale_addr = "0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB"
- export const ticketConsumer_addr = "0x9E545E3C0baAB3E08CdfD552C960A1050f373042"
- export const factory_addr = "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9"
+ export const zpad_addr = "0x54475dA8f5bdcc7D9b6b23f389ca2Be1d5087b74"
+ export const staking_addr = "0x453592959c2683f2BAd826528372C0308C6d5fe5"
+ export const rewardToken_addr = "0xcDcfbDb17c9971A0973f75A57d143C5fb9C78902"
+ export const tokenForSale_addr = "0x576bCf9151594a899c059b0D30C09eE0353A721f"
+ export const ticketConsumer_addr = "0x0cC584b943070b86a286Ac6DBB083dCB526652a8"
+ export const factory_addr = "0x1e947fFAdf49A4B1Ff9D93407Dd647c6e2569B91"
