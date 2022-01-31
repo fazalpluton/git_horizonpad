@@ -49,7 +49,7 @@ function AddProject(props){
         errorWeb3Modal
     } = useWeb3React();
 
-    const api = async (e,token_name,token_symbol,total_supply,c_whitelist_start,c_whitelist_end,c_sale_start,c_sale_end,c_destribution_end,cap) =>{
+    const api = async (e,token_name,token_symbol,total_supply,c_whitelist_start,c_whitelist_end,c_sale_start,c_sale_end,c_destribution_end,cap,token_owener) =>{
        
         formData.append(
             "image",
@@ -91,6 +91,11 @@ function AddProject(props){
             "contract",
             e
         )
+        formData.append(
+            "token_owener",
+            token_owener
+        )
+        
         formData.append(
             "token_name",
             token_name
@@ -194,8 +199,9 @@ function AddProject(props){
                          let token_supply = await ZPadContract.totalSupply()
                          let token_supp = await ethers.utils.formatEther(token_supply)
                          let cap = await ethers.utils.formatEther(allowanceCheck)
+                         let token_owener = eth_owner_addr;
 
-                        api(ico_addr,token_name,token_symbol,token_supp,c_whitelist_start,c_whitelist_end,c_sale_start,c_sale_end,c_destribution_end,cap)
+                        api(ico_addr,token_name,token_symbol,token_supp,c_whitelist_start,c_whitelist_end,c_sale_start,c_sale_end,c_destribution_end,cap,token_owener)
                 }
                 else{
                     console.log("error")

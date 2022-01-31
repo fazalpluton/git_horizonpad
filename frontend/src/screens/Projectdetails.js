@@ -90,13 +90,39 @@ function ProjectDetails(props){
         }
         }
 
+        const Claim = async (e) => {
+            try{
+                let signer = await loadProvider()
+                let crowdsale_contract = new ethers.Contract(project.contract, ContractCrowdSale, signer)
+                let claim_time = await crowdsale_contract.claim();
+                await claim_time.wait();
+                
+            }catch(e){
+                console.log(e)
+            }
+            }
+         
+        const Finalize = async (e) => {
+            try{
+                let signer = await loadProvider()
+                let crowdsale_contract = new ethers.Contract(project.contract, ContractCrowdSale, signer)
+                let finalize_time = await crowdsale_contract.Finalize();
+                await finalize_time.wait();
+                
+            }catch(e){
+                console.log(e)
+            }
+            }   
+
         const Allocations = async (e) => {
             try{
                 let signer = await loadProvider()
                 let ticketcontract = new ethers.Contract(ticketConsumer_addr, TicketConsumer, signer)
                 setTicketlist(await ticketcontract.getUserAppliedProjects(account))
                 let crowdsale_contract = new ethers.Contract(project.contract, ContractCrowdSale, signer)
-                setClaimstatus(await crowdsale_contract.getClaimed(account));
+                let claim_status = await crowdsale_contract.getClaimed(account);
+                setClaimstatus(claim_status);
+                console.log(claim_status)
                 
             }catch(e){
                 console.log(e)
@@ -155,15 +181,15 @@ function ProjectDetails(props){
         (async () => {
             if (account) {
                 try {
-                    Allocations()
                     checkAllowence()
+                    Allocations()
 
                 } catch (error) {
                     console.log(error)
                 }
             }
         })()
-    }, [account]);
+    }, [account,project]);
 
     return (
         <>
@@ -254,7 +280,8 @@ function ProjectDetails(props){
                             {project.short_intro}
                             </p>
 
-                            <div className="my-5">
+                            <div className="my-5 btn-group-custom">
+                                
                                 {
                                     project.time_status == 0 &&
                                     <button className="btn-custom secondary-btn" disabled>Apply Now</button>
@@ -273,11 +300,16 @@ function ProjectDetails(props){
                                 }
                                  {
                                     project.time_status == 4 &&
-                                    <button className="btn-custom secondary-btn" >Claim</button>
+                                    <button className="btn-custom secondary-btn" disabled>Claim</button>
                                 }
+                                
                                 {
                                     project.time_status == 5 &&
-                                    <button className="btn-custom secondary-btn" disabled>Sale Ended</button>
+                                    <button className="btn-custom secondary-btn" onClick={Claim}>Claim</button>
+                                }
+                                {
+                                    project.time_status >= 4 && project.token_owener == account &&
+                                    <button className="btn-custom secondary-btn" onClick={Finalize}>Finalize</button>
                                 }
                                 
                             </div>
