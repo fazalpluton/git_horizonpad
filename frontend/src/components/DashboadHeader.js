@@ -8,7 +8,7 @@ import { useWeb3React } from "@web3-react/core";
 import {injectedConnector} from "../../src/utils/connectors"
 
 import VectorLogo from "../assets/images/vector-logo.png"
-function DashboardHeader(){
+function DashboardHeader(props){
 
   const {
     connector,
@@ -48,13 +48,11 @@ function DashboardHeader(){
     token:token
   })
   .then(function (response) {
-    // console.log(">>>>>>Data<",response.data)
     if(!response.data){
       localStorage.setItem("token", null);
     }
   })
   .catch(function (error) {
-    localStorage.setItem("token", null);
     // console.log(error);
   });
   },[]);
@@ -75,7 +73,7 @@ function DashboardHeader(){
         <Link to={'/ido-projects'} className="nav-link">IDO Projects</Link>
         <Link to={'/hci-projects'} className="nav-link">HCI Projects</Link>
         {
-          token == 'null' ? '':<NavDropdown title="Manager" id="basic-nav-dropdown" className="manager-dropdown">
+          token == null ? '':<NavDropdown title="Manager" id="basic-nav-dropdown" className="manager-dropdown">
           <Link to={'/admin/add-project'} className="dropdown-item">Add Project</Link>
           <Link to={'/admin/projects'} className="dropdown-item">List Projects</Link>
         </NavDropdown>
@@ -86,7 +84,7 @@ function DashboardHeader(){
        {active
         ? (<div><button type="button" className="btn-custom secondary-btn">CONNECTED</button></div>)
          : (<div><button onClick={() => {
-          connectWallet(activate);
+          connectWallet(activate, props.setErrorMessage);
         }} type="button" className="btn-custom secondary-btn">Connect Wallet</button></div>)
          }
       </Form>
