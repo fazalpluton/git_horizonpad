@@ -110,13 +110,10 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         stakingDetail memory detail = userStakingDetail[account];
         uint256 currentblock = block.number;
         uint256 blocks = currentblock - detail.depositBlock;
-        console.log("deposit block ",detail.depositBlock);
         uint256 totalReceived = baseRatePerBlock * blocks;
         uint256 userShare = detail.depositValue - detail.withDrawValue;
-        console.log("userShare",userShare);
-        console.log("total recieved",totalReceived);
         if(userShare <= 0){
-            return  0 ; 
+            return  0; 
         }else{
             uint256 rewards = (totalReceived * userShare) / totalStakedValue - detail.rewardReleased ; 
             return rewards;
