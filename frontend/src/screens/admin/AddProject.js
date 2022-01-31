@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { factory_addr } from "../../contract/addresses";
 import Factory from '../../contract/Factory.json';
 import ZPadAbi from '../../contract/ZPad.json'
+import Crowdsale from '../../contract/CrowdSale.json'
 import axios from 'axios';
 import { useWeb3React } from "@web3-react/core";
 import Web3Modal from 'web3modal'
@@ -48,7 +49,8 @@ function AddProject(props){
         errorWeb3Modal
     } = useWeb3React();
 
-    const api = async (e) =>{
+    const api = async (e,token_name,token_symbol,total_supply,c_whitelist_start,c_whitelist_end,c_sale_start,c_sale_end,c_destribution_end,cap) =>{
+       
         formData.append(
             "image",
             selectedFile
@@ -90,6 +92,43 @@ function AddProject(props){
             e
         )
         formData.append(
+            "token_name",
+            token_name
+        )
+        formData.append(
+            "token_symbol",
+            token_symbol
+        )
+        formData.append(
+            "total_supply",
+            total_supply
+        )
+        formData.append(
+            "c_whitelist_start",
+            c_whitelist_start
+        );
+        formData.append(
+            "c_whitelist_end",
+            c_whitelist_end
+        );
+        formData.append(
+            "c_sale_start",
+            c_sale_start
+        );
+        formData.append(
+            "c_sale_end",
+            c_sale_end
+        );
+        formData.append(
+            "c_destribution_end",
+            c_destribution_end
+        );
+        formData.append(
+            "cap",
+            cap
+        );
+        
+        formData.append(
             'token',
             token
         )
@@ -116,7 +155,7 @@ function AddProject(props){
       const formSubmit = async (e) => {
         e.preventDefault();
         try{
-            if(token != null){
+            if(token != 'null'){
                 let signer = await loadProvider()
 
                 let eth_token_addr = ethers.utils.getAddress(tokenAddress)
@@ -132,6 +171,8 @@ function AddProject(props){
                     // console.log("allounceCheck>>", allowanceCheck)
                     let approve = await ZPadContract.approve(factory_addr, _value)
                     let approveTx = await approve.wait()
+                    allowanceCheck = await ZPadContract.allowance(eth_owner_addr, factory_addr)
+
     
                     if(approveTx.confirmations>=1){
                         let factory = new ethers.Contract(factory_addr, Factory, signer)
@@ -140,7 +181,21 @@ function AddProject(props){
                         let confirm = await tx.wait()
                         if(confirm.confirmations >= 1){
                          let ico_addr = await factory.ico_addr()
-                        api(ico_addr)
+                         let crowdsaleContract = new ethers.Contract(ico_addr, Crowdsale, signer)
+                         let c_whitelist_start = await crowdsaleContract.CUSTOM_WHITELIST_STARTTIME();
+                         let c_whitelist_end = await crowdsaleContract.CUSTOM_WHITELIST_ENDTIME();
+                         let c_sale_start = await crowdsaleContract.CUSTOM_SALE_STARTTIME();
+                         let c_sale_end = await crowdsaleContract.CUSTOM_SALE_ENDTIME();
+                         let c_destribution_end = await crowdsaleContract.CUSTOM_WHITELIST_ENDTIME();
+
+
+                         let token_name = await ZPadContract.name()
+                         let token_symbol = await ZPadContract.symbol()
+                         let token_supply = await ZPadContract.totalSupply()
+                         let token_supp = await ethers.utils.formatEther(token_supply)
+                         let cap = await ethers.utils.formatEther(allowanceCheck)
+
+                        api(ico_addr,token_name,token_symbol,token_supp,c_whitelist_start,c_whitelist_end,c_sale_start,c_sale_end,c_destribution_end,cap)
                 }
                 else{
                     console.log("error")
@@ -192,18 +247,18 @@ function AddProject(props){
         <>
         {props.header}
         <div className="position-relative">
-            <img src={require('../../assets/images/banner-background.png').default} className="single-project-background"/>
-            <div className="single-project-section admin-form-padding">
+            {/* <img src={require('../../assets/images/banner-background.png').default} className="single-project-background"/> */}
+            <div className="admin-form-padding">
                 <Container>
                 <h2 className="h2 mb-3 text-center">Add Project</h2>
                 <Row>
-                    <Col lg={12} sm={12} md={6} className="m-auto">
+                    <Col lg={12} sm={12} md={12} className="m-auto">
                         <div className="ido-box">
                         <Form onSubmit={(e) => {
                                         formSubmit(e);
                                         }} enctype="multipart/form-data">
                             <Row className="gy-5">
-                                <Col lg={6} sm={12} md={12}>
+                                <Col lg={6} sm={12} md={6}>
                              
                                 <img src={preview['img']} alt="upload image" className="upload-img"/>
                                 <Form.Group controlId="formFile" className="mb-3">
@@ -238,7 +293,7 @@ function AddProject(props){
                                 </Form.Group>
                                 
                                 </Col>
-                                <Col lg={6}>
+                                <Col lg={6} sm={12} md={6}>
                                     {/* block chain */}
                                 <Form.Group className="mt-3" controlId="token">
                                 <Form.Label>Token Address</Form.Label>

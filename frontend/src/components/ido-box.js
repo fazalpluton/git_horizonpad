@@ -36,10 +36,10 @@ function IdoBox(props){
         await axios.get(url+'projects?status='+props.status+'&type='+props.type).then((res)=>{
             setLatestProject(res.data.projects)
         })
-    },[]);
+    },[isupdate]);
 
     useEffect(async ()=>{
-    await axios.get(url+'projects?status='+props.status+'&type='+props.type).then((res)=>{
+    await axios.get(url+'projects').then((res)=>{
         const promises = res.data.projects.map(async (p)=>{
                 p["detail"]= await projectDetail(p.contract)
                 return p;
@@ -86,7 +86,8 @@ function IdoBox(props){
             let raised = ethers.utils.formatEther(await crowdsale_contract.weiRaised())
             let allocation = ethers.utils.formatEther(await crowdsale_contract.tokenAllocation())
             let getstatus = (await crowdsale_contract.getStatus()).toString()
-            let data = {"price":price,"raised":raised,"allocation":allocation,"getstatus":getstatus}
+            let total_user = (await crowdsale_contract.TOTAL_WHITELIST()).toString()
+            let data = {"price":price,"raised":raised,"allocation":allocation,"getstatus":getstatus,"total_user":total_user}
             return data;
         }catch(e){
             console.log(e)
@@ -212,7 +213,7 @@ function IdoBox(props){
 
                     <span >
                         <p>Price</p>
-                        <h4>{project.price} BNB</h4>
+                        <h4>{project.price} BUSD</h4>
                     </span>
 
                     <span className="text-center">
@@ -222,7 +223,7 @@ function IdoBox(props){
 
                     <span className="text-end">
                         <p>Total Raised</p>
-                        <h4>{project.total_raised} BNB</h4>
+                        <h4>{project.total_raised} BUSD</h4>
                     </span>
 
                 </div>
@@ -269,15 +270,15 @@ function IdoBox(props){
 
                     {
                         project.time_status == "4" &&
-                        <p className="closed">
+                        <p className="live">
                         <i class="fa-solid fa-circle"></i>
-                        Closed</p>
+                        Destribution</p>
                     }
                     {
                         project.time_status == "5" &&
                         <p className="closed">
                         <i class="fa-solid fa-circle"></i>
-                        Closed</p>
+                        Sale Ended</p>
                     }
               <div className="ido"> 
 
@@ -320,7 +321,7 @@ function IdoBox(props){
 
                 <span >
                         <p>Price</p>
-                        <h4>{project.price} BNB</h4>
+                        <h4>{project.price} BUSD</h4>
                     </span>
 
                     <span className="text-center">
@@ -330,7 +331,7 @@ function IdoBox(props){
 
                     <span className="text-end">
                         <p>Total Raised</p>
-                        <h4>{project.total_raised} BNB</h4>
+                        <h4>{project.total_raised} BUSD</h4>
                     </span>
 
                 </div>
