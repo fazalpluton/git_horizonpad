@@ -303,7 +303,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
     }
     
 
-    function unStake(uint256 amount) public nonReentrant{ 
+     function unStake(uint256 amount) public nonReentrant{ 
         stakingDetail memory detail = userStakingDetail[_msgSender()];
         uint256 balance =detail.depositValue;
         require(amount<=balance,"insufficient balance for unstaking");
@@ -337,7 +337,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         emit eve_Unstaked(amount);
     }
 
-     function getUnstakedValue(address account)public view returns(uint256){
+    function getUnstakedValue(address account)public view returns(uint256){
         stakingDetail memory detail = userStakingDetail[account];
         return detail.withDrawValue;
     }

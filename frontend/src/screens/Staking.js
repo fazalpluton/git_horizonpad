@@ -44,6 +44,8 @@ function Stacking(props){
     const [totalbalance, setTotalBalance] = useState(0)
     const [stakersNo, setStakersNo] = useState(0)
     const [userApy, setUserApy] = useState(0)
+    const [userReward, setUserReward] = useState(0)
+    const [userUnstakedValue, setUserUnstakedValue] = useState(0)
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -55,6 +57,9 @@ function Stacking(props){
     const [silver, setSilver] = useState(0)
     const [gold, setGold] = useState(0)
     const [tokenError, setTokenError]= useState()
+    // fazal 
+    const [isType,setIsType]= useState('withdraw')
+
     // fazal 
     const [isType,setIsType]= useState('withdraw')
 
@@ -145,6 +150,8 @@ function Stacking(props){
             event.preventDefault()
         }
 
+        
+
         // This Function is used to lock Maximum Token
 
         const MaxStake = async () => {
@@ -164,6 +171,94 @@ function Stacking(props){
           }
 
         // This Function is used for unStake Token from SmartToken
+
+        const unStake = async () => {
+            try{
+                
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                let token = ethers.utils.parseEther((unStakeValue).toString())
+                // console.log(token)
+                let unStake = await stakingContract.unStake(token)
+                console.log("unStake>>>>>>>>>>", unStake)
+                let tx = await unStake.wait()
+                // console.log("tx>>", tx)
+                setUnStakeValue(0)
+            }
+            catch(e){
+                console.log(e)
+            }
+        }
+        
+        console.log("unStakeValue", unStakeValue)
+
+        const MaxUnStake = async () => {
+            try{
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                let getUserStakedValue = await stakingContract.getUserStakedValue(account)
+                let token = ethers.utils.formatEther(getUserStakedValue.toString())
+                console.log("token>>", token)
+                setUnStakeValue(Math.floor(token))
+            }
+            catch(e){
+                console.log(e)
+            }
+        }
+
+        const unStaking = (event) => {
+            unStake()
+            event.preventDefault()
+        }
+
+        // This function is used to get unStaked Value
+
+        const getUnstakedValue = async () => {
+            try{
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                let getUserStakedValue = await stakingContract.getUnstakedValue(account)
+                let token = ethers.utils.formatEther(getUserStakedValue.toString())
+                setUserUnstakedValue(token)
+                console.log(getUserStakedValue.toString())
+            }
+            catch(e){
+                console.log(e)
+            }
+        }
+
+        console.log("userUnstakedValue",userUnstakedValue)
+
+        // This is functrion is used for pull Rewards
+        const Reward = async () => {
+            try{
+                let signer = await loadProvider()
+                let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                if(totalbalance !== 0){
+                    let withdrawRewards = await stakingContract.withdrawRewards()
+                    let tx = await withdrawRewards.wait()
+                console.log("tx", tx)
+                }
+                else{
+                   return null
+    
+                }
+                
+            }
+            catch(e) {
+                console.log(e)
+            }
+        }
+
+        // This function is used for Claculate Panding Reward
+        const calcPendingReward = async () => {
+            let signer = await loadProvider()
+            let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+            let calcPendingRewards = await stakingContract.calcPendingRewards(account)
+            setUserReward(calcPendingRewards.toString())
+            console.log("userReward", calcPendingRewards.toString())
+        } 
+
 
 
         // This function is used to get all token to the user
@@ -198,6 +293,8 @@ function Stacking(props){
                   
                     loadTotalStake()
                     totalBalance()
+                    getUnstakedValue()
+                    
                     // console.log("amount>>", amount.toString())
                 }
                 ) 
@@ -263,6 +360,7 @@ function Stacking(props){
                        // loadTotalStake()
                         Event()
                         totalBalance()
+                        getUnstakedValue()
                         // Stakers()
                         // APY()
     
@@ -378,25 +476,26 @@ function Stacking(props){
                         <Col lg={4} sm={12} md={6}>
                            
                         <div className="ido-box" style={{background: "#39065E"}}>
+                            
 
                             <div className="staked">
                                 <h4>Staked</h4>
                                 <h2>{Math.floor(totalbalance)}</h2>
+                                {console.log("totalbalance", totalbalance)}
                             </div>
 
                             <div className="staked">
                                 <h4>Unstaked</h4>
-                                <h2>0.0000</h2>
+                                <h2>{Math.floor(userUnstakedValue)}</h2>
                             </div>
 
                             <div className="staked">
                                 <h4>Reward</h4>
-                                <h2>0.0000</h2>
+                                <h2>{Math.floor(userReward)}</h2>
                             </div>
                         
                             
-
-                            <Form className="text-center mt-3">
+                            {isType == "stake" ? (<Form className="text-center mt-3">
                                 
                                 <Form.Group className="mb-3 max-staked" controlId="formBasicCheckbox">
                                 <Form.Control type="text" value={stakevalue} placeholder="Stake Amount" onChange={(e)=>setStakevalue(e.target.value)} />
@@ -407,7 +506,43 @@ function Stacking(props){
                                 <Button onClick={Staking} type="submit" className="btn-custom secondary-btn">
                                     Stake
                                 </Button>
-                            </Form>
+                            </Form>) : null}
+
+                            {isType == "unstaking" ? (<Form className="text-center mt-3">
+                                
+                                <Form.Group className="mb-3 max-staked" controlId="formBasicCheckbox">
+                                <Form.Control type="text"  placeholder="Stake Amount" onChange={(e)=>setUnStakeValue(e.target.value)} />
+                                <Button onClick={MaxUnStake} className="">
+                                    Max
+                                </Button>
+                                </Form.Group>
+                                <Button onClick={unStaking} type="submit"  className="btn-custom secondary-btn">
+                                    UnStake
+                                </Button>
+                            </Form>) : null}
+
+                            {/* withdraw */}
+
+                            {isType == "withdraw" ? (
+                                <div  className="text-center mt-3">
+                                <Button onClick={Reward} type="submit"  className="btn-custom secondary-btn">
+                                    Withdraw
+                                </Button>
+                                </div>
+                            ) : null}
+
+                            {/* <Form className="text-center mt-3">
+                                
+                                <Form.Group className="mb-3 max-staked" controlId="formBasicCheckbox">
+                                <Form.Control type="text" value={stakevalue} placeholder="Stake Amount" onChange={(e)=>setStakevalue(e.target.value)} />
+                                <Button onClick={MaxStake} className="">
+                                    Max
+                                </Button>
+                                </Form.Group>
+                                <Button onClick={Staking} type="submit" className="btn-custom secondary-btn">
+                                    Stake
+                                </Button>
+                            </Form> */}
 
                         </div>
 
