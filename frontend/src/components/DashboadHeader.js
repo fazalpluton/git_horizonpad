@@ -8,7 +8,7 @@ import { useWeb3React } from "@web3-react/core";
 import {injectedConnector} from "../../src/utils/connectors"
 
 import VectorLogo from "../assets/images/vector-logo.png"
-function DashboardHeader(){
+function DashboardHeader(props){
 
   const {
     connector,
@@ -19,7 +19,7 @@ function DashboardHeader(){
     deactivate,
     active,
     errorWeb3Modal,
-    // active: networkActive, error: networkError, activate: activateNetwork
+    active: networkActive, error: networkError, activate: activateNetwork
   } = useWeb3React();
 
   const [token,setToken] = useState(localStorage.getItem("token"));
@@ -28,19 +28,19 @@ function DashboardHeader(){
   const [loaded, setLoaded] = useState(false)
 
 
-  // useEffect(() => {
-  //   injectedConnector
-  //     .isAuthorized()
-  //     .then((isAuthorized) => {
-  //       setLoaded(true)
-  //       if (isAuthorized && !networkActive && !networkError) {
-  //         activateNetwork(injectedConnector)
-  //       }
-  //     })
-  //     .catch(() => {
-  //       setLoaded(true)
-  //     })
-  // }, [activateNetwork, networkActive, networkError])
+  useEffect(() => {
+    injectedConnector
+      .isAuthorized()
+      .then((isAuthorized) => {
+        setLoaded(true)
+        if (isAuthorized && !networkActive && !networkError) {
+          activateNetwork(injectedConnector)
+        }
+      })
+      .catch(() => {
+        setLoaded(true)
+      })
+  }, [activateNetwork, networkActive, networkError])
 
   let url = process.env.REACT_APP_API;
   useEffect(async ()=>{
@@ -84,7 +84,7 @@ function DashboardHeader(){
        {active
         ? (<div><button type="button" className="btn-custom secondary-btn">CONNECTED</button></div>)
          : (<div><button onClick={() => {
-          connectWallet(activate);
+          connectWallet(activate, props.setErrorMessage);
         }} type="button" className="btn-custom secondary-btn">Connect Wallet</button></div>)
          }
       </Form>

@@ -44,6 +44,8 @@ function ProjectDetails(props){
     const [busdvalue,setBusdvalue] = useState(0)
     const [allowancestatus,setAllowancestatus] = useState(false)
     const [pervalue,setPervalue] = useState(0)
+    const [error, setError] = useState()
+    const [errorMsg, setErrorMsg] = useState()
 
     const { id } = useParams();
 
