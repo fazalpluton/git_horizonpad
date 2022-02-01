@@ -1021,3 +1021,12 @@ input::-webkit-inner-spin-button {
 .btn-custom:hover,.btn-custom:active,.btn-custom:focus{
     box-shadow: 1px 1px 13px 4px #8080805e;
 }
+.error-msg{
+    position: sticky;
+    top: 86px;
+    z-index: 10;
+    background: var(--primary);
+    padding: 1rem;
+    text-align: center;
+    color: red;
+}

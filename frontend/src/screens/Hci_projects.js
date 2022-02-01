@@ -35,8 +35,10 @@ function HciProjects(props){
             <h2 className="text-center h2">Live Projects.</h2>
             <Container>
             <Row className="feature-section g-lg-5">
-                
+                {
+                    // props.errorMessage? <div style={{color:"red"}}>{props.errorMessage}</div>:
             <IdoBox status={"Live"} type={"HCI"} />
+                }
             
 
             </Row>
