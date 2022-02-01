@@ -39,7 +39,7 @@ function App() {
         <Routes>
         <Route path="/" element={<Home header={<Header/>} footer={<Footer/>}/>}  />
         <Route path="/ido-projects" element={<IdoProjects header={<DashboardHeader/>} footer={<Footer/>} />}  />
-        <Route path="/hci-projects" element={<HciProjects header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/hci-projects" element={<HciProjects errorMessage={errorMessage} header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/burgeon-projects" element={<Burgeon header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/nft-marketplace" element={<NFTMarket header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/p2p-swap" element={<P2P header={<DashboardHeader/>} footer={<Footer/>}/>}  />
@@ -61,7 +61,7 @@ function App() {
     </Router>
 
     {
-        errorMessage? <div style={{color:"red"}}>{errorMessage}</div>: null
+        // errorMessage? <div style={{color:"red"}}>{errorMessage}</div>: null
       }
    </div>
 

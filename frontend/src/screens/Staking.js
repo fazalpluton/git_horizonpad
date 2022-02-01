@@ -452,7 +452,7 @@ function Stacking(props){
 
                         <Col lg={3}>
 
-                       
+
                             <DropdownButton  title={isType == "stake" ? "Staking":isType == "unstaking" ? "Unstaking":isType == "withdraw" ? "Withdraw":"Staking"} className="staking-dropdown">
                             {
                             isType == "stake" ? "":
@@ -467,8 +467,6 @@ function Stacking(props){
                                 <Dropdown.Item href="#" onClick={(e)=>setIsType("withdraw")}>Withdraw</Dropdown.Item>
                             }
                             </DropdownButton>
-                           
-                       
 
                         </Col>
 
@@ -504,7 +502,10 @@ function Stacking(props){
                         </div>
 
                         </Col>
+                        <Col lg={3}>
+                        <button className="btn-custom primary-btn mt-2">Reward</button>
 
+                        </Col>
                     </Row>
 
                     <Row className="align-items-center">

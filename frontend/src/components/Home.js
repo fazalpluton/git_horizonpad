@@ -15,7 +15,6 @@ function Home() {
     error
   } = useWeb3React();
   const [balance, setBalance] = useState();
-
   useEffect(()=>{
     (async ()=>{
       if(library && account){

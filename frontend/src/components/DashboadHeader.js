@@ -53,6 +53,8 @@ function DashboardHeader(props){
   })
   .catch(function (error) {
     // console.log(error);
+    localStorage.setItem("token", null);
+
   });
   },[]);
     return (
@@ -72,7 +74,7 @@ function DashboardHeader(props){
         <Link to={'/ido-projects'} className="nav-link">IDO Projects</Link>
         <Link to={'/hci-projects'} className="nav-link">HCI Projects</Link>
         {
-          token == null ? '':<NavDropdown title="Manager" id="basic-nav-dropdown" className="manager-dropdown">
+          token == 'null' ? '':<NavDropdown title="Manager" id="basic-nav-dropdown" className="manager-dropdown">
           <Link to={'/admin/add-project'} className="dropdown-item">Add Project</Link>
           <Link to={'/admin/projects'} className="dropdown-item">List Projects</Link>
         </NavDropdown>
@@ -80,17 +82,28 @@ function DashboardHeader(props){
       </Nav>
       <Form className="d-flex">
        {/* <button type="button" className="btn-custom secondary-btn">CONNECTED</button> */}
-       {active
-        ? (<div><button type="button" className="btn-custom secondary-btn">CONNECTED</button></div>)
-         : (<div><button onClick={() => {
-          connectWallet(activate, props.setErrorMessage);
-        }} type="button" className="btn-custom secondary-btn">Connect Wallet</button></div>)
+       
+         {
+           networkError?<button type="button" className="btn-custom secondary-btn">Connect Wallet</button>:
+           active
+            ? (<div><button type="button" className="btn-custom secondary-btn">CONNECTED</button></div>)
+             : (<div><button onClick={() => {
+              connectWallet(activate, props.setErrorMessage);
+            }} type="button" className="btn-custom secondary-btn">Connect Wallet</button></div>)
+             
          }
       </Form>
     </Navbar.Collapse>
   </Container>
 </Navbar>
         </div>
+        {
+          networkError?
+          <div className="error-msg">
+          <p >{networkError.toString()}</p>
+        </div>:null
+        }
+        
         </>
     )
 }
