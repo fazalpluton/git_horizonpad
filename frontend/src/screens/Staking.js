@@ -45,7 +45,7 @@ function Stacking(props){
     const [totalToken, setTotalToken] = useState()
     const [totalbalance, setTotalBalance] = useState(0)
     const [stakersNo, setStakersNo] = useState(0)
-    const [userApy, setUserApy] = useState("45%")
+    const [userApy, setUserApy] = useState("40%")
     const [userReward, setUserReward] = useState(0)
     const [userUnstakedValue, setUserUnstakedValue] = useState(0)
     const [authorization, setAuthorization] = useState("")
@@ -96,19 +96,20 @@ function Stacking(props){
       const loadTotalStake = async () => {
         try{
             let signer = await loadProvider()
-            console.log("signer", signer)
+            // console.log("signer", signer)
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let totalStakedValue = await stakingContract.totalStakedValue()
-            let token = ethers.utils.formatEther(totalStakedValue.toString())
-            // setTotalToken(token)
+           
+           // let decimalsUnit = await stakingContract._ether();
+            let token = await ethers.utils.formatUnits(totalStakedValue.toString(),4)
             setTotalToken(token)
-            console.log(token)
+            // console.log(token)
         }catch(e){
             console.log(e)
         }
         }
 
-        console.log("totalToken", parseInt(totalToken).toString())
+        // console.log("totalToken", parseInt(totalToken).toString())
 
         // function to insert token to the smart contract
         const Stake = async () => {
@@ -119,11 +120,12 @@ function Stacking(props){
                 let getBronze = await stakingContract.bronze()
                 let ZPadContract = new ethers.Contract(zpad_addr, ZPadAbi, signer)
                 let allowanceCheck = await ZPadContract.allowance(account, staking_addr)
-                // allowanceCheck = parseInt(allowanceCheck.toString())
-                let _value = await ethers.utils.parseEther(stakevalue)
-                console.log("allowanceCheck", allowanceCheck)
-                console.log("getBronze", getBronze.toString())
-                if(allowanceCheck < getBronze){
+                
+                let decimalsUnit = await ZPadContract.decimals();
+                let _value = await ethers.utils.parseUnits(stakevalue,decimalsUnit)
+                // console.log("allowanceCheck", allowanceCheck)
+                // console.log("getBronze", getBronze.toString())
+                if(allowanceCheck.toString() < getBronze){
                     // console.log("allounceCheck>>", allowanceCheck)
                     setConfirmation("Confirmation")
                     let approve = await ZPadContract.approve(staking_addr, _value)
@@ -132,9 +134,9 @@ function Stacking(props){
                     if(approveTx && approveTx.blockNumber){
                         setMystate(stakevalue)
                         setMsgHandling("Staking")
-                        let stake = await stakingContract.stake(ethers.utils.parseEther(stakevalue))
+                        let stake = await stakingContract.stake(ethers.utils.parseUnits(stakevalue,decimalsUnit))
                         let tx = await stake.wait()
-                        console.log("tx1", tx)
+                        // console.log("tx1", tx)
                         setConfirmed("Confirmed")
                         // totalBalance()
                         setStakevalue(0)
@@ -146,12 +148,12 @@ function Stacking(props){
                         console.log("error")
                     }
                 }else{
-                    console.log("errorr")
+                    // console.log("errorr")
                     setConfirmation("Confirmation")
                     setMsgHandling("Staking")
-                        let stake = await stakingContract.stake(ethers.utils.parseEther(stakevalue))
+                        let stake = await stakingContract.stake(ethers.utils.parseUnits(stakevalue,decimalsUnit))
                         let tx = await stake.wait()
-                        console.log("tx2", tx)
+                        // console.log("tx2", tx)
                         setConfirmed("Confirmed")
                         setStakevalue(0)
                         Stakers()
@@ -162,14 +164,14 @@ function Stacking(props){
             }
             catch(e){
                 setMsgHandling(e)
-                handleShow()
+                // handleShow()
                 handleShow1()
                 setError(1)
-                console.log("error: ",e)
+                // console.log("error: ",e)
             }
         }
 
-        console.log("msgHandling", msgHandling)
+        // console.log("msgHandling", msgHandling)
 
         
         // let short = msgHandling.slice(0, 20)+"..." + msgHandling.slice(len-5, len-1)
@@ -192,8 +194,10 @@ function Stacking(props){
               let signer = await loadProvider()
               let ZPadContract = new ethers.Contract(zpad_addr, ZPadAbi, signer)
               let balanceOf = await ZPadContract.balanceOf(account)
-              let token = await ethers.utils.formatEther(balanceOf.toString())
-              console.log("token", token)
+              let decimalsUnit = await ZPadContract.decimals();
+              let token = await ethers.utils.formatUnits(balanceOf.toString(),decimalsUnit)
+              
+            //   console.log("token", token)
               setStakevalue(parseInt(token).toString())
               // console.log("balance>>",  token)
             }
@@ -210,10 +214,11 @@ function Stacking(props){
                 
                 let signer = await loadProvider()
                 let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
-                let token = ethers.utils.parseEther((unStakeValue).toString())
+                let token = await ethers.utils.parseUnits((unStakeValue).toString(),4)
+                
                 // console.log(token)
                 let unStake = await stakingContract.unStake(token)
-                console.log("unStake>>>>>>>>>>", unStake)
+                // console.log("unStake>>>>>>>>>>", unStake)
                 setAuthorization("Unstake")
                 let tx = await unStake.wait()
                 setConfirmed("Unstake_Confirmed")
@@ -224,17 +229,25 @@ function Stacking(props){
             }
         }
         
-        console.log("unStakeValue", unStakeValue)
+        // console.log("unStakeValue", unStakeValue)
 
         const MaxUnStake = async () => {
             try{
                 let signer = await loadProvider()
                 let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+             //   let ZPadContract = new ethers.Contract(zpad_addr, ZPadAbi, signer)
+            //   let decimalsUnit = await ZPadContract.decimals();
+            //   console.log("decimalsUnit", decimalsUnit)
                 let getUserStakedValue = await stakingContract.getUserStakedValue(account)
-                let token = ethers.utils.formatEther(getUserStakedValue.toString())
-                console.log("token>>", token)
-                // setUnStakeValue(token)
-                setUnStakeValue(Math.floor(token))
+                let token = await ethers.utils.formatUnits(getUserStakedValue.toString(),4)
+                // console.log("token>>", token)
+                setUnStakeValue(parseInt(token).toString())
+                // setUnStakeValue(Math.floor(token))
+
+            //     let ZPadContract = new ethers.Contract(zpad_addr, ZPadAbi, signer)
+            //   let balanceOf = await ZPadContract.balanceOf(account)
+            //   let decimalsUnit = await ZPadContract.decimals();
+            //   let token = await ethers.utils.formatUnits(balanceOf.toString(),decimalsUnit)
             }
             catch(e){
                 console.log(e)
@@ -253,17 +266,17 @@ function Stacking(props){
                 let signer = await loadProvider()
                 let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
                 let getUserStakedValue = await stakingContract.getUnstakedValue(account)
-                let token = ethers.utils.formatEther(getUserStakedValue.toString())
+               // let token = ethers.utils.formatEther(getUserStakedValue.toString())
+                let token = await ethers.utils.formatUnits(getUserStakedValue.toString(),4)
                 setUserUnstakedValue(token)
-                console.log(getUserStakedValue.toString())
+                // console.log(getUserStakedValue.toString())
             }
             catch(e){
                 console.log(e)
             }
         }
-        console.log("userUnstakedValue",userUnstakedValue)
+        // console.log("userUnstakedValue",userUnstakedValue)
 
-        console.log("userUnstakedValue",userUnstakedValue)
 
         // This is functrion is used for pull Rewards
         const Reward = async () => {
@@ -295,7 +308,7 @@ function Stacking(props){
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let calcPendingRewards = await stakingContract.showPendingRewards(account)
             setUserReward(calcPendingRewards.toString())
-            console.log("userReward", calcPendingRewards.toString())
+            // console.log("userReward", calcPendingRewards.toString())
             }
             catch(e){
                 console.log(e)
@@ -312,9 +325,10 @@ function Stacking(props){
                 let signer = await loadProvider()
                 let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
                 let getUserStakedValue = await stakingContract.getUserStakedValue(account)
-                let token = ethers.utils.formatEther(getUserStakedValue.toString())
+               // let token = ethers.utils.formatEther(getUserStakedValue.toString())
+                let token = await ethers.utils.formatUnits(getUserStakedValue.toString(),4)
                 setTotalBalance(token)
-                console.log("getUserStakedValue", token)
+                // console.log("getUserStakedValue", token)
             } 
             catch(e){
                 console.log(e)
@@ -363,7 +377,7 @@ function Stacking(props){
     
                     setStakersNo(staker.toString())
                 }
-                console.log("getAPY", staker.toString())
+                // console.log("getAPY", staker.toString())
             }
             catch(e){
                 console.log(e)
@@ -444,7 +458,7 @@ function Stacking(props){
                     try {
                         const interval = setInterval(() => {
                                 calcPendingReward();
-                                console.log("hhh")
+                                // console.log("hhh")
                               }, 15000);
                               return () => clearInterval(interval);
                         
@@ -539,7 +553,7 @@ function Stacking(props){
                                 },
                                 },
                             }, (err, added) => {
-                                console.log('provider returned', err, added)
+                                // console.log('provider returned', err, added)
                                 if (err || 'error' in added) {
                             
                                 setTokenError("There was a problem adding the token.")
@@ -582,7 +596,7 @@ function Stacking(props){
                             <div className="staked">
                                 <h4>Staked</h4>
                                 <h2>{Math.floor(totalbalance)}</h2>
-                                {console.log("totalbalance", totalbalance)}
+                                {/* {console.log("totalbalance", totalbalance)} */}
                             </div>
 
                             <div className="staked">
@@ -632,18 +646,6 @@ function Stacking(props){
                                 </div>
                             ) : null}
 
-                            {/* <Form className="text-center mt-3">
-                                
-                                <Form.Group className="mb-3 max-staked" controlId="formBasicCheckbox">
-                                <Form.Control type="text" value={stakevalue} placeholder="Stake Amount" onChange={(e)=>setStakevalue(e.target.value)} />
-                                <Button onClick={MaxStake} className="">
-                                    Max
-                                </Button>
-                                </Form.Group>
-                                <Button onClick={Staking} type="submit" className="btn-custom secondary-btn">
-                                    Stake
-                                </Button>
-                            </Form> */}
 
                         </div>
 

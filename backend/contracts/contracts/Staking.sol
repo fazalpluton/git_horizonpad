@@ -42,6 +42,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
 
     uint256 public fee;
 
+    uint256 private _ether = 10**4;
     //APY
 
     uint public constant blocksPerYear = 2102400;
@@ -52,9 +53,9 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
     
 
     //Tier
-    uint256 public bronze = 30000 ether;
-    uint256 public silver = 75000 ether;
-    uint256 public gold = 170000 ether;
+    uint256 public bronze = 30000 * _ether;
+    uint256 public silver = 75000 * _ether;
+    uint256 public gold = 170000 * _ether;
     uint256 public TotalBronze;
     uint256 public totalSilver;
     uint256 public totalGold;
@@ -121,6 +122,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         }   
         
     }
+
     function showPendingRewards(address account)public view returns(uint256) {
         stakingDetail memory detail = userStakingDetail[account];
         uint256 currentblock = block.number;
@@ -181,7 +183,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         stakingDetail memory detail = userStakingDetail[account];
         require(detail.tickets > 0 && detail.tickets - amount >=0 ,"not enough tickets remaing");
         require(detail.stakeTime + 1 seconds < block.timestamp ,"you can apply for WhiteList after 1 week");
-        require(detail.depositValue > bronze ,"you can apply for WhiteList after 1 week"); // 1 week
+        require(detail.depositValue >= bronze ,"you can apply for WhiteList after 1 week"); // 1 week
        // require(getUserStakedValue >= bronze,"you must be at bronze tier to be applicable");
         detail.tickets = detail.tickets - amount;
         userStakingDetail[account] = detail;
@@ -322,7 +324,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
 
      function unStake(uint256 amount) public nonReentrant{ 
         stakingDetail memory detail = userStakingDetail[_msgSender()];
-        uint256 balance =detail.depositValue;
+        uint256 balance = detail.depositValue;
         require(amount<=balance,"insufficient balance for unstaking");
         uint256 newBalance = 0;
         if(block.timestamp < detail.stakeTime + 1 weeks){
@@ -342,6 +344,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
             detail.withdrawBlock = block.number;
             detail.noHasStaked = 0;
             detail.stakeTime = 0;
+            noOfStakers--;
         }
         else{ 
             detail.depositValue = newBalance;
@@ -350,7 +353,6 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         detail.userWeight = getPoolWeight(newBalance);
         userStakingDetail[_msgSender()] = detail;
         totalStakedValue -= amount;
-        noOfStakers--;
         emit eve_Unstaked(amount);
     }
 
