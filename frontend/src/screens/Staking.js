@@ -56,6 +56,10 @@ function Stacking(props){
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const [show1, setShow1] = useState(false)
+    const handleClose1 = () => setShow1(false);
+    const handleShow1 = () => setShow1(true);
     const [error, setError] = useState()
     const [msgHandling, setMsgHandling] = useState()
     
@@ -159,6 +163,7 @@ function Stacking(props){
             catch(e){
                 setMsgHandling(e)
                 handleShow()
+                handleShow1()
                 setError(1)
                 console.log("error: ",e)
             }
@@ -558,7 +563,7 @@ function Stacking(props){
                             
                         {error == 1 ? (
                                 
-                                <Modal show={show} onHide={handleClose}  className='custom-modal' size="lg"
+                                <Modal show={show1} onHide={handleClose1}  className='custom-modal' size="lg"
                                 aria-labelledby="contained-modal-title-vcenter"
                                 centered>
                                     <Modal.Body>
