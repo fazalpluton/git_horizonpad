@@ -25,11 +25,13 @@ function ProjectDetails(props){
         active,
         errorWeb3Modal
     } = useWeb3React();
+    const [show, setShow] = useState(false)
+    const handleClose = () => setShow1(false);
+    const handleShow = () => setShow1(true);
 
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [show1, setShow1] = useState(false)
+    const handleClose1 = () => setShow1(false);
+    const handleShow1 = () => setShow1(true);
 
     let url = process.env.REACT_APP_API;
     const [project,setProject] = useState([]);
@@ -89,9 +91,9 @@ function ProjectDetails(props){
             
         }catch(e){
             console.log(e)
-            setError("whiteList")
             setErrorMsg(e)
-            // handleShow()
+            handleShow1()
+            setError("whiteList")
         }
         }
 
@@ -104,9 +106,9 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
-                setError("claim")
                 setErrorMsg(e)
-                // handleShow()
+                handleShow1()
+                setError("claim")
             }
             }
          
@@ -119,9 +121,9 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
-                setError("finalize")
                 setErrorMsg(e)
-                // handleShow()
+                handleShow1()
+                setError("finalize")
             }
             }   
 
@@ -137,9 +139,9 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
-                setError("allocations")
                 setErrorMsg(e)
-                // handleShow()
+                handleShow1()
+                setError("allocations")
             }
         }
 
@@ -167,9 +169,9 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
-                setError("swap_token")
                 setErrorMsg(e)
-                // handleShow()
+                handleShow1()
+                setError("swap_token")
             }
         }
 
@@ -189,9 +191,9 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
-                setError("checkallowence")
                 setErrorMsg(e)
-                // handleShow()
+                handleShow1()
+                setError("checkallowence")
             }
         }
         
@@ -297,12 +299,14 @@ function ProjectDetails(props){
 
                             {error == "whiteList" || error == "claim" || error == "finalize" || error == "allocations" || error == "swap_token" || error == "checkallowence" ? (
                                 
-                                <Modal show={show} onHide={handleClose}  className='custom-modal' size="lg"
+                                <Modal show={show1} onHide={handleClose1}  className='custom-modal' size="lg"
                                 aria-labelledby="contained-modal-title-vcenter"
                                 centered>
-                                    <Modal.Header > <div style={{textAlign:"center"}}>
-                                          <p style={{width:"800px", color:"red"}} >{errorMsg || errorMsg}</p>
-                                          </div></Modal.Header>
+                                    <Modal.Body>
+                                    <div style={{textAlign:"center"}}>
+                                          <p style={{ color:"red"}} >{errorMsg.message || errorMsg}</p>
+                                    </div>
+                                    </Modal.Body>
                                 
                             </Modal>
                             
