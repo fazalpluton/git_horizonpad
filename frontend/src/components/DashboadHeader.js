@@ -60,6 +60,13 @@ function DashboardHeader(props){
     return (
         <>
          <div className="custom-header">
+         {
+          networkError?
+          <div className="text-center">
+          <span className="text-center text-red">{networkError.toString()}</span>
+          </div>
+       :null
+        }
         <Navbar  expand="lg">
     <Container >
       <Link to={'/'} className="navbar-brand"><img src={VectorLogo} className="logo"/></Link>
@@ -97,12 +104,7 @@ function DashboardHeader(props){
   </Container>
 </Navbar>
         </div>
-        {
-          networkError?
-          <div className="error-msg">
-          <p >{networkError.toString()}</p>
-        </div>:null
-        }
+    
         
         </>
     )

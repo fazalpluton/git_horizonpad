@@ -141,7 +141,7 @@ function IdoBox(props){
 
         <>
         {
-            props.status == "Upcomming" &&
+            props.status == "Upcomming" && latestProject &&
         <Slider {...ido_slider} className="feature-section">
     {
            
@@ -251,6 +251,8 @@ function IdoBox(props){
                         })}
         </Slider>
                     }
+                    {latestProject == 0 ? <h2 className="text-center">No Projects</h2>:""}
+                  
             {
              props.status != "Upcomming" &&
                 <>

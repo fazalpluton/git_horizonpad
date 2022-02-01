@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './assets/css/style.css'
 import './assets/css/responsive.css';
 import Header from './components/Header';
@@ -25,21 +25,44 @@ import AddProject from './screens/admin/AddProject';
 import UpdateProject from './screens/admin/Update';
 import AddProjectDetail from './screens/admin/AddDetail';
 import Approval from './screens/Approval';
+import Web3Modal from "web3modal";
+import { connectWallet } from "./utils/connectWallet";
+import { useWeb3React } from "@web3-react/core";
+import {injectedConnector} from "./utils/connectors"
 
 
 function App() {
+  const {
+    connector,
+    library,
+    account,
+    chainId,
+    activate,
+    deactivate,
+    active,
+    errorWeb3Modal,
+    active: networkActive, error: networkError, activate: activateNetwork
+  } = useWeb3React();
 
-  const [errorMessage, setErrorMessage] = useState();
-  useEagerConnect(setErrorMessage);
-  useInactiveListener();
+  useEffect(() => {
+    injectedConnector
+      .isAuthorized()
+      .then((isAuthorized) => {
+        if (isAuthorized && !networkActive && !networkError) {
+          activateNetwork(injectedConnector)
+        }
+      })
+      .catch(() => {
+      })
+  }, [activateNetwork, networkActive, networkError])
 
   return (
    <div>
       <Router>
         <Routes>
         <Route path="/" element={<Home header={<Header/>} footer={<Footer/>}/>}  />
-        <Route path="/ido-projects" element={<IdoProjects header={<DashboardHeader/>} footer={<Footer/>} />}  />
-        <Route path="/hci-projects" element={<HciProjects errorMessage={errorMessage} header={<DashboardHeader/>} footer={<Footer/>}/>}  />
+        <Route path="/ido-projects" element={<IdoProjects errorMessage={networkError} header={<DashboardHeader/>} footer={<Footer/>} />}  />
+        <Route path="/hci-projects" element={<HciProjects errorMessage={networkError} header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/burgeon-projects" element={<Burgeon header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/nft-marketplace" element={<NFTMarket header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/p2p-swap" element={<P2P header={<DashboardHeader/>} footer={<Footer/>}/>}  />
