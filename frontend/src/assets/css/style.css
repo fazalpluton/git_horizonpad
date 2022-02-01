@@ -56,7 +56,6 @@ body{
 
 }
 .banner-video-section{
-    height: 1200px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,7 +75,6 @@ body{
     justify-content: center;
     align-items: center;
     position: relative;
-    height: 100%;
 }
 /* .home-play-icon{
     font-size: 40px;
@@ -114,6 +112,11 @@ text-decoration: none;
 .logo-text{
     font-size: 50px;
 }
+
+.slick-slide{
+/* width: 480px !important; */
+}
+
 .banner-p{
     font-size: 30px;
     margin-top: 2.5rem;
@@ -417,7 +420,7 @@ margin-top: 2rem;
 
 .ido-slider-section{
 
-    padding: 15rem;
+    padding: 15rem 0px;
 
 }
 .apply-btn-section{

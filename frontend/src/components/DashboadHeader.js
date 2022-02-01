@@ -8,6 +8,7 @@ import { useWeb3React } from "@web3-react/core";
 import {injectedConnector} from "../../src/utils/connectors"
 
 import VectorLogo from "../assets/images/vector-logo.png"
+import HZPAD from "../assets/images/hzpad.png"
 function DashboardHeader(props){
 
   const {
@@ -69,7 +70,12 @@ function DashboardHeader(props){
         }
         <Navbar  expand="lg">
     <Container >
-      <Link to={'/'} className="navbar-brand"><img src={VectorLogo} className="logo"/></Link>
+      {
+        props.logo ?
+        <Link to={'/'} className="navbar-brand"><img src={VectorLogo} className="logo"/></Link>
+        :
+        <Link to={'/'} className="navbar-brand"><img src={HZPAD} height={80} className="logo"/></Link>
+      }
     <Navbar.Toggle aria-controls="navbarScroll" />
     <Navbar.Collapse id="navbarScroll">
       <Nav
