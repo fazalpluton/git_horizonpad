@@ -101,22 +101,40 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
             return a;
         }else{
             return 0;
-        }
-       
-        
+        }   
         } 
 
     function calcPendingRewards(address account)public view returns(uint256) {
         stakingDetail memory detail = userStakingDetail[account];
         uint256 currentblock = block.number;
-        uint256 blocks = currentblock - detail.depositBlock;
+        if(currentblock == detail.depositBlock){
+            return 0;
+        }
+        uint256 blocks = currentblock - detail.depositBlock; 
         uint256 totalReceived = baseRatePerBlock * blocks;
-        uint256 userShare = detail.depositValue - detail.withDrawValue;
+        uint256 userShare = detail.depositValue;
         if(userShare <= 0){
             return  0; 
         }else{
             uint256 rewards = (totalReceived * userShare) / totalStakedValue - detail.rewardReleased ; 
-            return rewards;
+            return rewards ;
+        }   
+        
+    }
+    function showPendingRewards(address account)public view returns(uint256) {
+        stakingDetail memory detail = userStakingDetail[account];
+        uint256 currentblock = block.number;
+        if(currentblock == detail.depositBlock){
+            return getPendingRewards();
+        }
+        uint256 blocks = currentblock - detail.depositBlock; 
+        uint256 totalReceived = baseRatePerBlock * blocks;
+        uint256 userShare = detail.depositValue;
+        if(userShare <= 0){
+            return  getPendingRewards(); 
+        }else{
+            uint256 rewards = (totalReceived * userShare) / totalStakedValue - detail.rewardReleased ; 
+            return rewards + getPendingRewards();
         }   
         
     }
@@ -161,7 +179,10 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
 
     function consumetickets(address account , uint256 amount)public override onlyConsumer {
         stakingDetail memory detail = userStakingDetail[account];
-        require(detail.tickets > 0 && detail.tickets - amount >=0 && detail.stakeTime < block.timestamp + 1 weeks,"not enough tickets remaing");
+        require(detail.tickets > 0 && detail.tickets - amount >=0 ,"not enough tickets remaing");
+        require(detail.stakeTime + 1 seconds < block.timestamp ,"you can apply for WhiteList after 1 week");
+        require(detail.depositValue > bronze ,"you can apply for WhiteList after 1 week"); // 1 week
+       // require(getUserStakedValue >= bronze,"you must be at bronze tier to be applicable");
         detail.tickets = detail.tickets - amount;
         userStakingDetail[account] = detail;
     }
@@ -240,7 +261,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
 
     function pool_Dec(uint256 amount) private {
         if(amount>=bronze && amount<silver){
-           TotalBronze--;
+            TotalBronze--;
             emit eve_Poolchanged(0,TotalBronze);
         }
         else if(amount>=silver && amount<gold){
@@ -275,7 +296,6 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         require(amount>=bronze,"insufficient balance for staking");
         require(stakingToken.allowance(_msgSender(),address(this))>=amount,"Approve your token");
         stakingDetail memory detail = userStakingDetail[_msgSender()];
-        
         stakingToken.safeTransferFrom(_msgSender(),address(this),amount);
         uint256 balance = amount + detail.depositValue;
         
@@ -284,8 +304,8 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
             pool_Dec(detail.depositValue);
         }else{
             detail.stakeTime = block.timestamp;
-            detail.tickets = getTicketsForUser(balance);
         }
+        detail.tickets = getTicketsForUser(amount);
         pool_Inc(balance);
         savePendingRewards();
         detail.depositValue = balance;
