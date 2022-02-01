@@ -139,9 +139,8 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
-                setErrorMsg(e)
-                handleShow1()
-                setError("allocations")
+                // setErrorMsg(e)
+                // setError("allocations")
             }
         }
 
@@ -191,9 +190,9 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
-                setErrorMsg(e)
-                handleShow1()
-                setError("checkallowence")
+                // setErrorMsg(e)
+                // handleShow1()
+                // setError("checkallowence")
             }
         }
         

@@ -56,7 +56,6 @@ body{
 
 }
 .banner-video-section{
-    height: 1200px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,7 +75,6 @@ body{
     justify-content: center;
     align-items: center;
     position: relative;
-    height: 100%;
 }
 /* .home-play-icon{
     font-size: 40px;
@@ -114,6 +112,11 @@ text-decoration: none;
 .logo-text{
     font-size: 50px;
 }
+
+.slick-slide{
+/* width: 480px !important; */
+}
+
 .banner-p{
     font-size: 30px;
     margin-top: 2.5rem;
@@ -417,7 +420,7 @@ margin-top: 2rem;
 
 .ido-slider-section{
 
-    padding: 15rem;
+    padding: 15rem 0px;
 
 }
 .apply-btn-section{
@@ -630,14 +633,15 @@ margin-left: 1rem !important;
 
 .staking-dropdown button:focus,.show>.btn-primary.dropdown-toggle{
 
-    box-shadow: none !important;
-    border-color: var(--secondary) !important;
+    box-shadow: 1px 1px 13px 4px #8080805e !important;
+    border-color: var(--white) !important;
 
 }
 
 .staking-dropdown button:hover{
+    box-shadow: 1px 1px 13px 4px #8080805e !important;
 
-    border-color: var(--secondary);
+    border-color: var(--white);
 
 }
 
@@ -1018,6 +1022,8 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+
 .btn-custom:hover,.btn-custom:active,.btn-custom:focus{
     box-shadow: 1px 1px 13px 4px #8080805e;
 }

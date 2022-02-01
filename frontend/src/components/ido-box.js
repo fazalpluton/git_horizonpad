@@ -114,6 +114,15 @@ function IdoBox(props){
         arrows:false,
         responsive: [
             {
+                breakpoint: 1440,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: false
+                        }
+                    },
+            {
             breakpoint: 1024,
             settings: {
                 slidesToShow: 1,
@@ -142,13 +151,13 @@ function IdoBox(props){
         <>
         {
             props.status == "Upcomming" && latestProject &&
-        <Slider {...ido_slider} className="feature-section">
+        <Slider {...ido_slider} className="feature-section row">
     {
            
            latestProject && latestProject.map((project,index)=>{
                             return (
-               <Link to={'/project-detail/'+project.contract} className="anchor">
-                 <div className="px-3">
+               
+                 <div className="px-3 ido-box-slider">
                  <div className="text-icon mb-3">{index+1}</div>
                     <div className="ido-box">
 
@@ -173,12 +182,15 @@ function IdoBox(props){
                 }
 
                 <div className="ido"> 
+                <Link to={'/project-detail/'+project.contract} className=" anchor">
 
                     <img src={url+project.img} width={100}/>
+                    </Link>
 
                     <div className="ido-details">
-
+                    <Link to={'/project-detail/'+project.contract} className=" anchor">
                         <h4>{project.title}</h4>
+                        </Link>
 
                         <ul className="ido-ul">
                         {
@@ -206,8 +218,10 @@ function IdoBox(props){
                     </div>
 
                 </div>
+                <Link to={'/project-detail/'+project.contract} className=" anchor">
 
                 <p>{project.short_intro}</p>
+                </Link>
 
                 <div className="ido-cap my-5">
 
@@ -243,7 +257,6 @@ function IdoBox(props){
 
             </div>
                              </div>
-               </Link>
                             )
                           
 

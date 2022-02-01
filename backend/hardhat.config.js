@@ -2,7 +2,6 @@ require("@nomiclabs/hardhat-waffle");
 require('hardhat-abi-exporter');
 require('dotenv').config({path: __dirname+'/.env'})
 
-
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
@@ -23,7 +22,7 @@ console.log(process.env.privateKey)
  * @type import('hardhat/config').HardhatUserConfig
  */
 // const ALCHEMY_API_KEY = `GKcZh-E7o6PB3gEz0M9fUHPwG4_xHbbj`
-// const privateKey = `7ad2941b69a0d0429d576eaac92d18e6f4c17c2dc2673c221585b2b96e5cbdb3`
+// const privateKey = `669a00a5dcee6b12e70ec23b4a793b14bcb38a0f657ce29ada80b578e14743a7`
 
 module.exports = {
   solidity: "0.8.0",
@@ -46,7 +45,7 @@ module.exports = {
       chainId: 56,
       gasPrice: 20000000000,
       accounts: [`0x${process.env.privateKey}`],
-    }
+    },
   },
   abiExporter: {
     path: '../frontend/src/contract',

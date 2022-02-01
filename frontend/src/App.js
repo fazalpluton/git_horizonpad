@@ -61,7 +61,7 @@ function App() {
       <Router>
         <Routes>
         <Route path="/" element={<Home header={<Header/>} footer={<Footer/>}/>}  />
-        <Route path="/ido-projects" element={<IdoProjects errorMessage={networkError} header={<DashboardHeader/>} footer={<Footer/>} />}  />
+        <Route path="/ido-projects" element={<IdoProjects errorMessage={networkError} header={<DashboardHeader logo={"logo"}/>} footer={<Footer/>} />}  />
         <Route path="/hci-projects" element={<HciProjects errorMessage={networkError} header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/burgeon-projects" element={<Burgeon header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/nft-marketplace" element={<NFTMarket header={<DashboardHeader/>} footer={<Footer/>}/>}  />
