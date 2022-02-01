@@ -160,7 +160,7 @@ function AddProject(props){
       const formSubmit = async (e) => {
         e.preventDefault();
         try{
-            if(token != 'null'){
+            if(token != 'null' || token != null){
                 let signer = await loadProvider()
 
                 let eth_token_addr = ethers.utils.getAddress(tokenAddress)

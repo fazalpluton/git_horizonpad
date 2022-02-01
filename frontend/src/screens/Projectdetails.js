@@ -91,7 +91,7 @@ function ProjectDetails(props){
             console.log(e)
             setError("whiteList")
             setErrorMsg(e)
-            handleShow()
+            // handleShow()
         }
         }
 
@@ -106,7 +106,7 @@ function ProjectDetails(props){
                 console.log(e)
                 setError("claim")
                 setErrorMsg(e)
-                handleShow()
+                // handleShow()
             }
             }
          
@@ -121,7 +121,7 @@ function ProjectDetails(props){
                 console.log(e)
                 setError("finalize")
                 setErrorMsg(e)
-                handleShow()
+                // handleShow()
             }
             }   
 
@@ -139,7 +139,7 @@ function ProjectDetails(props){
                 console.log(e)
                 setError("allocations")
                 setErrorMsg(e)
-                handleShow()
+                // handleShow()
             }
         }
 
@@ -169,7 +169,7 @@ function ProjectDetails(props){
                 console.log(e)
                 setError("swap_token")
                 setErrorMsg(e)
-                handleShow()
+                // handleShow()
             }
         }
 
@@ -191,7 +191,7 @@ function ProjectDetails(props){
                 console.log(e)
                 setError("checkallowence")
                 setErrorMsg(e)
-                handleShow()
+                // handleShow()
             }
         }
         
@@ -223,7 +223,7 @@ function ProjectDetails(props){
 
                             <div className="ido"> 
 
-                                <img src={url+project.img} />
+                                <img src={url+project.img} width={100}/>
 
                                 <div className="ido-details">
 
@@ -301,7 +301,7 @@ function ProjectDetails(props){
                                 aria-labelledby="contained-modal-title-vcenter"
                                 centered>
                                     <Modal.Header > <div style={{textAlign:"center"}}>
-                                          <p style={{width:"800px", color:"red"}} >{errorMsg.message || errorMsg}</p>
+                                          <p style={{width:"800px", color:"red"}} >{errorMsg || errorMsg}</p>
                                           </div></Modal.Header>
                                 
                             </Modal>
