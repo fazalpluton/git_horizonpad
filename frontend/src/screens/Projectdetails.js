@@ -1,4 +1,4 @@
-import { Container, Row,Col,DropdownButton,Dropdown,Table, Modal, Form  } from "react-bootstrap";
+import { Container, Row,Col,DropdownButton,Dropdown,Table, Modal, Form, Spinner  } from "react-bootstrap";
 import React, { useState,useEffect } from "react";
 import IdoBox from "../components/ido-box"
 import BannerImage from "../assets/images/second-section.png"
@@ -26,8 +26,8 @@ function ProjectDetails(props){
         errorWeb3Modal
     } = useWeb3React();
     const [show, setShow] = useState(false)
-    const handleClose = () => setShow1(false);
-    const handleShow = () => setShow1(true);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const [show1, setShow1] = useState(false)
     const handleClose1 = () => setShow1(false);
@@ -91,7 +91,7 @@ function ProjectDetails(props){
             
         }catch(e){
             console.log(e)
-            setErrorMsg(e)
+            setErrorMsg(e.error)
             handleShow1()
             setError("whiteList")
         }
@@ -106,7 +106,7 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
-                setErrorMsg(e)
+                setErrorMsg(e.error)
                 handleShow1()
                 setError("claim")
             }
@@ -121,7 +121,7 @@ function ProjectDetails(props){
                 
             }catch(e){
                 console.log(e)
-                setErrorMsg(e)
+                setErrorMsg(e.error)
                 handleShow1()
                 setError("finalize")
             }
@@ -220,6 +220,7 @@ function ProjectDetails(props){
             <div className="banner-section banner-section-m">
                 <Container>
                     <Row className="align-items-center">
+                   
                         <Col lg={6} sm={12} md={6} className="py-5">
 
                             <div className="ido"> 

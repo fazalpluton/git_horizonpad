@@ -1031,3 +1031,7 @@ input::-webkit-inner-spin-button {
 .text-red{
     color: red;
 }
+.loading-modal .modal-content{
+    width: 200px !important;
+    margin: auto;
+}

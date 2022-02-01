@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Container, Form, Row, Spinner,Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { factory_addr } from "../../contract/addresses";
 import Factory from '../../contract/Factory.json';
@@ -20,6 +20,11 @@ function AddProject(props){
     const [whiteliststart, setWhiteliststart] = useState('')
     const [whitelistend, setWhitelistend] = useState('')
     const [destributionend, setDestributionend] = useState('')
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const [selectedFile, setSelectedFile] = useState()
     const [preview, setPreview] = useState('logo')
@@ -141,6 +146,7 @@ function AddProject(props){
         await axios.post(url+'projects/create', formData)
           .then(function (response) {
             setMessage(response.data.message);
+            handleClose()
           })
           .catch(function (error) {
             console.log(error);
@@ -182,6 +188,7 @@ function AddProject(props){
                     let factory = new ethers.Contract(factory_addr, Factory, signer)
                     let price = ethers.utils.parseEther(salePrice)
                     let tx = await factory.create_TokenSale(eth_token_addr,eth_owner_addr,whiteliststart,whitelistend,startTime,endTime,destributionend,price,eth_wallet_addr)
+                    handleShow()
                     let confirm = await tx.wait()
                     if(confirm.confirmations >= 1){
                      let ico_addr = await factory.ico_addr()
@@ -190,7 +197,7 @@ function AddProject(props){
                      let c_whitelist_end = await crowdsaleContract.CUSTOM_WHITELIST_ENDTIME();
                      let c_sale_start = await crowdsaleContract.CUSTOM_SALE_STARTTIME();
                      let c_sale_end = await crowdsaleContract.CUSTOM_SALE_ENDTIME();
-                     let c_destribution_end = await crowdsaleContract.CUSTOM_WHITELIST_ENDTIME();
+                     let c_destribution_end = await crowdsaleContract.CUSTOM_TOKEN_DESTRIBUTIONTIME();
 
 
                      let token_name = await ZPadContract.name()
@@ -254,6 +261,15 @@ function AddProject(props){
             <div className="admin-form-padding">
                 <Container>
                 <h2 className="h2 mb-3 text-center">Add Project</h2>
+               
+                    <Modal show={show} onHide={handleClose} centered className="loading-modal">
+                    <Modal.Body className="text-center">
+                    <Spinner animation="border" role="status">
+                    </Spinner>
+                    <p className="visually mt-1 mb-0">Loading...</p>
+                    </Modal.Body>
+                    
+                </Modal>
                 <Row>
                     <Col lg={12} sm={12} md={12} className="m-auto">
                         <div className="ido-box">
