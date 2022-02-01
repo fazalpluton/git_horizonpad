@@ -213,19 +213,19 @@ function UpdateProject(props){
 
                                 <Form.Group className="mt-3" controlId="twitter">
                                 <Form.Label>Twitter Link</Form.Label>
-                                <Form.Control type="text" value={twitter} onChange={(e)=>setTwitter(e.target.value)} required/>
+                                <Form.Control type="text" value={twitter} onChange={(e)=>setTwitter(e.target.value)} />
                                 </Form.Group>
                                 <Form.Group className="mt-3" controlId="telegram">
                                 <Form.Label>Telegram Link</Form.Label>
-                                <Form.Control type="text" value={telegram} onChange={(e)=>setTelegram(e.target.value)} required/>
+                                <Form.Control type="text" value={telegram} onChange={(e)=>setTelegram(e.target.value)} />
                                 </Form.Group>
                                 <Form.Group className="mt-3" controlId="medium">
                                 <Form.Label>Medium Link</Form.Label>
-                                <Form.Control type="text" value={medium} onChange={(e)=>setMedium(e.target.value)} required/>
+                                <Form.Control type="text" value={medium} onChange={(e)=>setMedium(e.target.value)} />
                                 </Form.Group>
                                 <Form.Group className="mt-3" controlId="medium">
                                 <Form.Label>Web Link</Form.Label>
-                                <Form.Control type="text" value={web} onChange={(e)=>setWeb(e.target.value)} required/>
+                                <Form.Control type="text" value={web} onChange={(e)=>setWeb(e.target.value)} />
                                 </Form.Group>
                                 {/* <Form.Group className="mt-3" controlId="status">
                                 <Form.Label>Status</Form.Label>

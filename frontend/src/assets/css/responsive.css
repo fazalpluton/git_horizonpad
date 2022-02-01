@@ -7,7 +7,7 @@
         width: 100%;
     }
     .btn-group-custom .btn-custom:nth-child(1) {
-        margin-right: 3rem;
+        margin-right: 2rem;
     }
     .ido-box{
 
@@ -19,6 +19,9 @@
 
         margin-bottom: 40px;
 
+    }
+    .banner-video video{
+        width: 100%;
     }
 }
 @media (max-width: 767px){
@@ -32,7 +35,6 @@
     .banner-section{
         margin-bottom: 5rem;
     }
-
     
 
     .banner-img{
@@ -184,14 +186,15 @@ margin-bottom: 10px !important;
 
 @media (max-width: 420px){
 
+
     .btn-group-custom{
-
-        justify-content: center;
-
+        flex-direction: column;
+        text-align: left;
+        align-items: flex-start;
     }
 
     .btn-group-custom .btn-custom:nth-child(1) {
-        margin-right: 1rem;
+        margin-bottom: 1rem;
     }
 
     .btn-custom{

@@ -69,7 +69,7 @@ function Stacking(props){
     const [tokenError, setTokenError]= useState()
     const [mystate,setMystate] = useState(0);
     // fazal 
-    const [isType,setIsType]= useState('withdraw')
+    const [isType,setIsType]= useState('stake')
 
     const loadProvider = async () => {
         try {
@@ -604,9 +604,9 @@ function Stacking(props){
                                     Max
                                 </Button>
                                 </Form.Group>
-                                <Button onClick={Staking} type="submit" className="btn-custom secondary-btn">
+                                <button onClick={Staking} type="submit" className="btn-custom secondary-btn">
                                     Stake
-                                </Button>
+                                </button>
                             </Form>) : null}
 
                             {isType == "unstaking" ? (<Form className="text-center mt-3">
@@ -617,18 +617,18 @@ function Stacking(props){
                                     Max
                                 </Button>
                                 </Form.Group>
-                                <Button onClick={unStaking} type="submit"  className="btn-custom secondary-btn">
+                                <button onClick={unStaking} type="submit"  className="btn-custom secondary-btn">
                                     UnStake
-                                </Button>
+                                </button>
                             </Form>) : null}
 
                             {/* withdraw */}
 
                             {isType == "withdraw" ? (
                                 <div  className="text-center mt-3">
-                                <Button onClick={Reward} type="submit"  className="btn-custom secondary-btn">
+                                <button onClick={Reward} type="submit"  className="btn-custom secondary-btn">
                                     Withdraw
-                                </Button>
+                                </button>
                                 </div>
                             ) : null}
 
@@ -889,7 +889,7 @@ function Stacking(props){
                 </div>
 
                 <div className="text-center my-5">
-                    <Link to={'/'} className="btn-custom secondary-btn">Next</Link>
+                    <button className="btn-custom secondary-btn">Next</button>
                 </div>
 
                 </Container>
@@ -1016,7 +1016,8 @@ function Stacking(props){
                     </div>
 
                     <div className="text-center my-5">
-                        <Link to={'/'} className="btn-custom secondary-btn">Next</Link>
+                    <button className="btn-custom secondary-btn">Next</button>
+
                     </div>
 
                     </Container>
@@ -1190,7 +1191,8 @@ function Stacking(props){
                         </div>
 
                         <div className="text-center my-5">
-                            <Link to={'/'} className="btn-custom secondary-btn">Next</Link>
+                        <button className="btn-custom secondary-btn">Next</button>
+
                         </div>
 
                         </Container>

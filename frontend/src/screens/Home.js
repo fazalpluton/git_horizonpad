@@ -19,7 +19,8 @@ function Home(props){
                     <Row className="align-items-center">
                         <Col lg={12}>
                         <div className="banner-video">
-                        <video  src={require('../assets/images/video.mp4').default} controls>
+               
+                        <video src={require('../assets/images/video.mp4').default} controls>
                         </video>
                         </div>
                         </Col>
@@ -254,8 +255,8 @@ function Home(props){
         <img src={ThirdBackground} className="third-background"/>
         <Container>
             <div className="apply-btn-section">
-            <button type="button" class="btn-custom secondary-btn">Apply For IDO</button>
-            <button type="button" class="btn-custom secondary-btn">Apply For HCI</button>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdd_zqTgIlJTxXGX24NmmAPLoWgqUuSOw_JKK0V_xA5CqfNmA/viewform?usp=pp_url" target="_blank" class="btn-custom secondary-btn">Apply For IDO</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdEaS9eNEzMEGklH5gspRVdGU0JacgRxUJ-uQrwY7--HopH-g/viewform?usp=pp_url" target="_blank" class="btn-custom secondary-btn">Apply For HCI</a>
             </div>
         </Container>
         </div>
