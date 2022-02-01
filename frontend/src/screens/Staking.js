@@ -42,7 +42,7 @@ function Stacking(props){
     const [stakevalue,setStakevalue] = useState(0);
     const [unStakeValue, setUnStakeValue] = useState(0)
     const [staketype,setStaketype] = useState('stake');
-    const [totalToken, setTotalToken] = useState(0)
+    const [totalToken, setTotalToken] = useState()
     const [totalbalance, setTotalBalance] = useState(0)
     const [stakersNo, setStakersNo] = useState(0)
     const [userApy, setUserApy] = useState(0)
@@ -56,6 +56,10 @@ function Stacking(props){
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const [show1, setShow1] = useState(false)
+    const handleClose1 = () => setShow1(false);
+    const handleShow1 = () => setShow1(true);
     const [error, setError] = useState()
     const [msgHandling, setMsgHandling] = useState()
     
@@ -96,12 +100,15 @@ function Stacking(props){
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let totalStakedValue = await stakingContract.totalStakedValue()
             let token = ethers.utils.formatEther(totalStakedValue.toString())
-            console.log(token)
+            // setTotalToken(token)
             setTotalToken(token)
+            console.log(token)
         }catch(e){
             console.log(e)
         }
         }
+
+        console.log("totalToken", parseInt(totalToken).toString())
 
         // function to insert token to the smart contract
         const Stake = async () => {
@@ -156,6 +163,7 @@ function Stacking(props){
             catch(e){
                 setMsgHandling(e)
                 handleShow()
+                handleShow1()
                 setError(1)
                 console.log("error: ",e)
             }
@@ -285,7 +293,7 @@ function Stacking(props){
             try{
                 let signer = await loadProvider()
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
-            let calcPendingRewards = await stakingContract.calcPendingRewards(account)
+            let calcPendingRewards = await stakingContract.showPendingRewards(account)
             setUserReward(calcPendingRewards.toString())
             console.log("userReward", calcPendingRewards.toString())
             }
@@ -293,6 +301,7 @@ function Stacking(props){
                 console.log(e)
             }
         } 
+        calcPendingReward()
 
 
 
@@ -431,7 +440,7 @@ function Stacking(props){
         
         useEffect(() => {
             (async () => {
-                if (account && stakevalue > 0) {
+                if (account && totalbalance > 0) {
                     try {
                         const interval = setInterval(() => {
                                 calcPendingReward();
@@ -445,7 +454,7 @@ function Stacking(props){
                     }
                 }
             })()
-        }, [account]);
+        }, [account, totalbalance]);
 
     return (
 
@@ -495,7 +504,12 @@ function Stacking(props){
                         <div className="ido-box ido-small" style={{background: "#39065E"}}>
 
                             <p className="f-bold text-center">Total Zpad Stacked</p>
-                            <h4 className="soon text-center mt-2">{Math.floor(totalToken)}</h4>
+                            {totalToken > 1 ? (
+                                <h4 className="soon text-center mt-2">{Math.floor(totalToken)}</h4>
+                            ) : (
+                                <h4 className="soon text-center mt-2">{("NA")}</h4>
+                            )}
+                            {/* <h4 className="soon text-center mt-2">{(totalToken)}</h4> */}
 
                         </div>
 
@@ -549,7 +563,7 @@ function Stacking(props){
                             
                         {error == 1 ? (
                                 
-                                <Modal show={show} onHide={handleClose}  className='custom-modal' size="lg"
+                                <Modal show={show1} onHide={handleClose1}  className='custom-modal' size="lg"
                                 aria-labelledby="contained-modal-title-vcenter"
                                 centered>
                                     <Modal.Body>
