@@ -78,7 +78,6 @@ function ProjectDetails(props){
             const provider = new ethers.providers.Web3Provider(connection);
             return provider.getSigner();
           } catch (e) {
-            console.log("loadProvider default: ", e);
           }
       };
     
@@ -90,7 +89,6 @@ function ProjectDetails(props){
             await whitelist.wait();
             
         }catch(e){
-            console.log(e)
             setErrorMsg(e.error)
             handleShow1()
             setError("whiteList")
@@ -105,7 +103,6 @@ function ProjectDetails(props){
                 await claim_time.wait();
                 
             }catch(e){
-                console.log(e)
                 setErrorMsg(e.error)
                 handleShow1()
                 setError("claim")
@@ -120,7 +117,6 @@ function ProjectDetails(props){
                 await finalize_time.wait();
                 
             }catch(e){
-                console.log(e)
                 setErrorMsg(e.error)
                 handleShow1()
                 setError("finalize")
@@ -135,10 +131,8 @@ function ProjectDetails(props){
                 let crowdsale_contract = new ethers.Contract(project.contract, ContractCrowdSale, signer)
                 let claim_status = await crowdsale_contract.getClaimed(account);
                 setClaimstatus(claim_status);
-                console.log(claim_status)
                 
             }catch(e){
-                console.log(e)
                 // setErrorMsg(e)
                 // setError("allocations")
             }
@@ -149,7 +143,6 @@ function ProjectDetails(props){
                 let signer = await loadProvider()
                 let BUSD = new ethers.Contract(busd_addr, ZPadAbi, signer)
                 let allowanceCheck = await BUSD.allowance(account, project.contract)
-                console.log(allowanceCheck.toString())
                 if(allowanceCheck ==0){
                     let _value = await ethers.utils.parseEther(busdvalue)
                     let approve = await BUSD.approve(project.contract, _value)
@@ -167,7 +160,6 @@ function ProjectDetails(props){
        
                 
             }catch(e){
-                console.log(e)
                 setErrorMsg(e)
                 handleShow1()
                 setError("swap_token")
@@ -189,7 +181,6 @@ function ProjectDetails(props){
                 }
                 
             }catch(e){
-                console.log(e)
                 // setErrorMsg(e)
                 // handleShow1()
                 // setError("checkallowence")
@@ -206,7 +197,6 @@ function ProjectDetails(props){
                     Allocations()
 
                 } catch (error) {
-                    console.log(error)
                 }
             }
         })()

@@ -142,14 +142,12 @@ function AddProject(props){
             'token',
             token
         )
-        console.log(formData.get('image'))
         await axios.post(url+'projects/create', formData)
           .then(function (response) {
             setMessage(response.data.message);
             handleClose()
           })
           .catch(function (error) {
-            console.log(error);
           });
     }
     const loadProvider = async () => {
@@ -159,7 +157,6 @@ function AddProject(props){
             const provider = new ethers.providers.Web3Provider(connection);
             return provider.getSigner();
           } catch (e) {
-            console.log("loadProvider default: ", e);
           }
       };
     
@@ -217,7 +214,6 @@ function AddProject(props){
             
         }
         catch(e){
-            console.log(e)
         }
         
     }
@@ -248,7 +244,6 @@ function AddProject(props){
 
 
                 } catch (error) {
-                    console.log(error)
                 }
             }
         })()

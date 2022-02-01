@@ -37,7 +37,6 @@ function Approval(props){
             const provider = new ethers.providers.Web3Provider(connection);
             return provider.getSigner();
           } catch (e) {
-            console.log("loadProvider default: ", e);
           }
       };
 
@@ -49,14 +48,11 @@ function Approval(props){
 
             let ZPadContract = new ethers.Contract(eth_token_addr, ZPadAbi, signer)
             let dec = await ZPadContract.decimals()
-            let _value = await ethers.utils.parseUnits( ammount , dec ) ;
-        
-                // console.log("allounceCheck>>", allowanceCheck)
-                let approve = await ZPadContract.approve(factory_addr, _value)
-                let approveTx = await approve.wait()
+            let _value = await ethers.utils.parseUnits( ammount , dec )
+            let approve = await ZPadContract.approve(factory_addr, _value)
+            let approveTx = await approve.wait()
             
         }catch(e){
-            console.log(e)
         }
     }
       
@@ -66,7 +62,6 @@ function Approval(props){
             try {
 
             } catch (error) {
-                console.log(error)
             }
         }
     })()

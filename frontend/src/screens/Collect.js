@@ -39,7 +39,6 @@ function Collect(props){
             const provider = new ethers.providers.Web3Provider(connection);
             return provider.getSigner();
           } catch (e) {
-            console.log("loadProvider default: ", e);
           }
       };
 
@@ -54,7 +53,6 @@ function Collect(props){
             let tx = await collect.wait()
             
         }catch(e){
-            console.log(e)
         }
     }
 
@@ -67,7 +65,6 @@ function Collect(props){
             setTotalammount(collect.toString())
             
         }catch(e){
-            console.log(e)
         }
     }
 
@@ -80,7 +77,6 @@ function Collect(props){
             try {
                 Feee()
             } catch (error) {
-                console.log(error)
             }
         }
     })()

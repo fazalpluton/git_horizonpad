@@ -34,7 +34,6 @@ function AddProjectDetail(props){
                 setMessage(response.data.message);
               })
               .catch(function (error) {
-                // console.log(error);
               });
         }
         const addDetail  = async e =>{
@@ -69,10 +68,8 @@ function AddProjectDetail(props){
                 setDetailmessage(response.data.message);
               })
               .catch(function (error) {
-                // console.log(error);
               });
         }
-        console.log(detaildescription)
         // useEffect(async ()=>{
         //     await 
         // },[])
