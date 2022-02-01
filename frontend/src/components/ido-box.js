@@ -59,12 +59,10 @@ function IdoBox(props){
             project:projects
           })
           .then(function (response) {
-            console.log(response)
             setIsupdate(true)
           })
           .catch(function (error) {
           });
-        console.log('===>',projects)
     },[projects]);
 
     const loadProvider = async () => {
@@ -74,7 +72,6 @@ function IdoBox(props){
             const provider = new ethers.providers.Web3Provider(connection);
             return provider.getSigner();
           } catch (e) {
-            console.log("loadProvider default: ", e);
           }
       };
     
@@ -90,7 +87,6 @@ function IdoBox(props){
             let data = {"price":price,"raised":raised,"allocation":allocation,"getstatus":getstatus,"total_user":total_user}
             return data;
         }catch(e){
-            console.log(e)
         }
         }
    useEffect(() => {
@@ -100,7 +96,6 @@ function IdoBox(props){
                
 
                 } catch (error) {
-                    console.log(error)
                 }
             }
         })()
