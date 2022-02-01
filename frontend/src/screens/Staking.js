@@ -45,7 +45,7 @@ function Stacking(props){
     const [totalToken, setTotalToken] = useState()
     const [totalbalance, setTotalBalance] = useState(0)
     const [stakersNo, setStakersNo] = useState(0)
-    const [userApy, setUserApy] = useState(0)
+    const [userApy, setUserApy] = useState("45%")
     const [userReward, setUserReward] = useState(0)
     const [userUnstakedValue, setUserUnstakedValue] = useState(0)
     const [authorization, setAuthorization] = useState("")
@@ -376,19 +376,19 @@ function Stacking(props){
             // console.log("staker", staker.toString())
         }
 
-        const APY = async () => {
-            let signer = await loadProvider()
-            let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
-            let getAPY = await stakingContract.getAPY()
-            if(getAPY <=0 ){
-                setUserApy("NA")
-            }
-            else{
+        // const APY = async () => {
+        //     let signer = await loadProvider()
+        //     let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+        //     let getAPY = await stakingContract.getAPY()
+        //     if(getAPY <=0 ){
+        //         setUserApy("NA")
+        //     }
+        //     else{
 
-                setUserApy(getAPY.toString())
-            }
-            console.log("getAPY", getAPY.toString())
-        }
+        //         setUserApy(getAPY.toString())
+        //     }
+        //     console.log("getAPY", getAPY.toString())
+        // }
         // Stakers()
 
         const Tiers = async () => {
