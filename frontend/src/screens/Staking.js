@@ -63,6 +63,7 @@ function Stacking(props){
     const [silver, setSilver] = useState(0)
     const [gold, setGold] = useState(0)
     const [tokenError, setTokenError]= useState()
+    const [mystate,setMystate] = useState(0);
     // fazal 
     const [isType,setIsType]= useState('withdraw')
 
@@ -125,6 +126,7 @@ function Stacking(props){
                     let approveTx = await approve.wait()
                     // console.log("approveTx>", approveTx)
                     if(approveTx && approveTx.blockNumber){
+                        setMystate(stakevalue)
                         setMsgHandling("Staking")
                         let stake = await stakingContract.stake(ethers.utils.parseEther(stakevalue))
                         let tx = await stake.wait()
@@ -559,9 +561,11 @@ function Stacking(props){
                                 <Modal show={show} onHide={handleClose}  className='custom-modal' size="lg"
                                 aria-labelledby="contained-modal-title-vcenter"
                                 centered>
-                                    <Modal.Header > <div style={{textAlign:"center"}}>
-                                          <p style={{width:"800px", color:"red"}} >{msgHandling.message || msgHandling}</p>
-                                          </div></Modal.Header>
+                                    <Modal.Body>
+                                    <div style={{textAlign:"center"}}>
+                                          <p style={{ color:"red"}} >{msgHandling.message || msgHandling}</p>
+                                    </div>
+                                    </Modal.Body>
                                 
                             </Modal>
                             
@@ -669,7 +673,7 @@ function Stacking(props){
 
                     <hr class="roadmap-hr"/>
 
-                    {stakevalue > bronze ? 
+                    {stakevalue > bronze || mystate > bronze ? 
                     (<div class="roadmap-item circle-active">
 
 
