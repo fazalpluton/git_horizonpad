@@ -18,6 +18,8 @@ import ZPadAbi from "../contract/ZPad.json"
 import {staking_addr, zpad_addr, rewardToken_addr} from "../contract/addresses"
 import Web3Modal from 'web3modal'
 import { useWeb3React } from "@web3-react/core";
+import detectEthereumProvider from '@metamask/detect-provider'
+
 
 
 
@@ -75,6 +77,7 @@ function Stacking(props){
             console.log("loadProvider default: ", e);
           }
       };
+
 
 
     //   const loadSigner = async () => {
@@ -203,8 +206,9 @@ function Stacking(props){
                 // console.log(token)
                 let unStake = await stakingContract.unStake(token)
                 console.log("unStake>>>>>>>>>>", unStake)
+                setAuthorization("Unstake")
                 let tx = await unStake.wait()
-                // console.log("tx>>", tx)
+                setConfirmed("Unstake_Confirmed")
                 setUnStakeValue(0)
             }
             catch(e){
@@ -249,6 +253,7 @@ function Stacking(props){
                 console.log(e)
             }
         }
+        console.log("userUnstakedValue",userUnstakedValue)
 
         console.log("userUnstakedValue",userUnstakedValue)
 
@@ -257,12 +262,14 @@ function Stacking(props){
             try{
                 let signer = await loadProvider()
                 let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+                setAuthorization("Withdraw")
                 if(totalbalance == 0){
                     return
                 }
                 else{
                     let withdrawRewards = await stakingContract.withdrawRewards()
                     await withdrawRewards.wait()
+                    setConfirmed("Withdraw_Confirmed")
                 // console.log("withdrawRewards", withdrawRewards)
     
                 }
@@ -424,7 +431,7 @@ function Stacking(props){
         
         useEffect(() => {
             (async () => {
-                if (account) {
+                if (account && stakevalue > 0) {
                     try {
                         const interval = setInterval(() => {
                                 calcPendingReward();
@@ -505,7 +512,29 @@ function Stacking(props){
 
                         </Col>
                         <Col lg={3}>
-                        <button className="btn-custom primary-btn mt-2">Reward</button>
+                        <button  onClick={async (event) => {
+                            const provider = await detectEthereumProvider()
+                            provider.sendAsync({
+                                method: 'metamask_watchAsset',
+                                params: {
+                                "type": "ERC20",
+                                "options": {
+                                    "address": rewardToken_addr,
+                                    "symbol": "RT",
+                                    "decimals": 18,
+                                },
+                                },
+                            }, (err, added) => {
+                                console.log('provider returned', err, added)
+                                if (err || 'error' in added) {
+                            
+                                setTokenError("There was a problem adding the token.")
+                                return
+                                }
+                                setTokenError("Token added!")
+                            })
+                            }}  className="btn-custom primary-btn mt-2">Reward
+                        </button>
 
                         </Col>
                     </Row>
@@ -872,7 +901,7 @@ function Stacking(props){
 
                         </div>
 
-                        <hr class="roadmap-hr"/>
+                        {/* <hr class="roadmap-hr"/>
 
                         <div class="roadmap-item">
 
@@ -882,23 +911,11 @@ function Stacking(props){
 
                             <p>Checklist</p>
 
-                        </div>
+                        </div> */}
 
                         <hr class="roadmap-hr"/>
 
-                        <div class="roadmap-item">
-
-                            {/* {stakevalue > bronze ?
-                             (<div><div class="roadmap-circle" style={{border:"1px solid red"}}>
-                            <img src={amountstack}/>
-                            </div>
-
-                            <p>Amount to Stake</p></div>)
-                             : <div><div class="roadmap-circle" >
-                             <img src={amountstack}/>
-                             </div>
- 
-                             <p>Amount to Stake</p></div>} */}
+                        {/* <div class="roadmap-item">
 
                             <div class="roadmap-circle">
                             <img src={amountstack}/>
@@ -908,9 +925,10 @@ function Stacking(props){
 
                         </div>
 
-                        <hr class="roadmap-hr"/>
+                        <hr class="roadmap-hr"/> */}
 
-                        <div class="roadmap-item">
+                        {authorization == "Unstake" ? (
+                            <div class="roadmap-item circle-active">
 
                             <div class="roadmap-circle">
                             <img src={confirm}/>
@@ -919,10 +937,43 @@ function Stacking(props){
                             <p>Initialize Unstake</p>
 
                         </div>
+                        ) : (
+                            <div class="roadmap-item">
+
+                            <div class="roadmap-circle">
+                            <img src={confirm}/>
+                            </div>
+
+                            <p>Initialize Unstake</p>
+
+                        </div>
+                        )}
+
 
                         <hr class="roadmap-hr"/>
 
+                        {confirmed == "Unstake_Confirmed" ? (
+                             <div class="roadmap-item circle-active">
+
+                             <div class="roadmap-circle">
+                             <img src={confirmation}/>
+                             </div>
+
+                             <p>Confirmation</p>
+
+                         </div>
+                        ) : (
                             <div class="roadmap-item">
+
+                            <div class="roadmap-circle">
+                            <img src={confirmation}/>
+                            </div>
+
+                            <p>Confirmation</p>
+
+                        </div>
+                        )}
+                            {/* <div class="roadmap-item">
 
                                 <div class="roadmap-circle">
                                 <img src={confirmation}/>
@@ -930,7 +981,7 @@ function Stacking(props){
 
                                 <p>Confirmation</p>
 
-                            </div>
+                            </div> */}
 
                         
 
@@ -960,12 +1011,14 @@ function Stacking(props){
          {
              isType == "withdraw" &&
              <div>
-                 <h2 className="text-center h2">Withdraw your Zpad</h2>
+                 <h2 className="text-center h2">Deposit your Zpad</h2>
 
                         <Container>
 
                         <div class="roadmap">
 
+                                                            
+                           
                             <div class="roadmap-item circle-active">
 
                                 <div class="roadmap-circle">
@@ -975,10 +1028,12 @@ function Stacking(props){
                                 <p>Checkpoint</p>
 
                             </div>
+                            
 
-                            <hr class="roadmap-hr"/>
 
-                            <div class="roadmap-item">
+                            {/* <hr class="roadmap-hr"/> */}
+
+                            {/* <div class="roadmap-item">
 
                                 <div class="roadmap-circle">
                                 <img src={amountstack}/>
@@ -986,12 +1041,13 @@ function Stacking(props){
 
                                 <p>Amount to Stake</p>
 
-                            </div>
+                            </div> */}
 
 
                             <hr class="roadmap-hr"/>
 
-                            <div class="roadmap-item">
+                            {authorization == "Withdraw" ? (
+                                <div class="roadmap-item circle-active">
 
                                 <div class="roadmap-circle">
                                 <img src={confirm}/>
@@ -1000,9 +1056,32 @@ function Stacking(props){
                                 <p>Initialize Withdraw</p>
 
                             </div>
+                            ) : (
+                                <div class="roadmap-item">
+
+                                <div class="roadmap-circle">
+                                <img src={confirm}/>
+                                </div>
+
+                                <p>Initialize Withdraw</p>
+
+                            </div>
+                            )}
+
 
                             <hr class="roadmap-hr"/>
 
+                            {confirmed == "Withdraw_Confirmed" ? (
+                                <div class="roadmap-item circle-active">
+
+                                <div class="roadmap-circle">
+                                <img src={confirmation}/>
+                                </div>
+
+                                <p>Confirmed</p>
+
+                            </div>
+                            ) : (
                                 <div class="roadmap-item">
 
                                     <div class="roadmap-circle">
@@ -1012,6 +1091,8 @@ function Stacking(props){
                                     <p>Confirmation</p>
 
                                 </div>
+                            )}
+
 
                             
 

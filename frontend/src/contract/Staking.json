@@ -38,6 +38,7 @@
   "function setSilverValue(uint256)",
   "function setSilverWeight(uint32)",
   "function setTicketConsumer(address)",
+  "function showPendingRewards(address) view returns (uint256)",
   "function silver() view returns (uint256)",
   "function silver_pool_weight() view returns (uint32)",
   "function stake(uint256)",
