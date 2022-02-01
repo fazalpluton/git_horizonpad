@@ -60,6 +60,13 @@ function DashboardHeader(props){
     return (
         <>
          <div className="custom-header">
+         {
+          networkError?
+          <div className="text-center">
+          <span className="text-center text-red">{networkError.toString()}</span>
+          </div>
+       :null
+        }
         <Navbar  expand="lg">
     <Container >
       <Link to={'/'} className="navbar-brand"><img src={VectorLogo} className="logo"/></Link>
@@ -74,7 +81,7 @@ function DashboardHeader(props){
         <Link to={'/ido-projects'} className="nav-link">IDO Projects</Link>
         <Link to={'/hci-projects'} className="nav-link">HCI Projects</Link>
         {
-          token == 'null' ? '':<NavDropdown title="Manager" id="basic-nav-dropdown" className="manager-dropdown">
+          token == 'null' || token == null ? '':<NavDropdown title="Manager" id="basic-nav-dropdown" className="manager-dropdown">
           <Link to={'/admin/add-project'} className="dropdown-item">Add Project</Link>
           <Link to={'/admin/projects'} className="dropdown-item">List Projects</Link>
         </NavDropdown>
@@ -97,12 +104,7 @@ function DashboardHeader(props){
   </Container>
 </Navbar>
         </div>
-        {
-          networkError?
-          <div className="error-msg">
-          <p >{networkError.toString()}</p>
-        </div>:null
-        }
+    
         
         </>
     )

@@ -160,7 +160,7 @@ function AddProject(props){
       const formSubmit = async (e) => {
         e.preventDefault();
         try{
-            if(token != 'null'){
+            if(token != 'null' || token != null){
                 let signer = await loadProvider()
 
                 let eth_token_addr = ethers.utils.getAddress(tokenAddress)
@@ -221,9 +221,12 @@ function AddProject(props){
     const formData = new FormData();
       
      const handleChangeImage = e => {
-        setSelectedFile(e.target.files[0]);
+         if(e.target.files[0]){
+
+             setSelectedFile(e.target.files[0]);
+             setPreview({[e.target.name]: URL.createObjectURL(e.target.files[0])})
+         }
         
-        setPreview({[e.target.name]: URL.createObjectURL(e.target.files[0])})
 
       }
      
@@ -329,7 +332,7 @@ function AddProject(props){
                                 </Form.Group>
                                 <Form.Group className="mt-3" controlId="price">
                                 <Form.Label>Payable Wallet Address</Form.Label>
-                                <Form.Control type="text" placeholder="Please put value in BUSD" value={walletAddress} onChange={(e)=>setWalletAddress(e.target.value)} required/>
+                                <Form.Control type="text"  value={walletAddress} onChange={(e)=>setWalletAddress(e.target.value)} required/>
                                 </Form.Group>
                                 {/* block chain end  */}
                                 <Form.Group className="mt-3" controlId="type">

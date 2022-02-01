@@ -13,6 +13,10 @@ function UpdateProject(props){
         const [preview, setPreview] = useState('')
         const [title, setTitle] = useState('')
         const [shortintro, setShortintro] = useState('')
+        const [twitter, setTwitter] = useState('')
+        const [telegram, setTelegram] = useState('')
+        const [medium, setMedium] = useState('')
+        const [web, setWeb] = useState('')
         const [message, setMessage] = useState('')
         const [highlight, setHighlight] = useState([])
         const [image , setImage] = useState('')
@@ -84,6 +88,10 @@ function UpdateProject(props){
             setProjects(res.data.projects)
             setTitle(res.data.projects.title)
             setShortintro(res.data.projects.short_intro)
+            setTwitter(res.data.projects.twitter)
+            setTelegram(res.data.projects.telegram)
+            setMedium(res.data.projects.medium)
+            setWeb(res.data.projects.web)
             setImage(url+res.data.projects.img)
             setStatus(res.data.projects.status)
             
@@ -141,6 +149,22 @@ function UpdateProject(props){
                 shortintro
             );
             formData.append(
+              "twitter",
+              twitter
+            );
+            formData.append(
+                "telegram",
+                telegram
+            );
+            formData.append(
+                "medium",
+                medium
+            );
+            formData.append(
+                "web",
+                web
+           );
+            formData.append(
                 'token',
                 token
             )
@@ -159,10 +183,10 @@ function UpdateProject(props){
 
                 <Row>
                 <h2 className="h2 mb-3 text-center">Edit Project</h2>
-                    <Col lg={12} sm={12} md={12}>
+                    <Col lg={6} sm={12} md={12} className="m-auto">
                         <div className="ido-box">
                             <Row className="gy-5">
-                                <Col lg={6} sm={12} md={6}>
+                                <Col lg={12} sm={12} md={12}>
                                 <Form onSubmit={(e) => {
                                         formSubmit(e);
                                         }}>
@@ -187,6 +211,22 @@ function UpdateProject(props){
                                 <Form.Control type="text" value={shortintro} onChange={(e)=>setShortintro(e.target.value)} required/>
                                 </Form.Group>
 
+                                <Form.Group className="mt-3" controlId="twitter">
+                                <Form.Label>Twitter Link</Form.Label>
+                                <Form.Control type="text" value={twitter} onChange={(e)=>setTwitter(e.target.value)} required/>
+                                </Form.Group>
+                                <Form.Group className="mt-3" controlId="telegram">
+                                <Form.Label>Telegram Link</Form.Label>
+                                <Form.Control type="text" value={telegram} onChange={(e)=>setTelegram(e.target.value)} required/>
+                                </Form.Group>
+                                <Form.Group className="mt-3" controlId="medium">
+                                <Form.Label>Medium Link</Form.Label>
+                                <Form.Control type="text" value={medium} onChange={(e)=>setMedium(e.target.value)} required/>
+                                </Form.Group>
+                                <Form.Group className="mt-3" controlId="medium">
+                                <Form.Label>Web Link</Form.Label>
+                                <Form.Control type="text" value={web} onChange={(e)=>setWeb(e.target.value)} required/>
+                                </Form.Group>
                                 {/* <Form.Group className="mt-3" controlId="status">
                                 <Form.Label>Status</Form.Label>
                                 <Form.Select aria-label="Default select example" value={status} onChange={(e)=>setStatus(e.target.value)} required>

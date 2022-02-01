@@ -34,7 +34,10 @@ function IdoProjects(props){
             <h2 className="text-center h2">Live Projects.</h2>
             <Container>
             <Row className="feature-section g-lg-5">
+                {
+                props.errorMessage != ""? <h2 className="text-center">No Projects</h2>:
                 <IdoBox status={"Live"} type={"IDOs"} />
+                }
 
             </Row>
             </Container>
@@ -52,8 +55,10 @@ function IdoProjects(props){
             <h2 className="text-center h2">Upcoming Projects.</h2>
             
          
-               
+               {
+                props.errorMessage != ""? <h2 className="text-center mt-5 pt-5">No Projects</h2>:
                 <IdoBox status={"Upcomming"} type={"IDOs"}/>
+               }
                 
 
             </Container>
@@ -63,8 +68,10 @@ function IdoProjects(props){
             <h2 className="text-center h2">Closed Projects.</h2>
             
             <Row className="feature-section g-lg-5">
-                
+            {
+                props.errorMessage != ""? <h2 className="text-center">No Projects</h2>:
             <IdoBox status={"Close"} type={"IDOs"} />
+            }
 
                 
                 

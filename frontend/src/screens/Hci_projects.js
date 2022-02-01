@@ -36,8 +36,8 @@ function HciProjects(props){
             <Container>
             <Row className="feature-section g-lg-5">
                 {
-                    // props.errorMessage? <div style={{color:"red"}}>{props.errorMessage}</div>:
-            <IdoBox status={"Live"} type={"HCI"} />
+                    props.errorMessage ? <h2 className="text-center">No Projects</h2>:
+                    <IdoBox status={"Live"} type={"HCI"} />
                 }
             
 
@@ -55,8 +55,10 @@ function HciProjects(props){
             <Container className="ido-slider-section">
             
             <h2 className="text-center h2">Upcoming Projects.</h2>
-            
+            {
+                props.errorMessage ? <h2 className="text-center mt-5">No Projects</h2>:
             <IdoBox status={"Upcomming"} type={"HCI"}/>
+            }
 
 
             </Container>
@@ -66,8 +68,12 @@ function HciProjects(props){
             <h2 className="text-center h2">Closed Projects.</h2>
             
             <Row className="feature-section g-lg-5">
-                
+
+                {
+                props.errorMessage? <h2 className="text-center">No Projects</h2>:
+
             <IdoBox status={"Close"} type={"HCI"} />
+                }
 
                 
                 
