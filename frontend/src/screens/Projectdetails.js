@@ -8,7 +8,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from 'axios';
 import { useWeb3React } from "@web3-react/core";
 import Web3Modal from 'web3modal'
-import { ethers } from 'ethers'
+import { ethers, utils } from 'ethers'
 import ContractCrowdSale from '../contract/CrowdSale.json';
 import TicketConsumer from '../contract/TicketConsumer.json';
 import { busd_addr, ticketConsumer_addr } from "../contract/addresses";
@@ -46,12 +46,22 @@ function ProjectDetails(props){
     const [busdvalue,setBusdvalue] = useState(0)
     const [allowancestatus,setAllowancestatus] = useState(false)
     const [pervalue,setPervalue] = useState(0)
+    const [price,setPrice] = useState(0)
+    const [decim,setDecim] = useState(0)
     const [error, setError] = useState()
     const [errorMsg, setErrorMsg] = useState()
 
     const { id } = useParams();
 
-
+    const loadProvider = async () => {
+        try {
+            const web3Modal = new Web3Modal();
+            const connection = await web3Modal.connect();
+            const provider = new ethers.providers.Web3Provider(connection);
+            return provider.getSigner();
+          } catch (e) {
+          }
+      };
 
     useEffect(async ()=>{
     await axios.get(url+'projects/'+id).then((res)=>{
@@ -66,20 +76,13 @@ function ProjectDetails(props){
          setSale_start(old_sale_start.toString())
          setSale_end(old_sale_end.toString())
          setDes_end(old_des_end.toString())
-         setPervalue(1 / res.data.projects.price)
+
+     
 
     })
     },[]);
 
-    const loadProvider = async () => {
-        try {
-            const web3Modal = new Web3Modal();
-            const connection = await web3Modal.connect();
-            const provider = new ethers.providers.Web3Provider(connection);
-            return provider.getSigner();
-          } catch (e) {
-          }
-      };
+ 
     
       const Whitelist_Application = async (e) => {
         try{
@@ -94,6 +97,25 @@ function ProjectDetails(props){
             setError("whiteList")
         }
         }
+
+        const Des = async (e) => {
+            try{
+                let signer = await loadProvider()
+                let crowdsale_contract = new ethers.Contract(project.contract, ContractCrowdSale, signer)
+                let contract_token_addr = await crowdsale_contract.token_addr();
+                let ZPadContract = new ethers.Contract(contract_token_addr, ZPadAbi, signer)
+                let dec = await ZPadContract.decimals()
+                let ether = (ethers.utils.formatUnits('1',dec)).toString()
+       
+                let p = (ethers.utils.formatUnits(project.price,dec)).toString()
+                let result = ether / p
+                result = result
+                setPrice(result)
+                
+            }catch(e){
+            
+            }
+            }
 
         const Claim = async (e) => {
             try{
@@ -140,27 +162,31 @@ function ProjectDetails(props){
 
         const Swap_Token = async (e) => {
             try{
+                if(busdvalue >=project.price){
+
                 let signer = await loadProvider()
                 let BUSD = new ethers.Contract(busd_addr, ZPadAbi, signer)
                 let allowanceCheck = await BUSD.allowance(account, project.contract)
-                if(allowanceCheck ==0){
+                let allow = ethers.utils.formatEther(allowanceCheck.toString())
+                if(allow ==0){
                     let _value = await ethers.utils.parseEther(busdvalue)
                     let approve = await BUSD.approve(project.contract, _value)
                     let approveTx = await approve.wait()
-                    allowanceCheck = await BUSD.allowance(account, project.contract)
                     if(approveTx.confirmations>=1){
                         setAllowancestatus(true)
                     }
                 }
+                
                 else{
                     let crowdsale_contract = new ethers.Contract(project.contract, ContractCrowdSale, signer)
                     let buy_token = await crowdsale_contract.buyTokens();
                     await buy_token.wait();
                 }
+            }
        
                 
             }catch(e){
-                setErrorMsg(e)
+                setErrorMsg(e.error)
                 handleShow1()
                 setError("swap_token")
             }
@@ -172,7 +198,8 @@ function ProjectDetails(props){
                 let signer = await loadProvider()
                 let BUSD = new ethers.Contract(busd_addr, ZPadAbi, signer)
                 let allowanceCheck = await BUSD.allowance(account, project.contract)
-                setBusdvalue(allowanceCheck.toString())
+                let allow = ethers.utils.formatEther(allowanceCheck.toString())
+                setBusdvalue(allow)
                 if(allowanceCheck ==0){
                     setAllowancestatus(false)
                 }
@@ -195,6 +222,7 @@ function ProjectDetails(props){
                 try {
                     checkAllowence()
                     Allocations()
+                    Des()
 
                 } catch (error) {
                 }
@@ -420,7 +448,7 @@ function ProjectDetails(props){
 
                             <tr>
                                 <td>Swap rate</td>
-                                <td>1BUSD = {(1 / project.price).toFixed(3)+project.token_symbol}</td>
+                                <td>1BUSD = {(price).toFixed(3)+project.token_symbol}</td>
                                 
                             </tr>
 
@@ -603,14 +631,14 @@ function ProjectDetails(props){
             <Form.Group className="mb-3" controlId="token_symbol">
              <div className="position-relative">
              <Form.Label>To</Form.Label>
-                <Form.Control type="text" readOnly value={( pervalue * busdvalue)}/>
+                <Form.Control type="text" readOnly value={( price * busdvalue)}/>
                 <span className="text-ab">{project.token_symbol}</span>
 
              </div>
             </Form.Group>
             <div className="d-flex justify-content-between">
             <p>Price</p>
-            <p>{parseFloat(pervalue.toFixed(8)) +" "+  project.token_symbol} per BUSD</p>
+            <p>{parseFloat(price.toFixed(8)) +" "+  project.token_symbol} per BUSD</p>
 
             </div>
             <div className="text-center mt-3 mb-2">

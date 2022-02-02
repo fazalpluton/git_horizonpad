@@ -196,12 +196,12 @@ function AddProject(props){
                      let c_sale_end = await crowdsaleContract.CUSTOM_SALE_ENDTIME();
                      let c_destribution_end = await crowdsaleContract.CUSTOM_TOKEN_DESTRIBUTIONTIME();
 
-
+                     let dec = await ZPadContract.decimals()
                      let token_name = await ZPadContract.name()
                      let token_symbol = await ZPadContract.symbol()
                      let token_supply = await ZPadContract.totalSupply()
-                     let token_supp = await ethers.utils.formatEther(token_supply)
-                     let cap = await ethers.utils.formatEther(allowanceCheck)
+                     let token_supp = await ethers.utils.formatUnits(token_supply,dec)
+                     let cap = await ethers.utils.formatUnits(allowanceCheck,dec)
                      let token_owener = eth_owner_addr;
 
                     api(ico_addr,token_name,token_symbol,token_supp,c_whitelist_start,c_whitelist_end,c_sale_start,c_sale_end,c_destribution_end,cap,token_owener)
