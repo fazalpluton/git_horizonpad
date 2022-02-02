@@ -9,7 +9,7 @@ import Web3Modal from 'web3modal'
 import { ethers } from 'ethers'
 import ContractCrowdSale from '../contract/CrowdSale.json';
 import Slider from "react-slick";
-
+import ZPadAbi from '../contract/ZPad.json'
 
 
 function IdoBox(props){
@@ -79,9 +79,12 @@ function IdoBox(props){
         try{
             let signer = await loadProvider()
             let crowdsale_contract = new ethers.Contract(addr, ContractCrowdSale, signer)
+            let contract_token_addr = await crowdsale_contract.token_addr();
+            let ZPadContract = new ethers.Contract(contract_token_addr, ZPadAbi, signer)
+            let dec = await ZPadContract.decimals()
             let price = ethers.utils.formatEther(await crowdsale_contract.getPrice())
             let raised = ethers.utils.formatEther(await crowdsale_contract.weiRaised())
-            let allocation = ethers.utils.formatEther(await crowdsale_contract.tokenAllocation())
+            let allocation = ethers.utils.formatUnits(await crowdsale_contract.tokenAllocation(),dec)
             let getstatus = (await crowdsale_contract.getStatus()).toString()
             let total_user = (await crowdsale_contract.TOTAL_WHITELIST()).toString()
             let data = {"price":price,"raised":raised,"allocation":allocation,"getstatus":getstatus,"total_user":total_user}

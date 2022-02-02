@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "./interfaces/ITicketConsumer.sol";
 
 
@@ -77,7 +78,7 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
     uint256 public _tokenPurchased;
     bool public success;
     bool public finalized;
-    bool public _buyable;
+    
 
     
     event TokensPurchased(address indexed purchaser, address indexed beneficiary, uint256 value, uint256 amount);
@@ -101,7 +102,12 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
         token_Owner = _tokenOwner;
         total_amount = _totalAmount;
         BUSD = IERC20(0xE2aD269bD111FF893BE307A4c6DAA01662aCb352);
+        //0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56
         setTicketConsumer(_ticketConsumer);
+    }
+    
+    function token_addr() public view returns(address){
+        return address(token);
     }
 
     function setTime(uint256 _wstartTimes,uint256 _wstartTimee,uint256 _sstartTimes,uint256 _sstartTimee,
@@ -170,7 +176,7 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
         require(getStatus() == 1,"Time limit reached");
         isWhitelisted[_msgSender()] = true;
         TOTAL_WHITELIST++;
-        require(total_amount / TOTAL_WHITELIST>0,"whiteListing finished");
+        require(total_amount / TOTAL_WHITELIST > 0 ,"whiteListing finished");
         tokenAllocation = total_amount / TOTAL_WHITELIST;
         ticketConsumer.lockTickets(_msgSender(), address(this));
     }
@@ -196,23 +202,23 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
         return _weiRaised;
     }
 
-    function buyable()public returns(bool) { 
-        if(buyTime > block.timestamp){
-            _buyable = true;
-        }
-        return _buyable;
-    }
     
     
-   function buyTokens() public nonReentrant payable {
+    
+    function buyTokens() public nonReentrant payable {
         require ( getStatus() == 3, "Buy Time expired");
 
         uint256 weiAmount = BUSD.allowance(_msgSender(), address(this));
-        require(msgValue[_msgSender()] + weiAmount <=tokenAllocation,"please approve Busd according to limit");
+      
         
         //new calulate amount
-        uint256 one = 1 ether;
-        uint256 tokens =  (one * weiAmount)/token_Price;
+        uint8 dec = IERC20Metadata(address(token)).decimals();
+        uint256 one = 1 *10**dec;
+        uint256 product = one * weiAmount;
+        require(product>=token_Price,"please buy greater than min");
+        uint256 tokens =  (one * weiAmount) / token_Price;
+
+        require(tokens <=tokenAllocation,"please approve Busd according to limit");
        
         require(token.balanceOf(address(this)) >= tokens,"buy amount exceeds not enough Tokens remaining");
         BUSD.safeTransferFrom(_msgSender(),address(this), weiAmount);
@@ -222,7 +228,7 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
         _weiRaised = _weiRaised.add(weiAmount);
         
         msgValue[_msgSender()] = msgValue[_msgSender()] + weiAmount;
-        purchase[_msgSender()]=purchase[_msgSender()]+tokens;
+        purchase[_msgSender()]=purchase[_msgSender()] + tokens;
        
     }
     
@@ -246,12 +252,14 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
         require( getStatus() >= 4 , "the crowdSale is in progress");
         require(!finalized,"already finalized");
         require(_msgSender() == wallet,"you are not the owner");
+
         if(_weiRaised >= min ){
             success = true;
         }
         else{
              success = false;   
         }
+
          uint256 remainingTokensInTheContract = token.balanceOf(address(this)) - _tokenPurchased;
         token.safeTransfer(address(token_Owner),remainingTokensInTheContract);
         _forwardFunds(_weiRaised);
@@ -283,9 +291,9 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
       //  _wallet.transfer(amount);
       BUSD.safeTransfer(wallet, amount);
     }
-    function time()public view returns(uint256){
+    function time()public view returns(uint256){ 
         return block.timestamp;
-    }
+    } 
 
       
 }

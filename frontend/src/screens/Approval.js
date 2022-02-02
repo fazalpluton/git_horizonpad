@@ -51,6 +51,7 @@ function Approval(props){
             let _value = await ethers.utils.parseUnits( ammount , dec )
             let approve = await ZPadContract.approve(factory_addr, _value)
             let approveTx = await approve.wait()
+            let check = await ZPadContract.allowance(account, factory_addr)
             
         }catch(e){
         }
