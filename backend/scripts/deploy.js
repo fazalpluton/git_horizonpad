@@ -27,10 +27,13 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
+    //zpad deploy // use zpad address
+  // ZPad = await ethers.getContractFactory("ZPad");
+  // zpad = await ZPad.deploy();
+  // await zpad.deployed();
 
-  ZPad = await ethers.getContractFactory("ZPad");
-  zpad = await ZPad.deploy();
-  await zpad.deployed();
+  // use zpad address
+  zpad_address = "0xFeFBBeEBBeEF18E3E4A2909F2B2729cA2fC61347" // put zpad address here <-
 
   RewardToken = await ethers.getContractFactory("RewardToken");
   rewardToken = await RewardToken.deploy();
@@ -53,7 +56,7 @@ async function main() {
   await factory.deployed();
 
   Staking = await ethers.getContractFactory("Staking");
-  staking = await Staking.deploy(zpad.address,rewardToken.address,10000000);
+  staking = await Staking.deploy(zpad_address,rewardToken.address,10000000); // number -> baserate reward per block
   await staking.deployed();
 
   CrowdSale = await ethers.getContractFactory("CrowdSale");
@@ -72,7 +75,7 @@ async function main() {
   await tx.wait()
 
   
-  console.log("ZPad deployed to:", zpad.address);
+  console.log("ZPad deployed to:", zpad_address);
   console.log("staking deployed to:", staking.address);
   console.log("RewardToken deployed to:", rewardToken.address);
   console.log("TokenForSale deployed to:", tokenForSale.address);
@@ -82,7 +85,7 @@ async function main() {
   
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(zpad, staking,rewardToken ,tokenForSale,ticketConsumer,factory);
+  saveFrontendFiles(zpad_address, staking,rewardToken ,tokenForSale,ticketConsumer,factory);
 }
 //,nftPreSale,nftPubSale,nft
 
@@ -94,13 +97,13 @@ function saveFrontendFiles(zpad, staking ,rewardToken ,tokenForSale,ticketConsum
     fs.mkdirSync(contractsDir);
   }
   let config = `
- export const zpad_addr = "${zpad.address}"
+ export const zpad_addr = "${zpad_address}"
  export const staking_addr = "${staking.address}"
  export const rewardToken_addr = "${rewardToken.address}"
  export const tokenForSale_addr = "${tokenForSale.address}"
  export const ticketConsumer_addr = "${ticketConsumer.address}"
  export const factory_addr = "${factory.address}"
- export const busd_addr = "0xE2aD269bD111FF893BE307A4c6DAA01662aCb352"
+ export const busd_addr = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
 `
 
   let data = JSON.stringify(config)
