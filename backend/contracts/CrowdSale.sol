@@ -101,7 +101,8 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
         wallet = _wallet;
         token_Owner = _tokenOwner;
         total_amount = _totalAmount;
-        BUSD = IERC20(0xE2aD269bD111FF893BE307A4c6DAA01662aCb352);
+
+        BUSD = IERC20(0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56);
         //0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56
         setTicketConsumer(_ticketConsumer);
     }

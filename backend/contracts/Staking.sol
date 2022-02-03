@@ -82,7 +82,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         stakingToken = IERC20(_token);
         rewardsToken = RewardToken(_rewardToken);
         baseRatePerBlock = _baseRatePerBlock;
-        
+        _ether = 10**4;
     }
 
     modifier onlyConsumer() {

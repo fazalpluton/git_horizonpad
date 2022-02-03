@@ -19,6 +19,7 @@ import {staking_addr, zpad_addr, rewardToken_addr} from "../contract/addresses"
 import Web3Modal from 'web3modal'
 import { useWeb3React } from "@web3-react/core";
 import detectEthereumProvider from '@metamask/detect-provider'
+import { formatUnits } from "ethers/lib/utils";
 
 
 
@@ -45,12 +46,15 @@ function Stacking(props){
     const [totalToken, setTotalToken] = useState()
     const [totalbalance, setTotalBalance] = useState(0)
     const [stakersNo, setStakersNo] = useState(0)
-    const [userApy, setUserApy] = useState("40%")
+    const [userApy, setUserApy] = useState("105%")
     const [userReward, setUserReward] = useState(0)
     const [userUnstakedValue, setUserUnstakedValue] = useState(0)
     const [authorization, setAuthorization] = useState("")
     const [Confirmation, setConfirmation] = useState("")
     const [confirmed, setConfirmed] = useState("")
+    const [ethAddress, setEthAddress] = useState("0")
+    const [check, setCheck] = useState(false)
+    console.log("check", check)
 
 
     const [show, setShow] = useState(false);
@@ -83,6 +87,14 @@ function Stacking(props){
       };
 
 
+      const getEther = async () => {
+        const web3Modal = new Web3Modal();
+        const connection = await web3Modal.connect();
+        const provider = new ethers.providers.Web3Provider(connection);
+        let balance = await provider.getBalance(account)
+        setEthAddress(ethers.utils.formatUnits(balance,8))
+        console.log("Provider", balance.toString())
+      }
 
     //   const loadSigner = async () => {
     //     try {
@@ -314,7 +326,7 @@ function Stacking(props){
                 console.log(e)
             }
         } 
-        calcPendingReward()
+        // calcPendingReward()
 
 
 
@@ -423,6 +435,7 @@ function Stacking(props){
                 if (account) {
                     try {
                         // loadTotalStake()
+                        getEther()
                         Event()
                         totalBalance()
                         getUnstakedValue()
@@ -561,7 +574,7 @@ function Stacking(props){
                                 }
                                 setTokenError("Token added!")
                             })
-                            }}  className="btn-custom primary-btn mt-2">Reward
+                            }}  className="btn-custom primary-btn mt-2">Import Reward
                         </button>
 
                         </Col>
@@ -618,9 +631,14 @@ function Stacking(props){
                                     Max
                                 </Button>
                                 </Form.Group>
-                                <button onClick={Staking} type="submit" className="btn-custom secondary-btn">
+                                {check == false ? (<button onClick={Staking} type="submit" disabled className="btn-custom secondary-btn">
                                     Stake
-                                </button>
+                                </button>) : (<button onClick={Staking} type="submit" className="btn-custom secondary-btn">
+                                    Stake
+                                </button>)}
+                                {/* <button onClick={Staking} type="submit" className="btn-custom secondary-btn">
+                                    Stake
+                                </button> */}
                             </Form>) : null}
 
                             {isType == "unstaking" ? (<Form className="text-center mt-3">
@@ -821,7 +839,23 @@ function Stacking(props){
 
                         <div className="conditions">
 
-                            <span className="conditions-met">
+                            {account ? (
+                                <div>
+                                    <span className="conditions-met">
+                                <h4>Connected with MetaMask</h4>
+                                <span className="tick-enable">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+                            </span>
+
+                            <p>If not connected, click
+                                the "Connect Wallet" 
+                                button in the top right
+                                corner
+                            </p>
+                                </div>
+                            ) : (<div>
+                                <span className="conditions-met">
                                 <h4>Connected with MetaMask</h4>
                                 <span className="tick-enable">
                                     {/* <i class="fa-solid fa-check"></i> */}
@@ -833,61 +867,94 @@ function Stacking(props){
                                 button in the top right
                                 corner
                             </p>
+                            </div>)}
 
                         </div>
 
                         <div className="conditions">
 
+                           {totalbalance > 0 ? (<div>
+                            <span className="conditions-met">
+                                <h4>ZPAD Available to Deposit</h4>
+                                <span className="tick-enable">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+                            </span>
+
+                            <p>
+                                {totalbalance}
+                            </p>
+                           </div>) : (<div>
                             <span className="conditions-met">
                                 <h4>ZPAD Available to Deposit</h4>
                                 <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
                             </span>
 
-                            <p>If not connected, click
-                                the "Connect Wallet" 
-                                button in the top right
-                                corner
+                            <p>
+                                {totalbalance}
                             </p>
+                           </div>)}
 
                         </div>
 
                         <div className="conditions">
 
-                            <span className="conditions-met">
-                                <h4>BNB Available in
-Wallet</h4>
+                            {ethAddress > 0 ? (<div>
+                                <span className="conditions-met">
+                                <h4>Ether Available in
+                                Wallet</h4>
+                                <span className="tick-enable">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+                            </span>
+
+                            <p>
+                                {ethAddress}
+                            </p>
+                            </div>) : (<div>
+                                <span className="conditions-met">
+                                <h4>Ether Available in
+                                Wallet</h4>
                                 <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
                             </span>
 
-                            <p>If not connected, click
-                                the "Connect Wallet" 
-                                button in the top right
-                                corner
+                            <p>
+                                {ethAddress}
                             </p>
+                            </div>)}
 
                         </div>
 
                         <div className="conditions">
 
-                            <span className="conditions-met">
+                            {totalbalance > 30000 ? (<div>
+                                <span className="conditions-met">
                                 <h4>Eligibility to 
-Stake</h4>
+                                Stake</h4>
+                                <span className="tick-enable">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+                            </span>
+
+                            <p>You cannot stake if you have an active Zpad balance less than 30,000
+                            </p>
+                            </div>) : (<div>
+                                <span className="conditions-met">
+                                <h4>Eligibility to 
+                                Stake</h4>
                                 <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
                             </span>
 
-                            <p>If not connected, click
-                                the "Connect Wallet" 
-                                button in the top right
-                                corner
+                            <p>You cannot stake if you have an active Zpad balance less than 30,000
                             </p>
-
+                            </div>)}
                         </div>
 
                     </div>
 
                     <Form>
                         <div class="custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked" />
+                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked" onChange={(e) => setCheck(e.target.checked)} />
                             <label class="custom-control-label" for="defaultUnchecked">I have read the Terms and Conditions</label>
                         </div>
                     </Form>
@@ -1227,8 +1294,3 @@ your ZPAD</h4>
 
 export default Stacking;
 
-// function Stacking(props){
-//     return(<div>jfhjfhj</div>)
-// }
-
-// export default Stacking;
