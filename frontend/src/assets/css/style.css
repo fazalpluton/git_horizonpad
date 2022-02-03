@@ -60,6 +60,13 @@ body{
     justify-content: center;
     align-items: center;
 }
+.home-section-iframe{
+    width: 1065px;
+    height: 600px;
+    border-radius: 30px;
+    margin: 2rem auto auto auto !important;
+    display: flex;
+}
 .banner-background{
     position: absolute;
     z-index: -1;

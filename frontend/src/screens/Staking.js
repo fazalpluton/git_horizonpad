@@ -823,7 +823,9 @@ function Stacking(props){
 
                             <span className="conditions-met">
                                 <h4>Connected with MetaMask</h4>
-                                <span className="tick-enable"><i class="fa-solid fa-check"></i></span>
+                                <span className="tick-enable">
+                                    {/* <i class="fa-solid fa-check"></i> */}
+                                </span>
                             </span>
 
                             <p>If not connected, click
@@ -837,7 +839,7 @@ function Stacking(props){
                         <div className="conditions">
 
                             <span className="conditions-met">
-                                <h4>Connected with MetaMask</h4>
+                                <h4>ZPAD Available to Deposit</h4>
                                 <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
                             </span>
 
@@ -852,7 +854,8 @@ function Stacking(props){
                         <div className="conditions">
 
                             <span className="conditions-met">
-                                <h4>Connected with MetaMask</h4>
+                                <h4>BNB Available in
+Wallet</h4>
                                 <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
                             </span>
 
@@ -867,7 +870,8 @@ function Stacking(props){
                         <div className="conditions">
 
                             <span className="conditions-met">
-                                <h4>Connected with MetaMask</h4>
+                                <h4>Eligibility to 
+Stake</h4>
                                 <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
                             </span>
 
@@ -1125,7 +1129,9 @@ function Stacking(props){
 
                                     <span className="conditions-met">
                                         <h4>Connected with MetaMask</h4>
-                                        <span className="tick-enable"><i class="fa-solid fa-check"></i></span>
+                                        <span className="tick-enable">
+                                            {/* <i class="fa-solid fa-check"></i> */}
+                                            </span>
                                     </span>
 
                                     <p>If not connected, click
@@ -1139,7 +1145,26 @@ function Stacking(props){
                                 <div className="conditions">
 
                                     <span className="conditions-met">
-                                        <h4>Connected with MetaMask</h4>
+                                        <h4>7 Days Waiting
+Perion Elapsed</h4>
+                                        <span className="tick-enable tick-disble">
+                                            <i class="fa-solid fa-check"></i>
+                                            </span>
+                                    </span>
+
+                                    <p>If not connected, click
+                                        the "Connect Wallet" 
+                                        button in the top right
+                                        corner
+                                    </p>
+
+                                </div>
+
+                                <div className="conditions">
+
+                                    <span className="conditions-met">
+                                        <h4>BNB Available in
+Wallet</h4>
                                         <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
                                     </span>
 
@@ -1154,22 +1179,8 @@ function Stacking(props){
                                 <div className="conditions">
 
                                     <span className="conditions-met">
-                                        <h4>Connected with MetaMask</h4>
-                                        <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
-                                    </span>
-
-                                    <p>If not connected, click
-                                        the "Connect Wallet" 
-                                        button in the top right
-                                        corner
-                                    </p>
-
-                                </div>
-
-                                <div className="conditions">
-
-                                    <span className="conditions-met">
-                                        <h4>Connected with MetaMask</h4>
+                                        <h4>You have Unstaked
+your ZPAD</h4>
                                         <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
                                     </span>
 

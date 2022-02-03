@@ -18,11 +18,12 @@ function Home(props){
                 <Container>
                     <Row className="align-items-center">
                         <Col lg={12}>
-                        <div className="banner-video">
+                        {/* <div className="banner-video">
                
                         <video src={require('../assets/images/video.mp4').default} controls>
                         </video>
-                        </div>
+                        </div> */}
+                        <iframe className="home-section-iframe" src="https://www.youtube.com/embed/nJw2W1ZVqas?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </Col>
                         <Col lg={6} sm={12} md={6}>
                             <h1 className="logo-text">
