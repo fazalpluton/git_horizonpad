@@ -45,7 +45,7 @@ function Stacking(props){
     const [totalToken, setTotalToken] = useState()
     const [totalbalance, setTotalBalance] = useState(0)
     const [stakersNo, setStakersNo] = useState(0)
-    const [userApy, setUserApy] = useState("40%")
+    const [userApy, setUserApy] = useState("105%")
     const [userReward, setUserReward] = useState(0)
     const [userUnstakedValue, setUserUnstakedValue] = useState(0)
     const [authorization, setAuthorization] = useState("")
@@ -314,7 +314,7 @@ function Stacking(props){
                 console.log(e)
             }
         } 
-        calcPendingReward()
+        // calcPendingReward()
 
 
 
@@ -561,7 +561,7 @@ function Stacking(props){
                                 }
                                 setTokenError("Token added!")
                             })
-                            }}  className="btn-custom primary-btn mt-2">Reward
+                            }}  className="btn-custom primary-btn mt-2">Import Reward
                         </button>
 
                         </Col>
@@ -1227,8 +1227,3 @@ your ZPAD</h4>
 
 export default Stacking;
 
-// function Stacking(props){
-//     return(<div>jfhjfhj</div>)
-// }
-
-// export default Stacking;
