@@ -30,6 +30,7 @@ import { connectWallet } from "./utils/connectWallet";
 import { useWeb3React } from "@web3-react/core";
 import {injectedConnector} from "./utils/connectors"
 import Collect from './screens/Collect';
+import Comming from './screens/Comming';
 
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
         <Route path="/project-detail/:id" element={<ProjectDetails header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/project/approval"  element={ <Approval header={<DashboardHeader/>} footer={<Footer/>}/>} />
         <Route path="/admin/collect"  element={ <Collect header={<DashboardHeader/>} footer={<Footer/>}/>} />
+        <Route path="/comming-soon"  element={ <Comming header={<DashboardHeader/>} footer={<Footer/>}/>} />
         {/* admin routes  */}
         <Route path="/admin/login" element={<Login header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/admin/projects" element={<Projects header={<DashboardHeader/>} footer={<Footer/>}/>}  />
