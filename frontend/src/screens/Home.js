@@ -64,7 +64,7 @@ function Home(props){
             </Container>
         </div>
         </div>
-        <div className="pad-section" id="how_it_work">
+        <div className="pad-section" >
             <Container>
             <h2 className="text-center h2">What is for the PAD?</h2>
             <Row>
@@ -92,7 +92,30 @@ function Home(props){
             </Row>
             </Container>
         </div>
+        <div className="how-its-work" id="how_it_work">
+            <Container>
+            <h2 className="text-center h2">How it works</h2>
+            <Row>
+   
+                <Col lg={6} md={6} sm={12}>
+                <p className="how-it-text">
+                Horizonpad is the first of it's kind that allow ideas to come into life! Crypto Investors will now turn to company shareholders/stakeholders with full voting rights based on stages.
+                </p>
+                <p className="how-it-text">
+                Staking ZPAD will give you chance to participate in the IDO PROJECTS and as well as a shareholder in the HCI PROJECTS!
+                </p>
+                <p className="how-it-text">
+                When you stake ZPAD you will enjoy the APY of over 105% receiving the reward token of ZPAD ( rZPAD) it will first be tradable on Pancakeswap
+                </p>
+                </Col>
+                <Col lg={6} md={6} sm={12}>
+                <img src={require('../assets/images/how-work.png').default} className="how-it-work-img"/>
+                </Col>
+            </Row>
+            </Container>
+        </div>
         <Container>
+            
         <div className="non-crypto-section" id="htc">
             <h2 className="h2">The Non-Crypto Project</h2>
             <Row className="non-crypto-inner">

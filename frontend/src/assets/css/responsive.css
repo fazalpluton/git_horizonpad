@@ -3,6 +3,9 @@
     .feature-img{
         width: 100%;
     }
+    .how-it-work-img{
+        width: 100%;
+    }
     .feature-ul li a{
         width: 100%;
     }
@@ -29,13 +32,20 @@
     }
     .home-section-iframe{
         height: 400px;
+        width: 100%;
     }
 }
 @media (max-width: 767px){
     .banner-video-section video{
         width: 100%;
     }
-    
+    .h2{
+        font-size: 2.1rem !important;
+    }
+    .home-section-iframe {
+        height: 225px;
+        width: 100%;
+    }
     .logo-text{
         margin-top: 1rem !important;
     }
@@ -65,11 +75,24 @@
         margin-bottom: 1rem;
     }
     .feature{
-        margin-top: 22rem;
+        margin-top: 7rem;
     }
     .tier-table-section th{
         padding: 0rem !important;
         font-size: 18px;
+    }
+    .non-crypto-text{
+        font-size: 1.1rem;
+    }
+    .how-it-text {
+        font-size: 1.1rem;
+    }
+    .banner-p {
+        font-size: 1.2rem;
+    }
+    .zpad-tier-text {
+        text-align: left;
+        font-size: 15px;
     }
 
 .ido-box{
@@ -242,6 +265,9 @@ margin-bottom: 10px !important;
 @media (max-width:991px) and (min-width:768px) {
 
     .feature-img {
+        width: 100%;
+    }
+    .how-it-work-img{
         width: 100%;
     }
 
