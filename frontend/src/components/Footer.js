@@ -11,12 +11,13 @@ function Footer(){
                     <h2 className="footer-heading">Horizonpad</h2>
                     <div className="footer-social-icon">
                     
-                    <a href=""><i class="fa-brands fa-twitter"></i></a>
-                    <a href=""><i class="fa-brands fa-telegram"></i></a>
-                    <a href=""><i class="fa-brands fa-linkedin-in"></i></a>
-                    <a href=""><i class="fa-brands fa-youtube"></i></a>
-                    <a href=""><i class="fa-brands fa-medium"></i></a>
-                    <a href=""><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://twitter.com/horizonpad" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="https://t.me/horizonpad" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="https://www.linkedin.com/company/horizonpad" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="https://www.youtube.com/channel/UCswpDaG-lgDtO7MlyQgFM_w" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://horizonpad01.medium.com/" target="_blank"><i class="fa-brands fa-medium"></i></a>
+                    <a href="https://discord.gg/y342zJnB" target="_blank"><i class="fa-brands fa-discord"></i></a>
+                    <a href="https://github.com/horizonpad" target="_blank"><i class="fa-brands fa-github"></i></a>
 
                     </div>
                     <p className="mt-3">2020 Horizonpad All Rights Reserved</p>
