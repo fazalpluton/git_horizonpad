@@ -173,6 +173,9 @@ text-decoration: none;
 .feature-img{
     width: 400px;
 }
+.how-it-work-img{
+    width: 500px;
+}
 .pad-section{
     background-color: var(--secondary);
     padding: 5rem 0;
@@ -1041,4 +1044,13 @@ input::-webkit-inner-spin-button {
 .loading-modal .modal-content{
     width: 200px !important;
     margin: auto;
+}
+.how-it-text{
+    font-size: 25px;
+}
+.how-its-work{
+    padding-top: 5rem;
+}
+.how-its-work .h2{
+    margin-bottom: 3rem;
 }
