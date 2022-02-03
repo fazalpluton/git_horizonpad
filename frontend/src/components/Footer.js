@@ -28,16 +28,16 @@ function Footer(){
                     <h2>About Us</h2>
                     <ul className="footer-ul">
                         <li>
-                            <Link to={'/'}>About</Link>
+                            <Link to={'/comming-soon'}>About</Link>
                         </li>
                         <li>
-                            <Link to={'/'}>Careers</Link>
+                            <Link to={'/comming-soon'}>Careers</Link>
                         </li>
                         <li>
-                            <Link to={'/'}>Blog</Link>
+                            <Link to={'/comming-soon'}>Blog</Link>
                         </li>
                         <li>
-                            <Link to={'/'}>Legal & Privacy</Link>
+                            <Link to={'/comming-soon'}>Legal & Privacy</Link>
                         </li>
                        
                     </ul>
@@ -50,13 +50,13 @@ function Footer(){
                     <h2>Services</h2>
                     <ul className="footer-ul">
                         <li>
-                            <Link to={'/'} target="_blank">Apply for IDO</Link>
+                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdd_zqTgIlJTxXGX24NmmAPLoWgqUuSOw_JKK0V_xA5CqfNmA/viewform?usp=pp_url" target="_blank">Apply for IDO</a>
                         </li>
                         <li>
                             <Link to={'/nft-marketplace'}>NFT Market Place</Link>
                         </li>
                         <li>
-                            <Link to={'/'}>Non-Crypto Projects</Link>
+                            <Link to={'/comming-soon'}>Non-Crypto Projects</Link>
                         </li>
                         <li>
                             <Link to={'/burgeon-projects'}>Burgeon Project</Link>
@@ -75,16 +75,16 @@ function Footer(){
                     <h2>Learn</h2>
                     <ul className="footer-ul">
                         <li>
-                            <Link to={'/'}>What is Cryptocurrency?</Link>
+                            <Link to={'/comming-soon'}>What is Cryptocurrency?</Link>
                         </li>
                         <li>
-                            <Link to={'/'}>Crypto Basics</Link>
+                            <Link to={'/comming-soon'}>Crypto Basics</Link>
                         </li>
                         <li>
                             <Link to={'/'}>Tips and Tutorials</Link>
                         </li>
                         <li>
-                            <Link to={'/'}>Market Update</Link>
+                            <Link to={'/comming-soon'}>Market Update</Link>
                         </li>
                        
                     </ul>
