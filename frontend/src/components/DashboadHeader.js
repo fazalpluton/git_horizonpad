@@ -11,8 +11,6 @@ import HZPAD from "../assets/images/hzpad.png"
 import { ethers, BigNumber } from 'ethers'
 import detectEthereumProvider from '@metamask/detect-provider';
 
-
-
 function DashboardHeader(props){
 
   const {
@@ -71,8 +69,6 @@ function DashboardHeader(props){
 
   });
 
-  
-
   },[]);
 
   useEffect(() => {
@@ -115,8 +111,48 @@ function DashboardHeader(props){
   }
 
   console.log("address", localStorage.getItem('status'))
+  let chain = chainId
+  console.log("chain", chain)
 
+  // const loadProvider = async () => {
+  //   const web3Modal = new Web3Modal({
+  //     // network: chainId, // optional
+  //     cacheProvider: true, // optional
+  //     providerOptions: {
+  //       metamask: {
+  //         package: "metamask",
+  //         options: {
+  //           chainId: chainId,
+  //           infuraId: '4774218cabd3475da6e9fe41ab23f911',
+  //         },
+  //       },
+  //     },
+  //   });
 
+  //   const connection = await web3Modal.connectTo('metamask')
+  //   console.log("connection", connection)
+  //   return new ethers.providers.Web3Provider(connection)
+  // };
+
+  // loadProvider()
+
+ 
+      
+    
+
+    //   async function onConnect() {
+    //     try {
+    //       let provider = await web3Modal.connect();
+    //       // const hello = new walletconnect()
+    //       console.log("provider", provider)
+    //     } catch (e) {
+    //         console.log(e)
+    //         return;
+    //   }
+    // }
+
+      
+    
 
     return (
         <>
@@ -167,6 +203,7 @@ function DashboardHeader(props){
               <button type="button" className="btn-custom secondary-btn">{shortAddress}</button>
               </div>)
              : (<div><button onClick={() => {
+               
               connectWallet(activate, props.setErrorMessage);
               setAddress("1")
             }} type="button" className="btn-custom secondary-btn">Connect Wallet</button>

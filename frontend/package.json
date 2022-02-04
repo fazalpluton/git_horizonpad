@@ -1,7 +1,8 @@
 {
-  "name": "Horizonpad",
-  "version": "0.1.0",
-  "private": true,
+  "name": "hzpad",
+  "version": "1.0.0",
+  "description": "Tutorial to implement Wallet Connection using Ethers in React Application",
+  "main": "index.js",
   "dependencies": {
     "@metamask/detect-provider": "^1.2.0",
     "@testing-library/jest-dom": "^5.11.4",
@@ -12,8 +13,10 @@
     "@web3-react/injected-connector": "^6.0.7",
     "axios": "^0.25.0",
     "bootstrap": "^5.1.3",
+    "core-js": "^3.16.1",
     "dotenv": "^14.3.2",
     "ethers": "^5.5.2",
+    "json-rpc-engine": "^6.1.0",
     "mdbreact": "^5.2.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.1",
@@ -25,28 +28,10 @@
     "web-vitals": "^1.0.1",
     "web3modal": "^1.9.5"
   },
+  "devDependencies": {},
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "author": "",
+  "license": "ISC"
 }
