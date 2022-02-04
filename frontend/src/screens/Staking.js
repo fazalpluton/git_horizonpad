@@ -54,6 +54,7 @@ function Stacking(props){
     const [confirmed, setConfirmed] = useState("")
     const [ethAddress, setEthAddress] = useState("0")
     const [check, setCheck] = useState(false)
+    const [userToken, setUserToken] = useState("0")
     console.log("check", check)
 
 
@@ -209,8 +210,26 @@ function Stacking(props){
               let decimalsUnit = await ZPadContract.decimals();
               let token = await ethers.utils.formatUnits(balanceOf.toString(),decimalsUnit)
               
-            //   console.log("token", token)
+              console.log("token", token)
               setStakevalue(parseInt(token).toString())
+              // console.log("balance>>",  token)
+            }
+            catch(error){
+                console.log(error)
+            }
+             
+          }
+
+          const userBalance = async () => {
+            try{
+              let signer = await loadProvider()
+              let ZPadContract = new ethers.Contract(zpad_addr, ZPadAbi, signer)
+              let balanceOf = await ZPadContract.balanceOf(account)
+              let decimalsUnit = await ZPadContract.decimals();
+              let token = await ethers.utils.formatUnits(balanceOf.toString(),decimalsUnit)
+              
+              console.log("token", token)
+              setUserToken(parseInt(token).toString())
               // console.log("balance>>",  token)
             }
             catch(error){
@@ -394,6 +413,7 @@ function Stacking(props){
             catch(e){
                 console.log(e)
             }
+            console.log(">>>",stakersNo)
            
             // setStakersNo(staker.toString())
             // if(stakersNo == null || 0) {
@@ -442,6 +462,7 @@ function Stacking(props){
                         loadTotalStake()
                         Stakers()
                         Tiers()
+                        userBalance()
                         // Stakers()
     
                     } catch (error) {
@@ -520,7 +541,11 @@ function Stacking(props){
                             <div className="ido-box ido-small" style={{background: "#39065E"}}>
 
                                 <p className="f-bold text-center">Number Of Stackers</p>
+                                {stakersNo > 0 ? (
                                 <h4 className="soon text-center mt-2">{stakersNo}</h4>
+                            ) : (
+                                <h4 className="soon text-center mt-2">{("NA")}</h4>
+                            )}
 
                             </div>
 
@@ -531,7 +556,7 @@ function Stacking(props){
                         <div className="ido-box ido-small" style={{background: "#39065E"}}>
 
                             <p className="f-bold text-center">Total Zpad Stacked</p>
-                            {totalToken > 1 ? (
+                            {totalToken > 0 ? (
                                 <h4 className="soon text-center mt-2">{Math.floor(totalToken)}</h4>
                             ) : (
                                 <h4 className="soon text-center mt-2">{("NA")}</h4>
@@ -873,7 +898,7 @@ function Stacking(props){
 
                         <div className="conditions">
 
-                           {totalbalance > 0 ? (<div>
+                           {userToken > 0 ? (<div>
                             <span className="conditions-met">
                                 <h4>ZPAD Available to Deposit</h4>
                                 <span className="tick-enable">
@@ -882,7 +907,7 @@ function Stacking(props){
                             </span>
 
                             <p>
-                                {totalbalance}
+                                {userToken}
                             </p>
                            </div>) : (<div>
                             <span className="conditions-met">
@@ -891,7 +916,7 @@ function Stacking(props){
                             </span>
 
                             <p>
-                                {totalbalance}
+                                {userToken}
                             </p>
                            </div>)}
 
@@ -927,7 +952,7 @@ function Stacking(props){
 
                         <div className="conditions">
 
-                            {totalbalance > 30000 ? (<div>
+                            {userToken > 30000 ? (<div>
                                 <span className="conditions-met">
                                 <h4>Eligibility to 
                                 Stake</h4>
@@ -1213,7 +1238,7 @@ function Stacking(props){
 
                                     <span className="conditions-met">
                                         <h4>7 Days Waiting
-Perion Elapsed</h4>
+                                        Perion Elapsed</h4>
                                         <span className="tick-enable tick-disble">
                                             <i class="fa-solid fa-check"></i>
                                             </span>
@@ -1231,7 +1256,7 @@ Perion Elapsed</h4>
 
                                     <span className="conditions-met">
                                         <h4>BNB Available in
-Wallet</h4>
+                                        Wallet</h4>
                                         <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
                                     </span>
 
@@ -1247,7 +1272,7 @@ Wallet</h4>
 
                                     <span className="conditions-met">
                                         <h4>You have Unstaked
-your ZPAD</h4>
+                                        your ZPAD</h4>
                                         <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
                                     </span>
 
