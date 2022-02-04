@@ -22,7 +22,7 @@ function Footer(){
                     </div>
                     <p className="mt-3">2020 Horizonpad All Rights Reserved</p>
                 </Col>
-                <Col lg={3} md={6} sm={12}>
+                <Col lg={3} md={6} sm={12} className="col-6">
                     <div className="">
                     <div>
                     <h2>About Us</h2>
@@ -44,7 +44,7 @@ function Footer(){
                     </div>
                     </div>
                 </Col>
-                <Col lg={3} md={6} sm={12}>
+                <Col lg={3} md={6} sm={12} className="col-6">
                     <div className="">
                     <div>
                     <h2>Services</h2>

@@ -42,6 +42,13 @@
     .h2{
         font-size: 2.1rem !important;
     }
+    .footer h2{
+        font-size: 30px;
+    }
+    .footer-ul a{
+        font-size: 18px !important;
+        line-height: 30px;
+    }
     .home-section-iframe {
         height: 225px;
         width: 100%;
@@ -59,6 +66,11 @@
         margin-top: 20px;
         
     }
+    .apply-btn-section .btn-custom {
+        padding: 0.5rem 2rem !important;
+        width: 278px;
+        margin: auto;
+    }
 
     .apply-btn-section {
         display: flex;
@@ -75,11 +87,36 @@
         margin-bottom: 1rem;
     }
     .feature{
-        margin-top: 7rem;
+        margin-top: 1rem;
     }
+    .feature-section{
+        padding-top: 1rem !important;
+    }
+    .feature-ul li a {
+        width: 276px;
+        font-size: 23px;
+        margin: auto;
+    }
+    .navbar-toggler {
+        font-size: 1rem !important;
+    }
+    .h2{
+        line-height: 45px !important;
+    }
+    .ul-between-flex h5, .ul-between-footer h5 {
+        font-size: 25px !important;
+    }
+    .ul-box-between {
+        padding: 2rem 1rem !important;
+    }
+    .ul-between-footer {
+        margin-top: 3.5rem !important;
+    }
+        
     .tier-table-section th{
-        padding: 0rem !important;
+        padding: 0.5rem !important;
         font-size: 18px;
+        white-space: nowrap;
     }
     .non-crypto-text{
         font-size: 1.1rem;
@@ -129,15 +166,23 @@ height: auto !important;
     flex-wrap: wrap;
 }
 .box-ul-column .ul-box {
-    width: 166px;
+    width: 157px !important;
+    height: 120px !important;
+}
+.box-ul-flex .ul-box:not(:last-child) {
+    margin-right: 0rem;
 }
 .box-ul-flex {
     flex-wrap: wrap;
 }
 .box-ul-flex .ul-box {
-    width: 166px !important;
-    margin: 1rem auto; 
+    width: 157px !important;
+    height: 120px !important;
+    margin: 1rem auto !important; 
 
+}
+.z-pad-section {
+    padding-top: 4rem !important;
 }
 
 .staking-dropdown{
@@ -170,6 +215,7 @@ margin-bottom: 10px !important;
 
     margin-right: 0 !important;
     margin-bottom: 30px;
+    width: 100%;
 
 }
 
