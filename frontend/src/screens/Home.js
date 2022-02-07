@@ -1,8 +1,9 @@
 import { Container, Row,Col, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import BannerImage from "../assets/images/banner-main.png"
-import FirstImage from "../assets/images/first-section.png"
-import SecondImage from "../assets/images/second-section.png"
+import BannerImage from "../assets/images/banner-new.png"
+import FirstImage from "../assets/images/first-section-new.png"
+import SecondImage from "../assets/images/none-crypto.png"
+import WorkImage from "../assets/images/how-it-works.png"
 import NotoIcon from "../assets/images/noto_coin.png";
 import SecondBackground from "../assets/images/second-background.png";
 import ThirdBackground from "../assets/images/background-3.png";
@@ -109,7 +110,7 @@ function Home(props){
                 </p>
                 </Col>
                 <Col lg={6} md={6} sm={12}>
-                <img src={require('../assets/images/how-work.png').default} className="how-it-work-img"/>
+                <img src={require('../assets/images/how-it-works.png').default} className="how-it-work-img"/>
                 </Col>
             </Row>
             </Container>
