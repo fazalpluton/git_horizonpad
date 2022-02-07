@@ -10,8 +10,8 @@ import VectorLogo from "../assets/images/vector-logo.png"
 import HZPAD from "../assets/images/hzpad.png"
 import { ethers, BigNumber } from 'ethers'
 import detectEthereumProvider from '@metamask/detect-provider';
-import Web3Connect from "web3connect";
-import WalletConnectProvider from "@walletconnect/web3-provider";
+// import Web3Connect from "web3connect";
+// import WalletConnectProvider from "@walletconnect/web3-provider";
 
 function DashboardHeader(props){
 
@@ -116,25 +116,25 @@ function DashboardHeader(props){
   let chain = chainId
   console.log("chain", chain)
 
-  const loadProvider = async () => {
-    const web3Modal = new Web3Modal({
-      // network: chainId, // optional
-      cacheProvider: true, // optional
-      providerOptions: {
-        walletconnect: {
-          package: WalletConnectProvider,
-          options: {
-            // chainId: chainId,
-            infuraId: '4774218cabd3475da6e9fe41ab23f911',
-          },
-        },
-      },
-    });
+  // const loadProvider = async () => {
+  //   const web3Modal = new Web3Modal({
+  //     // network: chainId, // optional
+  //     cacheProvider: true, // optional
+  //     providerOptions: {
+  //       walletconnect: {
+  //         package: WalletConnectProvider,
+  //         options: {
+  //           // chainId: chainId,
+  //           infuraId: '4774218cabd3475da6e9fe41ab23f911',
+  //         },
+  //       },
+  //     },
+  //   });
 
-    const connection = await web3Modal.connectTo('walletconnect')
-    console.log("connection", connection)
-    return new ethers.providers.Web3Provider(connection)
-  };
+  //   const connection = await web3Modal.connectTo('walletconnect')
+  //   console.log("connection", connection)
+  //   return new ethers.providers.Web3Provider(connection)
+  // };
 
   
 

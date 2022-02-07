@@ -52,11 +52,11 @@ async function main() {
   await ticketConsumer.deployed();
 
   Factory = await ethers.getContractFactory("Factory");
-  factory = await Factory.deploy(ticketConsumer.address);
+  factory = await Factory.deploy(ticketConsumer.address, busd.address);
   await factory.deployed();
 
   Staking = await ethers.getContractFactory("Staking");
-  staking = await Staking.deploy(zpad_address,rewardToken.address,10000000); // number -> baserate reward per block
+  staking = await Staking.deploy(zpad.address,rewardToken.address,10000000); // number -> baserate reward per block
   await staking.deployed();
 
   CrowdSale = await ethers.getContractFactory("CrowdSale");
@@ -85,11 +85,11 @@ async function main() {
   
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(TokenBUSD ,zpad, staking,rewardToken ,tokenForSale,ticketConsumer,factory);
+  saveFrontendFiles(busd ,zpad, staking,rewardToken ,tokenForSale,ticketConsumer,factory);
 }
 //,nftPreSale,nftPubSale,nft
 
-function saveFrontendFiles(zpad, staking ,rewardToken ,tokenForSale,ticketConsumer,factory) {
+function saveFrontendFiles(busd, zpad, staking ,rewardToken ,tokenForSale,ticketConsumer,factory) {
   const fs = require("fs");
   const contractsDir = "../frontend/src/contract";
 

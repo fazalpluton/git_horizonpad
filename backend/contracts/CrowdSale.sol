@@ -95,14 +95,14 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
 
     constructor(uint256 _salePrice,
                 address _token,address payable _wallet,
-                address _tokenOwner,uint256 _totalAmount ,address _ticketConsumer){
+                address _tokenOwner,uint256 _totalAmount ,address _ticketConsumer, address addrBusd){
         token_Price = _salePrice;
         token = IERC20(_token);
         wallet = _wallet;
         token_Owner = _tokenOwner;
         total_amount = _totalAmount;
 
-        BUSD = IERC20(0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56);
+        BUSD = IERC20(addrBusd);
         //0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56
         setTicketConsumer(_ticketConsumer);
     }

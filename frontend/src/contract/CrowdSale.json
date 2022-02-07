@@ -1,5 +1,5 @@
 [
-  "constructor(uint256,address,address,address,uint256,address)",
+  "constructor(uint256,address,address,address,uint256,address,address)",
   "event OwnershipTransferred(address indexed,address indexed)",
   "event TokensPurchased(address indexed,address indexed,uint256,uint256)",
   "function CUSTOM_SALE_ENDTIME() view returns (uint256)",

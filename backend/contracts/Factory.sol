@@ -16,7 +16,7 @@ contract Factory is IFactory, Ownable {
     using SafeERC20 for IERC20;
     
     address immutable ticketConsumer;
-    
+    address public addr_busd ; 
     address public ico_addr;
     address[] public idos;
     address[] private tokens;
@@ -37,8 +37,9 @@ contract Factory is IFactory, Ownable {
         return ido_exist[_ido];
     }
 
-    constructor(address _ticketConsumer){
+    constructor(address _ticketConsumer, address busd){
         ticketConsumer = _ticketConsumer;
+        addr_busd = busd;
     }
 
     
@@ -54,7 +55,7 @@ contract Factory is IFactory, Ownable {
         uint256 allowedFunds = IERC20(tokenForSale).allowance(_tokenOwner, address(this));
         require(allowedFunds>0,"please approve funds to startsale");
         CrowdSale ico;
-        ico = new CrowdSale(_price,tokenForSale,_wallet,_tokenOwner,allowedFunds,ticketConsumer); 
+        ico = new CrowdSale(_price,tokenForSale,_wallet,_tokenOwner,allowedFunds,ticketConsumer, addr_busd); 
         ico_addr = address(ico);
         ido_exist[ico_addr]=true;
         IERC20(tokenForSale).safeTransferFrom(_tokenOwner,ico_addr,allowedFunds);
