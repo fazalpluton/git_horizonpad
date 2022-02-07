@@ -8,6 +8,8 @@ const { json } = require("hardhat/internal/core/params/argumentTypes");
 
 // This is a script for deploying your contracts. You can adapt it to deploy
 // yours, or create new ones.
+zpad_address = "0xFeFBBeEBBeEF18E3E4A2909F2B2729cA2fC61347" // put zpad address here <-
+  busd_address = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
 async function main() {
   // This is just a convenience check
   // if (network.name === "hardhat") {
@@ -33,7 +35,7 @@ async function main() {
   // await zpad.deployed();
 
   // use zpad address
-  zpad_address = "0xFeFBBeEBBeEF18E3E4A2909F2B2729cA2fC61347" // put zpad address here <-
+  
 
   RewardToken = await ethers.getContractFactory("RewardToken");
   rewardToken = await RewardToken.deploy();
@@ -52,7 +54,7 @@ async function main() {
   await ticketConsumer.deployed();
 
   Factory = await ethers.getContractFactory("Factory");
-  factory = await Factory.deploy(ticketConsumer.address);
+  factory = await Factory.deploy(ticketConsumer.address, busd_address);
   await factory.deployed();
 
   Staking = await ethers.getContractFactory("Staking");
@@ -85,11 +87,11 @@ async function main() {
   
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(zpad_address, staking,rewardToken ,tokenForSale,ticketConsumer,factory);
+  saveFrontendFiles(busd_address,zpad_address, staking,rewardToken ,tokenForSale,ticketConsumer,factory);
 }
 //,nftPreSale,nftPubSale,nft
 
-function saveFrontendFiles(zpad, staking ,rewardToken ,tokenForSale,ticketConsumer,factory) {
+function saveFrontendFiles(busd_address,zpad, staking ,rewardToken ,tokenForSale,ticketConsumer,factory) {
   const fs = require("fs");
   const contractsDir = "../frontend/src/contract";
 
@@ -103,7 +105,7 @@ function saveFrontendFiles(zpad, staking ,rewardToken ,tokenForSale,ticketConsum
  export const tokenForSale_addr = "${tokenForSale.address}"
  export const ticketConsumer_addr = "${ticketConsumer.address}"
  export const factory_addr = "${factory.address}"
- export const busd_addr = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
+ export const busd_addr = "${busd_address}"
 `
 
   let data = JSON.stringify(config)

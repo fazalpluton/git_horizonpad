@@ -285,6 +285,8 @@ function Stacking(props){
             }
         }
 
+        console.log(unStakeValue)
+
         const unStaking = (event) => {
             unStake()
             event.preventDefault()
@@ -413,7 +415,7 @@ function Stacking(props){
             catch(e){
                 console.log(e)
             }
-            console.log(">>>",stakersNo)
+            console.log(">>>",account)
            
             // setStakersNo(staker.toString())
             // if(stakersNo == null || 0) {

@@ -1,6 +1,7 @@
 [
-  "constructor(address)",
+  "constructor(address,address)",
   "event OwnershipTransferred(address indexed,address indexed)",
+  "function addr_busd() view returns (address)",
   "function create_TokenSale(address,address,uint256,uint256,uint256,uint256,uint256,uint256,address)",
   "function getIdoExist(address) view returns (bool)",
   "function ico_addr() view returns (address)",
