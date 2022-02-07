@@ -285,6 +285,8 @@ function Stacking(props){
             }
         }
 
+        console.log(unStakeValue)
+
         const unStaking = (event) => {
             unStake()
             event.preventDefault()
