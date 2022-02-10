@@ -40,7 +40,6 @@ contract Factory is IFactory, Ownable {
     constructor(address _ticketConsumer, address busd){
         ticketConsumer = _ticketConsumer;
         addr_busd = busd;
-        _transferOwnership(0x455C6EA1511c91ff950da2A63Dbc3F69cceC6Bb7); // extra line
     }
 
     

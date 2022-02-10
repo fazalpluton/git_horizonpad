@@ -55,7 +55,7 @@ function Stacking(props){
     const [ethAddress, setEthAddress] = useState("0")
     const [check, setCheck] = useState(false)
     const [userToken, setUserToken] = useState("0")
-    console.log("check", check)
+   
 
 
     const [show, setShow] = useState(false);
@@ -94,7 +94,7 @@ function Stacking(props){
         const provider = new ethers.providers.Web3Provider(connection);
         let balance = await provider.getBalance(account)
         setEthAddress(ethers.utils.formatUnits(balance,8))
-        console.log("Provider", balance.toString())
+        
       }
 
     //   const loadSigner = async () => {
@@ -210,7 +210,7 @@ function Stacking(props){
               let decimalsUnit = await ZPadContract.decimals();
               let token = await ethers.utils.formatUnits(balanceOf.toString(),decimalsUnit)
               
-              console.log("token", token)
+            
               setStakevalue(parseInt(token).toString())
               // console.log("balance>>",  token)
             }
@@ -228,7 +228,7 @@ function Stacking(props){
               let decimalsUnit = await ZPadContract.decimals();
               let token = await ethers.utils.formatUnits(balanceOf.toString(),decimalsUnit)
               
-              console.log("token", token)
+   
               setUserToken(parseInt(token).toString())
               // console.log("balance>>",  token)
             }
@@ -285,7 +285,7 @@ function Stacking(props){
             }
         }
 
-        console.log(unStakeValue)
+    
 
         const unStaking = (event) => {
             unStake()
@@ -415,7 +415,7 @@ function Stacking(props){
             catch(e){
                 console.log(e)
             }
-            console.log(">>>",account)
+          
            
             // setStakersNo(staker.toString())
             // if(stakersNo == null || 0) {
