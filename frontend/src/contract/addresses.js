@@ -1,4 +1,5 @@
 
+
  export const zpad_addr = "0xC004CDA19660bbe9f8d20635CBf4D3D39E41A0eD"
  export const staking_addr = "0x8F839DEa28076fd51e3FC53D59073f1731AE27cA"
  export const rewardToken_addr = "0x17d32cD12734215eb539b0b6FD1f174EFdaF975d"

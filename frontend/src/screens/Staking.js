@@ -59,6 +59,7 @@ function Stacking(props){
     const [userToken, setUserToken] = useState("0")
 
 
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -95,6 +96,7 @@ function Stacking(props){
         const connection = await web3Modal.connect();
         const provider = new ethers.providers.Web3Provider(connection);
         let balance = await provider.getBalance(account)
+
         setEthAddress(ethers.utils.formatEther(balance))
         // const {data: balancee, mutate} = useSWR(['getBalance', account, 'latest'])
     }
@@ -105,6 +107,7 @@ function Stacking(props){
     // console.log(">>>>>>>>>",n)
       
       
+
 
     
       const loadTotalStake = async () => {
@@ -230,6 +233,8 @@ function Stacking(props){
               let decimalsUnit = await ZPadContract.decimals();
               let token = await ethers.utils.formatUnits(balanceOf.toString(),decimalsUnit)
               
+
+
               setStakevalue(parseInt(token).toString())
               // console.log("balance>>",  token)
             }
@@ -246,7 +251,7 @@ function Stacking(props){
               let balanceOf = await ZPadContract.balanceOf(account)
               let decimalsUnit = await ZPadContract.decimals();
               let token = await ethers.utils.formatUnits(balanceOf.toString(),decimalsUnit)
-              
+
               setUserToken(parseInt(token).toString())
               // console.log("balance>>",  token)
             }
@@ -433,6 +438,7 @@ function Stacking(props){
             catch(e){
                 console.log(e)
             }
+
            
             // setStakersNo(staker.toString())
             // if(stakersNo == null || 0) {
