@@ -87,7 +87,7 @@ function Approval(props){
                                 </Form.Group>
 
                                 <Form.Group className="mt-3" controlId="ammount">
-                                <Form.Label>Ammount</Form.Label>
+                                <Form.Label>Amount</Form.Label>
                                 <Form.Control type="number" value={ammount} onChange={(e)=>setAmmount(e.target.value)} required/>
                                 </Form.Group>
                                 <br/>

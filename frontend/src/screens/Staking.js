@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, InputGroup,DropdownButton,Dropdown,FormControl,Form ,Button, Modal } from "react-bootstrap";
 import IdoBox from "../components/ido-box"
-import BannerImage from "../assets/images/ido-banner-main.png"
+import BannerImage from "../assets/images/none-crypto.png"
 import checkpoint from "../assets/images/checkpoint.png";
 import confirm from "../assets/images/confirm.png";
 import confirmation from "../assets/images/confirmation.png";
@@ -19,7 +19,8 @@ import {staking_addr, zpad_addr, rewardToken_addr} from "../contract/addresses"
 import Web3Modal from 'web3modal'
 import { useWeb3React } from "@web3-react/core";
 import detectEthereumProvider from '@metamask/detect-provider'
-import { formatUnits } from "ethers/lib/utils";
+import { formatUnits,formatEther } from "ethers/lib/utils";
+
 
 
 
@@ -40,6 +41,7 @@ function Stacking(props){
         errorWeb3Modal
     } = useWeb3React();
 
+    const [totalzpadToken, setTotalZpadToken] = useState(0)
     const [stakevalue,setStakevalue] = useState(0);
     const [unStakeValue, setUnStakeValue] = useState(0)
     const [staketype,setStaketype] = useState('stake');
@@ -55,7 +57,6 @@ function Stacking(props){
     const [ethAddress, setEthAddress] = useState("0")
     const [check, setCheck] = useState(false)
     const [userToken, setUserToken] = useState("0")
-    console.log("check", check)
 
 
     const [show, setShow] = useState(false);
@@ -75,6 +76,7 @@ function Stacking(props){
     const [mystate,setMystate] = useState(0);
     // fazal 
     const [isType,setIsType]= useState('stake')
+    console.log("chainId", chainId)
 
     const loadProvider = async () => {
         try {
@@ -93,18 +95,17 @@ function Stacking(props){
         const connection = await web3Modal.connect();
         const provider = new ethers.providers.Web3Provider(connection);
         let balance = await provider.getBalance(account)
-        setEthAddress(ethers.utils.formatUnits(balance,8))
-        console.log("Provider", balance.toString())
-      }
+        setEthAddress(ethers.utils.formatEther(balance))
+        // const {data: balancee, mutate} = useSWR(['getBalance', account, 'latest'])
+    }
+    
+    console.log("Ether", ethAddress)
 
-    //   const loadSigner = async () => {
-    //     try {
-    //       const provider = new ethers.providers.Web3Provider(window.ethereum)
-    //       return provider
-    //     } catch (e) {
-    //       console.log("loadProvider: ", e);
-    //     }
-    //   };
+    // let n =(ethAddress + "").split(".")[1,3]
+    // console.log(">>>>>>>>>",n)
+      
+      
+
     
       const loadTotalStake = async () => {
         try{
@@ -150,6 +151,7 @@ function Stacking(props){
                         let stake = await stakingContract.stake(ethers.utils.parseUnits(stakevalue,decimalsUnit))
                         let tx = await stake.wait()
                         // console.log("tx1", tx)
+                        totalZpadToken()
                         setConfirmed("Confirmed")
                         // totalBalance()
                         setStakevalue(0)
@@ -167,6 +169,7 @@ function Stacking(props){
                         let stake = await stakingContract.stake(ethers.utils.parseUnits(stakevalue,decimalsUnit))
                         let tx = await stake.wait()
                         // console.log("tx2", tx)
+                        totalZpadToken()
                         setConfirmed("Confirmed")
                         setStakevalue(0)
                         Stakers()
@@ -183,6 +186,23 @@ function Stacking(props){
                 // console.log("error: ",e)
             }
         }
+
+        const totalZpadToken = async () => {
+            try{
+              let signer = await loadProvider()
+              let ZPadContract = new ethers.Contract(zpad_addr, ZPadAbi, signer)
+              let balanceOf = await ZPadContract.balanceOf(account)
+              let decimalsUnit = await ZPadContract.decimals();
+              let token = await ethers.utils.formatUnits(balanceOf.toString(),decimalsUnit)
+              
+              setTotalZpadToken(parseInt(token).toString())
+              // console.log("balance>>",  token)
+            }
+            catch(error){
+                console.log(error)
+            }
+             
+          }
 
         // console.log("msgHandling", msgHandling)
 
@@ -210,7 +230,6 @@ function Stacking(props){
               let decimalsUnit = await ZPadContract.decimals();
               let token = await ethers.utils.formatUnits(balanceOf.toString(),decimalsUnit)
               
-              console.log("token", token)
               setStakevalue(parseInt(token).toString())
               // console.log("balance>>",  token)
             }
@@ -228,7 +247,6 @@ function Stacking(props){
               let decimalsUnit = await ZPadContract.decimals();
               let token = await ethers.utils.formatUnits(balanceOf.toString(),decimalsUnit)
               
-              console.log("token", token)
               setUserToken(parseInt(token).toString())
               // console.log("balance>>",  token)
             }
@@ -252,6 +270,7 @@ function Stacking(props){
                 // console.log("unStake>>>>>>>>>>", unStake)
                 setAuthorization("Unstake")
                 let tx = await unStake.wait()
+                totalZpadToken()
                 setConfirmed("Unstake_Confirmed")
                 setUnStakeValue(0)
             }
@@ -285,7 +304,6 @@ function Stacking(props){
             }
         }
 
-        console.log(unStakeValue)
 
         const unStaking = (event) => {
             unStake()
@@ -341,7 +359,7 @@ function Stacking(props){
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let calcPendingRewards = await stakingContract.showPendingRewards(account)
             setUserReward(calcPendingRewards.toString())
-            // console.log("userReward", calcPendingRewards.toString())
+            console.log("userReward", calcPendingRewards.toString())
             }
             catch(e){
                 console.log(e)
@@ -415,7 +433,6 @@ function Stacking(props){
             catch(e){
                 console.log(e)
             }
-            console.log(">>>",account)
            
             // setStakersNo(staker.toString())
             // if(stakersNo == null || 0) {
@@ -474,6 +491,20 @@ function Stacking(props){
             })()
         }, [account]);
 
+        useEffect(() => {
+            (async () => {
+                if (account) {
+                    try {
+                        totalZpadToken()
+    
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            })()
+        }, [account,totalzpadToken]);
+
+
         // useEffect(() => {
         //     (async () => {
                 
@@ -487,6 +518,8 @@ function Stacking(props){
                 
         //     })()
         // }, []);
+
+        console.log("userReward",userReward)
         
         useEffect(() => {
             (async () => {
@@ -542,7 +575,7 @@ function Stacking(props){
 
                             <div className="ido-box ido-small" style={{background: "#39065E"}}>
 
-                                <p className="f-bold text-center">Number Of Stackers</p>
+                                <p className="f-bold text-center">Number Of Stakers</p>
                                 {stakersNo > 0 ? (
                                 <h4 className="soon text-center mt-2">{stakersNo}</h4>
                             ) : (
@@ -557,7 +590,7 @@ function Stacking(props){
                             
                         <div className="ido-box ido-small" style={{background: "#39065E"}}>
 
-                            <p className="f-bold text-center">Total Zpad Stacked</p>
+                            <p className="f-bold text-center">Total Zpad Staked</p>
                             {totalToken > 0 ? (
                                 <h4 className="soon text-center mt-2">{Math.floor(totalToken)}</h4>
                             ) : (
@@ -632,6 +665,11 @@ function Stacking(props){
                            
                         <div className="ido-box" style={{background: "#39065E"}}>
                             
+                            <div className="staked">
+                                <h4>Total Zpad Token</h4>
+                                <h2>{totalzpadToken}</h2>
+                                {/* {console.log("totalbalance", totalbalance)} */}
+                            </div>
 
                             <div className="staked">
                                 <h4>Staked</h4>
@@ -681,15 +719,20 @@ function Stacking(props){
                                 </button>
                             </Form>) : null}
 
-                            {/* withdraw */}
+                            {console.log(check)}
+
 
                             {isType == "withdraw" ? (
                                 <div  className="text-center mt-3">
-                                <button onClick={Reward} type="submit"  className="btn-custom secondary-btn">
+                                {check == false ? (<button onClick={Reward} type="submit" disabled className="btn-custom secondary-btn">
                                     Withdraw
-                                </button>
+                                </button>) : (<button onClick={Reward} type="submit" className="btn-custom secondary-btn">
+                                    Withdraw
+                                </button>)}
                                 </div>
                             ) : null}
+
+
 
 
                         </div>
@@ -928,7 +971,7 @@ function Stacking(props){
 
                             {ethAddress > 0 ? (<div>
                                 <span className="conditions-met">
-                                <h4>Ether Available in
+                                <h4>BNB Available in
                                 Wallet</h4>
                                 <span className="tick-enable">
                                     <i class="fa-solid fa-check"></i>
@@ -937,22 +980,23 @@ function Stacking(props){
 
                             <p>
                                 {ethAddress}
+                                {/* {parseFloat(formatEther(ethAddress)).toPrecision(4)} */}
                             </p>
                             </div>) : (<div>
                                 <span className="conditions-met">
-                                <h4>Ether Available in
+                                <h4>BNB Available in
                                 Wallet</h4>
                                 <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
                             </span>
 
                             <p>
-                                {ethAddress}
+                            {parseFloat(ethAddress).toFixed(4)}
                             </p>
                             </div>)}
 
                         </div>
 
-                        <div className="conditions">
+                        {/* <div className="conditions">
 
                             {userToken > 30000 ? (<div>
                                 <span className="conditions-met">
@@ -975,7 +1019,7 @@ function Stacking(props){
                             <p>You cannot stake if you have an active Zpad balance less than 30,000
                             </p>
                             </div>)}
-                        </div>
+                        </div> */}
 
                     </div>
 
@@ -1221,22 +1265,39 @@ function Stacking(props){
 
                                 <div className="conditions">
 
+                                {account ? (
+                                <div>
                                     <span className="conditions-met">
-                                        <h4>Connected with MetaMask</h4>
-                                        <span className="tick-enable">
-                                            {/* <i class="fa-solid fa-check"></i> */}
-                                            </span>
-                                    </span>
+                                <h4>Connected with MetaMask</h4>
+                                <span className="tick-enable">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+                            </span>
 
-                                    <p>If not connected, click
-                                        the "Connect Wallet" 
-                                        button in the top right
-                                        corner
-                                    </p>
+                            <p>If not connected, click
+                                the "Connect Wallet" 
+                                button in the top right
+                                corner
+                            </p>
+                                </div>
+                            ) : (<div>
+                                <span className="conditions-met">
+                                <h4>Connected with MetaMask</h4>
+                                <span className="tick-enable">
+                                    {/* <i class="fa-solid fa-check"></i> */}
+                                </span>
+                            </span>
+
+                            <p>If not connected, click
+                                the "Connect Wallet" 
+                                button in the top right
+                                corner
+                            </p>
+                            </div>)}
 
                                 </div>
 
-                                <div className="conditions">
+                                {/* <div className="conditions">
 
                                     <span className="conditions-met">
                                         <h4>7 Days Waiting
@@ -1252,25 +1313,38 @@ function Stacking(props){
                                         corner
                                     </p>
 
-                                </div>
+                                </div> */}
 
                                 <div className="conditions">
 
-                                    <span className="conditions-met">
-                                        <h4>BNB Available in
-                                        Wallet</h4>
-                                        <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
-                                    </span>
+                                {ethAddress > 0 ? (<div>
+                                <span className="conditions-met">
+                                <h4>BNB Available in
+                                Wallet</h4>
+                                <span className="tick-enable">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+                            </span>
 
-                                    <p>If not connected, click
-                                        the "Connect Wallet" 
-                                        button in the top right
-                                        corner
-                                    </p>
+                            <p>
+                            {parseFloat(ethAddress).toFixed(4)}
+                                {/* {parseFloat(formatEther(ethAddress)).toPrecision(4)} */}
+                            </p>
+                            </div>) : (<div>
+                                <span className="conditions-met">
+                                <h4>BNB Available in
+                                Wallet</h4>
+                                <span className="tick-enable tick-disble"><i class="fa-solid fa-check"></i></span>
+                            </span>
+
+                            <p>
+                            {ethAddress}
+                            </p>
+                            </div>)}
 
                                 </div>
 
-                                <div className="conditions">
+                                {/* <div className="conditions">
 
                                     <span className="conditions-met">
                                         <h4>You have Unstaked
@@ -1284,16 +1358,16 @@ function Stacking(props){
                                         corner
                                     </p>
 
-                                </div>
+                                </div> */}
 
                             </div>
 
                             <Form>
-                                <div class="custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="defaultUnchecked" />
-                                    <label class="custom-control-label" for="defaultUnchecked">I have read the Terms and Conditions</label>
-                                </div>
-                            </Form>
+                        <div class="custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked" onChange={(e) => setCheck(e.target.checked)} />
+                            <label class="custom-control-label" for="defaultUnchecked">I have read the Terms and Conditions</label>
+                        </div>
+                    </Form>
 
                         </div>
 
@@ -1320,4 +1394,3 @@ function Stacking(props){
 }
 
 export default Stacking;
-

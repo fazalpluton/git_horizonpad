@@ -11,6 +11,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useEagerConnect, useInactiveListener } from './hooks/useEagerConnect';
 import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import Burgeon from './screens/Burgeon';
 import NFTMarket from './screens/NFTMarket';
 import P2P from './screens/P2P';
@@ -46,6 +47,8 @@ function App() {
     active: networkActive, error: networkError, activate: activateNetwork
   } = useWeb3React();
 
+
+
   useEffect(() => {
     injectedConnector
       .isAuthorized()
@@ -63,7 +66,7 @@ function App() {
       <Router>
         <Routes>
         <Route path="/" element={<Home header={<Header/>} footer={<Footer/>}/>}  />
-        <Route path="/ido-projects" element={<IdoProjects errorMessage={networkError} header={<DashboardHeader logo={"logo"}/>} footer={<Footer/>} />}  />
+        <Route path="/ido-projects" element={<IdoProjects errorMessage={networkError} header={<DashboardHeader />} footer={<Footer/>} />}  />
         <Route path="/hci-projects" element={<HciProjects errorMessage={networkError} header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/burgeon-projects" element={<Burgeon header={<DashboardHeader/>} footer={<Footer/>}/>}  />
         <Route path="/nft-marketplace" element={<NFTMarket header={<DashboardHeader/>} footer={<Footer/>}/>}  />

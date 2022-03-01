@@ -1,7 +1,7 @@
 import { Container, Row,Col,DropdownButton,Dropdown,Table, Modal, Form, Spinner  } from "react-bootstrap";
 import React, { useState,useEffect } from "react";
 import IdoBox from "../components/ido-box"
-import BannerImage from "../assets/images/second-section.png"
+import BannerImage from "../assets/images/none-crypto.png"
 import SecondBackground from "../assets/images/second-background.png";
 import ido_logos from "../assets/images/ido-logos.png"
 import { Link, useParams } from "react-router-dom";
@@ -155,7 +155,8 @@ function ProjectDetails(props){
                 setClaimstatus(claim_status);
                 
             }catch(e){
-                // setErrorMsg(e)
+
+                setErrorMsg(e.error)
                 // setError("allocations")
             }
         }
@@ -208,7 +209,7 @@ function ProjectDetails(props){
                 }
                 
             }catch(e){
-                // setErrorMsg(e)
+                setErrorMsg(e.error)
                 // handleShow1()
                 // setError("checkallowence")
             }
@@ -322,7 +323,7 @@ function ProjectDetails(props){
                                 centered>
                                     <Modal.Body>
                                     <div style={{textAlign:"center"}}>
-                                          <p style={{ color:"red"}} >{errorMsg.message || errorMsg}</p>
+                                          <p style={{ color:"red"}} >{errorMsg }</p>
                                     </div>
                                     </Modal.Body>
                                 

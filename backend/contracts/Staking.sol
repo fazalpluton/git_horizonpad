@@ -182,8 +182,8 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
     function consumetickets(address account , uint256 amount)public override onlyConsumer {
         stakingDetail memory detail = userStakingDetail[account];
         require(detail.tickets > 0 && detail.tickets - amount >=0 ,"not enough tickets remaing");
-        require(detail.stakeTime + 1 seconds < block.timestamp ,"you can apply for WhiteList after 1 week");
-        require(detail.depositValue >= bronze ,"you can apply for WhiteList after 1 week"); // 1 week
+        require(detail.stakeTime + 5 minutes < block.timestamp ,"you can apply for WhiteList after 4 hours");
+        require(detail.depositValue >= bronze ,"you can apply for WhiteList After Staking 30,000"); // 1 week
        // require(getUserStakedValue >= bronze,"you must be at bronze tier to be applicable");
         detail.tickets = detail.tickets - amount;
         userStakingDetail[account] = detail;
@@ -191,7 +191,9 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
 
     function releasetickets(address account , uint256 amount)public override onlyConsumer {
         stakingDetail memory detail = userStakingDetail[account];
-        detail.tickets = detail.tickets + amount;
+        if(detail.tickets < getTicketsForUser(detail.depositValue)){
+            detail.tickets = detail.tickets + amount;
+        }
         userStakingDetail[account] = detail;
     }
 
@@ -295,7 +297,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
 
   
     function stake(uint256 amount) public nonReentrant{ 
-        require(amount>=bronze,"insufficient balance for staking");
+        // require(amount>=bronze,"insufficient balance for staking");
         require(stakingToken.allowance(_msgSender(),address(this))>=amount,"Approve your token");
         stakingDetail memory detail = userStakingDetail[_msgSender()];
         stakingToken.safeTransferFrom(_msgSender(),address(this),amount);
@@ -307,7 +309,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         }else{
             detail.stakeTime = block.timestamp;
         }
-        detail.tickets = getTicketsForUser(amount);
+        detail.tickets = getTicketsForUser(balance);
         pool_Inc(balance);
         savePendingRewards();
         detail.depositValue = balance;
@@ -350,6 +352,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
             detail.depositValue = newBalance;
             pool_Inc(newBalance);
         }
+        detail.tickets = getTicketsForUser(newBalance);
         detail.userWeight = getPoolWeight(newBalance);
         userStakingDetail[_msgSender()] = detail;
         totalStakedValue -= amount;
