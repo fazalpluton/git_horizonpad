@@ -1,6 +1,6 @@
 import { Container, Form, FormControl, Nav, Navbar,Button, NavDropdown,  Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
 import axios from "axios";
 import Web3Modal from "web3modal";
 import { connectWallet } from "../utils/connectWallet";
@@ -28,6 +28,13 @@ function DashboardHeader(props){
   } = useWeb3React();
   // const { activateBrowserWallet, deactivate } = useEthers();
   // console.log("account", account)
+  const location = useLocation();
+  useEffect(() => {
+    console.log("kicat",{location});
+    window.scrollTo({
+      top: 0,
+    });
+  }, [location]);
 
   const [token,setToken] = useState(localStorage.getItem("token"));
 
@@ -95,7 +102,6 @@ function DashboardHeader(props){
     return 
   } else {
     setDetectMetamask("Install Metamask")
-    console.log('Please install MetaMask!');
   }
   }
   detect()
@@ -112,9 +118,7 @@ function DashboardHeader(props){
     handleShow1()
   }
 
-  console.log("address", localStorage.getItem('status'))
   let chain = chainId
-  console.log("chain", chain)
 
   // const loadProvider = async () => {
   //   const web3Modal = new Web3Modal({
@@ -206,12 +210,7 @@ function DashboardHeader(props){
         }
         <Navbar  expand="lg">
     <Container >
-      {
-        props.logo ?
         <Link to={'/'} className="navbar-brand"><img src={VectorLogo} className="logo"/></Link>
-        :
-        <Link to={'/'} className="navbar-brand"><img src={HZPAD} height={80} className="logo"/></Link>
-      }
     <Navbar.Toggle aria-controls="navbarScroll" />
     <Navbar.Collapse id="navbarScroll">
       <Nav

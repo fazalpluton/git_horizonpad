@@ -13,13 +13,11 @@ function Projects(props){
             setProjects(res.data.projects)
         })
         },[]);
-
     return (
         <>
                 {props.header}
                 <Container className="admin-projects">
                 <Row className="gy-5">
-                    
                     {
                         projects.map((project)=>{
                             return<Col lg={6} sm={12}>
@@ -100,6 +98,16 @@ function Projects(props){
                                     </div>
                             </Col>
                             })
+                    }
+                    {
+                        <Col lg={12}>
+                            {
+                                projects.length == 0 &&
+                                <div className="text-center mt-5 pt-5">
+                                    <h3>No Projects</h3>
+                                </div>
+                            }
+                        </Col>
                     }
                 </Row>
                 </Container>

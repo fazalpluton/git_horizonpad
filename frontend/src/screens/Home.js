@@ -30,10 +30,10 @@ function Home(props){
                             <h1 className="logo-text">
                                 <img src={HORIZONPAD} className="logo-text-img"/>
                             </h1>
-                            <h5>The First of its’ kind</h5>
-                            <p className="banner-p">The First of it’s kind Fundraising platform <br/> For Crypto and Non-Crpto Project, built<br/> and partnered with Binance Smart Chain</p>
+                            {/* <h5>The First of its’ kind</h5> */}
+                            <p className="banner-p">The First of it’s kind Fundraising platform <br/> For Crypto and Non-Crypto Project, built<br/> and partnered with Binance Smart Chain</p>
                             <div className="btn-group-custom">
-                            <button class="btn-custom secondary-btn">Learn More</button>
+                            <Link to={'/ido-projects'} target="_blank" className="btn-custom secondary-btn">Learn More</Link>
                             <Link to={'/ido-projects'} target="_blank" className="btn-custom secondary-btn">Launch App</Link>
                             </div>
                         </Col>
@@ -72,22 +72,22 @@ function Home(props){
                 <Col lg={4} md={12} sm={12}>
                     <div className="text-icon">1</div>
                     <div className="text-box">
-                        <h3>Lunchpad</h3>
-                        <p>Discover top-tier cryptoprojects and earn allocationto invest.</p>
+                        <h3>Launchpad</h3>
+                        <p>Discover top-tier crypto projects and earn allocation to invest.</p>
                     </div>
                 </Col>
                 <Col lg={4} md={12} sm={12}>
                     <div className="text-icon">2</div>
                     <div className="text-box">
                         <h3>HCI Projects</h3>
-                        <p>Discover a promising non-crypto projects and beamong the shareholders.</p>
+                        <p>Discover a promising non-crypto projects and be among the shareholders.</p>
                     </div>
                 </Col>
                 <Col lg={4} md={12} sm={12}>
                     <div className="text-icon">3</div>
                     <div className="text-box">
                         <h3>Burgeon Projects</h3>
-                        <p>Migrate your business database into theblockchain easily.</p>
+                        <p>Migrate your business database into the blockchain easily.</p>
                     </div>
                 </Col>
             </Row>
@@ -100,7 +100,7 @@ function Home(props){
    
                 <Col lg={6} md={6} sm={12}>
                 <p className="how-it-text">
-                Horizonpad is the first of it's kind that allow ideas to come into life! Crypto Investors will now turn to company shareholders/stakeholders with full voting rights based on stages.
+                Horizonpad is the first of it's kind that allow ideas to come into life! Crypto Investors will now turn to company shareholders/stakeholders with full voting right based on stages.
                 </p>
                 <p className="how-it-text">
                 Staking ZPAD will give you chance to participate in the IDO PROJECTS and as well as a shareholder in the HCI PROJECTS!
@@ -124,8 +124,8 @@ function Home(props){
                 <img src={SecondImage} className="feature-img"/>
                 </Col>
                 <Col lg={6} md={6} sm={12}>
-                <p className="non-crypto-text">Horizonpad Circle Inclusion will consider the best Projects outside the CryptoSpace and allow few legitimate investors to invest their funds as shares with goodrecords tracking.</p>
-                <button class="btn-custom secondary-btn">Learn More</button>
+                <p className="non-crypto-text">Horizonpad Circle Inclusion will consider the best Projects outside the CryptoSpace and allow few legitimate investors to invest their funds as shares with good records tracking.</p>
+                <a href="https://youtu.be/LFQv_hq_n4Y" target="_blank" class="btn-custom secondary-btn">Learn More</a>
                 </Col>
             </Row>
         </div>
@@ -164,16 +164,16 @@ function Home(props){
                             <div className="ul-between-flex">
                                 <div>
                                     <h5>Initial Price</h5>
-                                    <h5>$0.0005</h5>
+                                    <h5 className="text-center">TBA</h5>
                                 </div>
                                 <div>
-                                    <h5>Initial Price</h5>
-                                    <h5>$0.0005</h5>
+                                    <h5>Supply at listing</h5>
+                                    <h5 className="text-center">TBA</h5>
                                 </div>
                             </div>
                             <div className="ul-between-footer">
                                 <h5>Initial Market Cap</h5>
-                                <h5>$199,810</h5>
+                                <h5 >TBA</h5>
                             </div>
                         </div>
                         <div className="box-ul-flex">
@@ -214,7 +214,7 @@ function Home(props){
                             <div className="ul-box">
                                 <div className="flex">
                                 <p className="text-center">8%</p>
-                                <h4>Echosystem</h4>
+                                <h4>Ecosystem</h4>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +229,7 @@ function Home(props){
             <div className="zpad-tier-section">
                <Container>
                <h2 className="h2 text-center">ZPAD Teir System.</h2>
-                <p className="zpad-tier-text">Horizonpad token launch will follow a three tier system, all<br/> tiers of the token launch will haveguaranteed allocation<br/> with different pool weight.</p>
+                <p className="zpad-tier-text">Horizonpad token launch will follow a three tier system, all<br/> tiers of the token launch will have guaranteed allocation<br/> with different pool weight.</p>
                <Row>
                    <Col lg={12}>
                        <div className="tier-table-section">
@@ -237,7 +237,7 @@ function Home(props){
                         <thead>
                         <tr>
                             <th className="left-none top-none">Tiers</th>
-                            <th className="top-none">ZPAD Stacked</th>
+                            <th className="top-none">ZPAD Staked</th>
                             <th className="top-none">Time before the IDO</th>
                             <th className="top-none">Guaranteed Allocation</th>
                             <th className="top-none right-none">Poll Weight</th>
@@ -247,26 +247,26 @@ function Home(props){
                         <tbody>
                         <tr>
                             <td className="left-none">Bronze</td>
-                            <td>30,000</td>
+                            <td>TBA</td>
                             <td>4 Hrs</td>
-                            <td>Yes</td>
-                            <td className="right-none">10</td>
+                            <td>TBA</td>
+                            <td className="right-none">TBA</td>
                         
                         </tr>
                         <tr>
                             <td className="left-none">Silver</td>
-                            <td>75,000</td>
+                            <td>TBA</td>
                             <td>4 Hrs</td>
-                            <td>Yes</td>
-                            <td className="right-none">32</td>
+                            <td>TBA</td>
+                            <td className="right-none">TBA</td>
                         
                         </tr>
                         <tr>
                             <td className="left-none bottom-none">Gold</td>
-                            <td className="bottom-none">170,000</td>
+                            <td className="bottom-none">TBA</td>
                             <td className="bottom-none">4 Hrs</td>
-                            <td className="bottom-none">Yes</td>
-                            <td className="bottom-none right-none">80</td>
+                            <td className="bottom-none">TBA</td>
+                            <td className="bottom-none right-none">TBA</td>
                         </tr>
                         </tbody>
                     </Table>

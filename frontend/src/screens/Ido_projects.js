@@ -1,6 +1,6 @@
 import { Container, Row,Col, Table } from "react-bootstrap";
 import IdoBox from "../components/ido-box"
-import BannerImage from "../assets/images/ido-banner-main.png"
+import BannerImage from "../assets/images/none-crypto.png"
 import SecondImage from "../assets/images/second-section.png"
 import SecondBackground from "../assets/images/second-background.png";
 

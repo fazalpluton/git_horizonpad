@@ -12,11 +12,11 @@ function Footer(){
                     <div className="footer-social-icon">
                     
                     <a href="https://twitter.com/horizonpad" target="_blank"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="https://t.me/horizonpad" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="https://t.me/horizonpadC" target="_blank"><i class="fa-brands fa-telegram"></i></a>
                     <a href="https://www.linkedin.com/company/horizonpad" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
                     <a href="https://www.youtube.com/channel/UCswpDaG-lgDtO7MlyQgFM_w" target="_blank"><i class="fa-brands fa-youtube"></i></a>
                     <a href="https://horizonpad01.medium.com/" target="_blank"><i class="fa-brands fa-medium"></i></a>
-                    <a href="https://discord.gg/y342zJnB" target="_blank"><i class="fa-brands fa-discord"></i></a>
+                    <a href="https://discord.gg/MbDCs4vc5g" target="_blank"><i class="fa-brands fa-discord"></i></a>
                     <a href="https://github.com/horizonpad" target="_blank"><i class="fa-brands fa-github"></i></a>
 
                     </div>
@@ -75,16 +75,16 @@ function Footer(){
                     <h2>Learn</h2>
                     <ul className="footer-ul">
                         <li>
-                            <Link to={'/comming-soon'}>What is Cryptocurrency?</Link>
+                            <Link to={'https://www.youtube.com/channel/UCswpDaG-lgDtO7MlyQgFM_w'} target="_blank">What is Cryptocurrency?</Link>
                         </li>
                         <li>
-                            <Link to={'/comming-soon'}>Crypto Basics</Link>
+                            <Link to={'/https://www.youtube.com/channel/UCswpDaG-lgDtO7MlyQgFM_w'} target="_blank">Crypto Basics</Link>
                         </li>
                         <li>
-                            <Link to={'/'}>Tips and Tutorials</Link>
+                            <Link to={'https://www.youtube.com/channel/UCswpDaG-lgDtO7MlyQgFM_w'} target="_blank">Tips and Tutorials</Link>
                         </li>
                         <li>
-                            <Link to={'/comming-soon'}>Market Update</Link>
+                            <Link to={'https://coinmarketcap.com/'} target="_blank">Market Update</Link>
                         </li>
                        
                     </ul>
