@@ -76,7 +76,7 @@ function Stacking(props){
     const [mystate,setMystate] = useState(0);
     // fazal 
     const [isType,setIsType]= useState('stake')
-    console.log("chainId", chainId)
+    // console.log("chainId", chainId)
 
     const loadProvider = async () => {
         try {
@@ -99,7 +99,7 @@ function Stacking(props){
         // const {data: balancee, mutate} = useSWR(['getBalance', account, 'latest'])
     }
     
-    console.log("Ether", ethAddress)
+    // console.log("Ether", ethAddress)
 
     // let n =(ethAddress + "").split(".")[1,3]
     // console.log(">>>>>>>>>",n)
@@ -359,7 +359,7 @@ function Stacking(props){
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
             let calcPendingRewards = await stakingContract.showPendingRewards(account)
             setUserReward(calcPendingRewards.toString())
-            console.log("userReward", calcPendingRewards.toString())
+            // console.log("userReward", calcPendingRewards.toString())
             }
             catch(e){
                 console.log(e)
@@ -519,7 +519,7 @@ function Stacking(props){
         //     })()
         // }, []);
 
-        console.log("userReward",userReward)
+        // console.log("userReward",userReward)
         
         useEffect(() => {
             (async () => {
@@ -719,7 +719,7 @@ function Stacking(props){
                                 </button>
                             </Form>) : null}
 
-                            {console.log(check)}
+                            {/* {console.log(check)} */}
 
 
                             {isType == "withdraw" ? (
@@ -905,7 +905,7 @@ function Stacking(props){
 
                 <div className="ido-box" style={{background: "transparent"}}>
 
-                    <div className="d-flex mb-5 flex-xs-wrap">
+                    <div className="d-flex mb-5 flex-xs-wrap justify-content-center">
 
                         <div className="conditions">
 
@@ -1261,7 +1261,7 @@ function Stacking(props){
 
                         <div className="ido-box" style={{background: "transparent"}}>
 
-                            <div className="d-flex mb-5 flex-xs-wrap">
+                            <div className="d-flex mb-5 flex-xs-wrap justify-content-center">
 
                                 <div className="conditions">
 
