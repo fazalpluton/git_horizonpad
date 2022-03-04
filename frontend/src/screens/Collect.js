@@ -31,6 +31,7 @@ function Collect(props){
     const [token,setToken] = useState(localStorage.getItem("token"));
     const navigate = useNavigate();
     const [ammount,setAmmount] = useState()
+    const [reward,setReward] = useState()
     const [totalammount,setTotalammount] = useState()
     const loadProvider = async () => {
         try {
@@ -54,6 +55,24 @@ function Collect(props){
             
         }catch(e){
         }
+
+    }
+
+
+    const updateReward = async () => {
+        try{
+             let signer = await loadProvider()
+             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
+             let value = ethers.utils.parseUnits( reward , 4 ) ;
+            console.log("reward",value.toString())
+             const UpdateBaseRatePerBlock = await stakingContract.UpdateBaseRatePerBlock(value)
+            let tx = await UpdateBaseRatePerBlock.wait()
+            console.log("tx",tx.toString())
+            // let tx = await collect.wait()
+            
+        }catch(e){
+        } 
+
     }
 
     const Feee = async (e) => {
@@ -89,7 +108,7 @@ function Collect(props){
             <img src={require('../assets/images/banner-background.png').default} className="banner-background"/>
             <div className="banner-section">
                 <Container>
-                <Row>
+                <Row style={{marginTop:"7rem"}}>
                     <Col lg={6} sm={12} md={6} className="m-auto">
                         <div className="ido-box mt-5">
                             <Row className="gy-5">
@@ -110,6 +129,36 @@ function Collect(props){
                                 </Form.Group>
                                 <br/>
                                 <button type="submit" className="btn-custom primary-btn" onClick={CollectFeee}>Collect</button>
+                                </Col>
+                            </Row>
+                        </div>
+                    </Col>
+                 
+                   
+                   
+                </Row>
+
+                <Row>
+                    <Col lg={6} sm={12} md={6} className="m-auto">
+                        <div className="ido-box mt-5">
+                            <Row className="gy-5">
+                                <Col lg={12} sm={12} md={12}>
+                                <h3 className="main-heading text-center mt-4">Reward Base Rate</h3>
+                                {/* <div className="mt-1 d-flex align-items-center justify-content-between">
+                                    <span>Ammount to collect</span>
+                                    <span>{totalammount} HZ</span>
+                                </div>
+                                <Form.Group className="mt-3" controlId="addr">
+                                <Form.Label>Wallet Address</Form.Label>
+                                <Form.Control type="text" autoComplete="off" value={walletaddress} onChange={(e)=>setWalletaddress(e.target.value)} required/>
+                                </Form.Group> */}
+
+                                <Form.Group className="mt-3" controlId="ammount">
+                                <Form.Label>Rate/Block</Form.Label>
+                                <Form.Control placeholder="Enter Rate in wei RZpad" type="number" value={reward} onChange={(e)=>setReward(e.target.value)} required/>
+                                </Form.Group>
+                                <br/>
+                                <button type="submit" className="btn-custom primary-btn" onClick={updateReward}>Update</button>
                                 </Col>
                             </Row>
                         </div>

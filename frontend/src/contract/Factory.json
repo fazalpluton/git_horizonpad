@@ -8,6 +8,7 @@
   "function idos(uint256) view returns (address)",
   "function owner() view returns (address)",
   "function renounceOwnership()",
+  "function setBusdaddress(address)",
   "function total_idos() view returns (uint256)",
   "function total_tokens() view returns (uint256)",
   "function transferOwnership(address)"
