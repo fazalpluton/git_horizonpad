@@ -64,10 +64,10 @@ function Collect(props){
              let signer = await loadProvider()
              let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
              let value = ethers.utils.parseUnits( reward , 4 ) ;
-            console.log("reward",value.toString())
+            // console.log("reward",value.toString())
              const UpdateBaseRatePerBlock = await stakingContract.UpdateBaseRatePerBlock(value)
             let tx = await UpdateBaseRatePerBlock.wait()
-            console.log("tx",tx.toString())
+            // console.log("tx",tx.toString())
             // let tx = await collect.wait()
             
         }catch(e){
