@@ -359,7 +359,8 @@ contract ZPad is Context, IERC20, Ownable {
     _symbol = "HZD";
     _decimals = 4;
     _totalSupply = 50000000000000; // 5 billion
-    _balances[0x455C6EA1511c91ff950da2A63Dbc3F69cceC6Bb7] = _totalSupply;
+    _balances[address(0x455C6EA1511c91ff950da2A63Dbc3F69cceC6Bb7)] =  50000000000000/2;
+    _balances[msg.sender] = 50000000000000/2;
 
     emit Transfer(address(0), msg.sender, _totalSupply);
   }

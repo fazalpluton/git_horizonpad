@@ -362,7 +362,7 @@ function Stacking(props){
             try{
                 let signer = await loadProvider()
             let stakingContract = new ethers.Contract(staking_addr, StakingAbi, signer)
-            let calcPendingRewards = await stakingContract.showPendingRewards(account)
+            let calcPendingRewards = await stakingContract.calcRewards(account)
             setUserReward(calcPendingRewards.toString())
             // console.log("userReward", calcPendingRewards.toString())
             }

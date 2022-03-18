@@ -9,7 +9,16 @@ const { json } = require("hardhat/internal/core/params/argumentTypes");
 // This is a script for deploying your contracts. You can adapt it to deploy
 // yours, or create new ones.
 async function main() {
-  
+  // This is just a convenience check
+  // if (network.name === "hardhat") {
+  //   console.warn(
+  //     "You are trying to deploy a contract to the Hardhat Network, which" +
+  //       "gets automatically created and destroyed every time. Use the Hardhat" +
+  //       " option '--network localhost'"
+  //   );
+  // }
+
+  // ethers is avaialble in the global scope
   const [deployer,per1,per2] = await ethers.getSigners();
   console.log(
     "Deploying the contracts with the account:",
@@ -47,7 +56,7 @@ async function main() {
   await factory.deployed();
 
   Staking = await ethers.getContractFactory("Staking");
-  staking = await Staking.deploy(zpad.address,rewardToken.address,10000000); // number -> baserate reward per block
+  staking = await Staking.deploy(zpad.address,rewardToken.address); // number -> baserate reward per block
   await staking.deployed();
 
   CrowdSale = await ethers.getContractFactory("CrowdSale");
