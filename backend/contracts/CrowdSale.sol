@@ -216,7 +216,7 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
         uint8 dec = IERC20Metadata(address(token)).decimals();
         uint256 one = 1 *10**dec;
         uint256 product = one * weiAmount;
-        require(product>=token_Price,"please buy greater than min");
+        require(product >= token_Price,"please buy greater than min");
         uint256 tokens =  (one * weiAmount) / token_Price;
 
         require(tokens <=tokenAllocation,"please approve Busd according to limit");
@@ -254,14 +254,14 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
         require(!finalized,"already finalized");
         require(_msgSender() == wallet,"you are not the owner");
 
-        if(_weiRaised >= min ){
+        if(_weiRaised >= min ) {
             success = true;
         }
         else{
              success = false;   
         }
 
-         uint256 remainingTokensInTheContract = token.balanceOf(address(this)) - _tokenPurchased;
+        uint256 remainingTokensInTheContract = token.balanceOf(address(this)) - _tokenPurchased;
         token.safeTransfer(address(token_Owner),remainingTokensInTheContract);
         _forwardFunds(_weiRaised);
         finalized = true;
@@ -292,9 +292,9 @@ contract CrowdSale is Context,Ownable, ReentrancyGuard {
       //  _wallet.transfer(amount);
       BUSD.safeTransfer(wallet, amount);
     }
+
     function time()public view returns(uint256){ 
         return block.timestamp;
     } 
-
       
 }

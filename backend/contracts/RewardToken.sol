@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract RewardToken is ERC20 ,Ownable{ // change the name
 
 address public minter;
-constructor () ERC20("Reward", "RT"){}
+constructor () ERC20("RZPad", "RZ") {}
 
 
  modifier onlyMinter() {

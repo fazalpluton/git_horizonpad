@@ -19,11 +19,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
     RewardToken public rewardsToken;
     IERC20 public stakingToken;
 
-    //sig
-    bytes32 public DOMAIN_SEPARATOR;
-    // keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)");
-    bytes32 public constant PERMIT_TYPEHASH = 0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
-    mapping(address => uint) public nonces;
+    
     //
     struct stakingDetail{
 
@@ -36,18 +32,22 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         uint32 userWeight; 
         uint256 rewardReleased; 
         uint256 stakeTime; 
-        uint256 tickets; 
+        uint256 tickets;
 
     }
 
     uint256 public fee;
+    uint256 public feeRate = 20;
 
     uint256 private _ether = 10**4;
     //APY
+    uint256 private apy = 105;
 
-    uint public constant blocksPerYear = 2102400;
-    uint public multiplierPerBlock;
-    uint public baseRatePerBlock;
+    uint256 public blocksPerYear = 10512000;
+    uint256 public blockPerday = 28800;
+
+    
+    
     uint256 public noOfStakers;
 
     
@@ -77,69 +77,90 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
 
     
 
-    constructor(address _token ,address _rewardToken,uint256 _baseRatePerBlock){
+    constructor(address _token ,address _rewardToken){
         
         stakingToken = IERC20(_token);
         rewardsToken = RewardToken(_rewardToken);
-        baseRatePerBlock = _baseRatePerBlock;
         _ether = 10**4;
+
     }
 
+    
+
     modifier onlyConsumer() {
+
         require(ticketConsumer == _msgSender(), "Ownable: caller is not the Consumer");
         _;
     }
 
+    function setBlocksPerYear(uint256 _blocksPerYear) public onlyOwner {
+        blocksPerYear = _blocksPerYear;
+    }
+
+    function setblockPerday(uint256 _blockPerday) public onlyOwner {
+        blockPerday = _blockPerday;
+    }
+
+    function setFeeRate(uint256 _feeRate) public onlyOwner{
+        require(_feeRate < 100 , "please set value under 100");
+            feeRate = _feeRate;
+    }
+
+    
+
+    function setRewardToken(address _rewardToken) public onlyOwner {
+
+        rewardsToken = RewardToken(_rewardToken);
+    }
+
+    function setStakingToken(address _token) public onlyOwner {
+
+        stakingToken = IERC20(_token);
+    }
+
     function setTicketConsumer(address _consumer) public onlyOwner {
+
         ticketConsumer = _consumer;
     }
 
-     function getAPY() public view returns(uint256) {
-        if(totalStakedValue != 0){
-            uint256 a= blocksPerYear * baseRatePerBlock;
-            a= a/totalStakedValue;
-            a= a*100;
-            return a;
-        }else{
-            return 0;
-        }   
-        } 
-
-    function calcPendingRewards(address account)public view returns(uint256) {
-        stakingDetail memory detail = userStakingDetail[account];
-        uint256 currentblock = block.number;
-        if(currentblock == detail.depositBlock){
-            return 0;
-        }
-        uint256 blocks = currentblock - detail.depositBlock; 
-        uint256 totalReceived = baseRatePerBlock * blocks;
-        uint256 userShare = detail.depositValue;
-        if(userShare <= 0){
-            return  0; 
-        }else{
-            uint256 rewards = (totalReceived * userShare) / totalStakedValue - detail.rewardReleased ; 
-            return rewards ;
-        }   
-        
+    function setApy (uint256 _apy) public onlyOwner {
+        require(_apy !=0 , "please provide greater than zero" );
+        apy = _apy;
     }
 
-    function showPendingRewards(address account)public view returns(uint256) {
+    function getAPY() public view returns(uint256) {
+        return apy;
+    }
+
+     
+     
+    function calcRewards(address account) public view returns (uint256) {
         stakingDetail memory detail = userStakingDetail[account];
         uint256 currentblock = block.number;
-        if(currentblock == detail.depositBlock){
-            return getPendingRewards();
-        }
-        uint256 blocks = currentblock - detail.depositBlock; 
-        uint256 totalReceived = baseRatePerBlock * blocks;
+        uint256 depositBlock = detail.depositBlock;
+        uint256 blocks = currentblock - depositBlock;
         uint256 userShare = detail.depositValue;
-        if(userShare <= 0){
-            return  getPendingRewards(); 
-        }else{
-            uint256 rewards = (totalReceived * userShare) / totalStakedValue - detail.rewardReleased ; 
-            return rewards + getPendingRewards();
-        }   
+        uint256 apyRevenue = (( userShare / 100 ) * 105);
+        if(currentblock == depositBlock){
+            return 0;
+        }else if(apyRevenue < 365){
+
+            if(blocks < blocksPerYear){
+                return (0);
+            }else{
+                return ( apyRevenue * ( blocks / blocksPerYear));
+            }
+            
+        }else {
+
+        uint256 ratePerDay = ( apyRevenue ) / 365 ;
+        return   ( blocks / blockPerday ) * ratePerDay ;
         
-    }
+        }
+
+    } 
+
+    
 
     function getPendingRewards()public view returns(uint256){
         stakingDetail memory detail = userStakingDetail[_msgSender()];
@@ -156,12 +177,12 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
     function savePendingRewards() public {
         stakingDetail memory detail = userStakingDetail[_msgSender()];
         uint256 pending = detail.pendingRewards;
-        detail.pendingRewards = pending + calcPendingRewards(_msgSender());
+        detail.pendingRewards = pending + calcRewards(_msgSender());
         userStakingDetail[_msgSender()] = detail;
     }
 
-    function withdrawRewards()public {
-        require(calcPendingRewards(_msgSender()) > 0 , "no rewards to pull");
+    function withdrawRewards() public {
+        require(calcRewards(_msgSender()) > 0 , "no rewards to pull");
         savePendingRewards();
         userStakingDetail[_msgSender()].rewardReleased = userStakingDetail[_msgSender()].rewardReleased + getPendingRewards() ;
         rewardsToken.mint(_msgSender(),getPendingRewards());
@@ -182,7 +203,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
     function consumetickets(address account , uint256 amount)public override onlyConsumer {
         stakingDetail memory detail = userStakingDetail[account];
         require(detail.tickets > 0 && detail.tickets - amount >=0 ,"not enough tickets remaing");
-        require(detail.stakeTime + 5 minutes < block.timestamp ,"you can apply for WhiteList after 4 hours");
+        require(detail.stakeTime + 4 hours < block.timestamp ,"you can apply for WhiteList after 4 hours of staking");
         require(detail.depositValue >= bronze ,"you can apply for WhiteList After Staking 30,000"); // 1 week
        // require(getUserStakedValue >= bronze,"you must be at bronze tier to be applicable");
         detail.tickets = detail.tickets - amount;
@@ -297,7 +318,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
 
   
     function stake(uint256 amount) public nonReentrant{ 
-        // require(amount>=bronze,"insufficient balance for staking");
+        require(amount >= 100,"insufficient balance for staking");
         require(stakingToken.allowance(_msgSender(),address(this))>=amount,"Approve your token");
         stakingDetail memory detail = userStakingDetail[_msgSender()];
         stakingToken.safeTransferFrom(_msgSender(),address(this),amount);
@@ -330,10 +351,13 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
         require(amount<=balance,"insufficient balance for unstaking");
         uint256 newBalance = 0;
         if(block.timestamp < detail.stakeTime + 1 weeks){
-            uint256 amount_80 = (amount/100)*80;
-            uint256 amount_20 = (amount/100)*20;
-            fee += amount_20;
+           
+            uint256 withdraw_rate = 100 - feeRate ;
+            uint256 amount_80 = (amount/100) * withdraw_rate;
+            fee += amount - amount_80;
+
             stakingToken.safeTransfer(_msgSender(),amount_80);
+            
         }else{
             stakingToken.safeTransfer(_msgSender(),amount);
         }

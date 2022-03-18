@@ -8,8 +8,8 @@ const { json } = require("hardhat/internal/core/params/argumentTypes");
 
 // This is a script for deploying your contracts. You can adapt it to deploy
 // yours, or create new ones.
-zpad_address = "0xFeFBBeEBBeEF18E3E4A2909F2B2729cA2fC61347" // put zpad address here <-
-  busd_address = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
+let zpad_address = "0xFeFBBeEBBeEF18E3E4A2909F2B2729cA2fC61347" // put zpad address here <-
+let busd_address = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56" 
 async function main() {
   // This is just a convenience check
   // if (network.name === "hardhat") {
@@ -29,7 +29,7 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-    //zpad deploy // use zpad address
+  // zpad deploy // use zpad address
   // ZPad = await ethers.getContractFactory("ZPad");
   // zpad = await ZPad.deploy();
   // await zpad.deployed();

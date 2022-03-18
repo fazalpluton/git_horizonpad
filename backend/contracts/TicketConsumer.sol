@@ -12,7 +12,7 @@ import "./interfaces/IFactory.sol";
 import "./interfaces/IStaking.sol";
 import "./interfaces/ITicketConsumer.sol";
 
-contract TicketConsumer is ITicketConsumer, Context ,Ownable, ReentrancyGuard {
+contract TicketConsumer is ITicketConsumer, Context ,Ownable, ReentrancyGuard { 
 
     IFactory factory;
     IStaking staking;
