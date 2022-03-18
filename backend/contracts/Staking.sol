@@ -329,6 +329,7 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
             pool_Dec(detail.depositValue);
         }else{
             detail.stakeTime = block.timestamp;
+            noOfStakers++;
         }
         detail.tickets = getTicketsForUser(balance);
         pool_Inc(balance);
@@ -340,7 +341,6 @@ contract Staking is IStaking, Context, Ownable , ReentrancyGuard {
 
         userStakingDetail[_msgSender()] = detail;
         totalStakedValue += amount;
-        noOfStakers++;
         emit eve_staked(amount);
     }
     

@@ -15,6 +15,10 @@ constructor () ERC20("RZPad", "RZ") {}
         require(minter == _msgSender(), "Ownable: caller is not the minter");
         _;
     }
+
+    function decimals() public view virtual override returns (uint8) {
+        return 4;
+    }
    
 
 function setMinter(address _minter)public onlyOwner{
