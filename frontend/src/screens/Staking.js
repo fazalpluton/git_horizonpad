@@ -1158,7 +1158,7 @@ function Stacking(props){
                     <div className="unstaking-warn">
 
                             <img src={warningyellow}/>
-                            <p>After Unstaking, you must wait 7 days before you can withdraw your BSCPAD and rewards.
+                            <p>After Unstaking, you must wait 7 days before you can withdraw your HZPAD and rewards.
 
                             The amount of tokens you Unstake will not count towards your tier level for upcoming Projects.</p>
 
